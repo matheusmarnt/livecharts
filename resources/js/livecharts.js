@@ -12,6 +12,14 @@ document.addEventListener('alpine:init', () => {
             this.$watch('payload', (value) => {
                 this.update(value);
             });
+
+            // Register global event for manual updates from JS
+            window.addEventListener(`livecharts:update:${this.id}`, (event) => {
+                if (event.detail.options) {
+                    this.options = event.detail.options;
+                }
+                this.update(event.detail.payload || this.payload);
+            });
         },
 
         render() {
@@ -73,6 +81,10 @@ document.addEventListener('alpine:init', () => {
 
             if (this.instance) {
                 this.instance.render ? this.instance.render() : null;
+                
+                // Expose instance globally for direct JS access
+                window.LiveCharts = window.LiveCharts || {};
+                window.LiveCharts[this.id] = this.instance;
             }
         },
 
