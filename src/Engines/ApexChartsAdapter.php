@@ -39,6 +39,12 @@ class ApexChartsAdapter implements EngineAdapter
             'colors' => $payload->colors,
             'legend' => ['show' => $payload->legend],
             'tooltip' => ['enabled' => $payload->tooltip],
+            'xaxis' => $payload->xaxis,
+            'yaxis' => $payload->yaxis,
+            'grid' => $payload->grid,
+            'stroke' => $payload->stroke,
+            'markers' => $payload->markers,
+            'dataLabels' => $payload->dataLabels,
         ];
 
         if ($payload->theme !== 'auto') {

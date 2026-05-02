@@ -38,6 +38,12 @@ class ChartPayload implements Arrayable, Jsonable, JsonSerializable
         public ?string $onScroll = null,
         public ?string $broadcastOn = null,
         public ?string $broadcastAs = null,
+        public array $xaxis = [],
+        public array $yaxis = [],
+        public array $grid = [],
+        public array $stroke = [],
+        public array $markers = [],
+        public array $dataLabels = [],
         public array $options = [],
     ) {}
 
@@ -67,6 +73,12 @@ class ChartPayload implements Arrayable, Jsonable, JsonSerializable
             'onScroll' => $this->onScroll,
             'broadcastOn' => $this->broadcastOn,
             'broadcastAs' => $this->broadcastAs,
+            'xaxis' => $this->xaxis,
+            'yaxis' => $this->yaxis,
+            'grid' => $this->grid,
+            'stroke' => $this->stroke,
+            'markers' => $this->markers,
+            'dataLabels' => $this->dataLabels,
             'options' => $this->options,
         ];
     }
