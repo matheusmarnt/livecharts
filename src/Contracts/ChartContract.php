@@ -36,5 +36,9 @@ interface ChartContract
 
     public function onScroll(string $event): self;
 
+    public function broadcastOn(string $channel): self;
+
+    public function broadcastAs(string $event): self;
+
     public function toPayload(): array;
 }

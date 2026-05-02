@@ -20,6 +20,16 @@ document.addEventListener('alpine:init', () => {
                 }
                 this.update(event.detail.payload || this.payload);
             });
+
+            // Echo Integration
+            if (window.Echo && this.payload.broadcastOn && this.payload.broadcastAs) {
+                window.Echo.channel(this.payload.broadcastOn)
+                    .listen(this.payload.broadcastAs, (event) => {
+                        if (event.payload) {
+                            this.update(event.payload);
+                        }
+                    });
+            }
         },
 
         render() {
