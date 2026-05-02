@@ -1,7 +1,7 @@
 <?php
 
-use Matheusmarnt\LiveCharts\Charts\GenericChart;
 use Matheusmarnt\LiveCharts\Charts\Dataset;
+use Matheusmarnt\LiveCharts\Charts\GenericChart;
 
 it('dataset can set all properties', function () {
     $dataset = Dataset::make('Series')
@@ -54,7 +54,7 @@ it('chart can set all common properties', function () {
 it('chart handles raw array datasets', function () {
     $chart = GenericChart::make()
         ->datasets([
-            ['name' => 'S1', 'data' => [1, 2]]
+            ['name' => 'S1', 'data' => [1, 2]],
         ]);
 
     expect($chart->toPayload()['datasets'][0]['name'])->toBe('S1');
