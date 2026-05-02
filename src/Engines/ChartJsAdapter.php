@@ -17,6 +17,9 @@ class ChartJsAdapter implements EngineAdapter
         'scatter', 'radar', 'bubble', 'candlestick', 'matrix', 'sankey', 'treemap',
     ];
 
+    /**
+     * @return array<string, mixed>
+     */
     public function build(ChartPayload $payload): array
     {
         if (! in_array($payload->type, self::SUPPORTED_TYPES, true)) {
@@ -75,6 +78,9 @@ class ChartJsAdapter implements EngineAdapter
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function buildScales(ChartPayload $payload): array
     {
         if (in_array($payload->type, ['pie', 'donut', 'doughnut', 'polarArea', 'radar', 'sankey', 'treemap', 'matrix'])) {

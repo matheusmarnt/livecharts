@@ -36,10 +36,13 @@ abstract class Chart implements ChartContract
 
     protected int|string $width = '100%';
 
+    /** @var array<int, string|int|float> */
     protected array $labels = [];
 
+    /** @var array<int, Dataset> */
     protected array $datasets = [];
 
+    /** @var array<int, string> */
     protected array $colors = [];
 
     protected string $theme = 'auto';
@@ -70,18 +73,25 @@ abstract class Chart implements ChartContract
 
     protected ?string $broadcastEvent = null;
 
+    /** @var array<string, mixed> */
     protected array $xaxis = [];
 
+    /** @var array<string, mixed> */
     protected array $yaxis = [];
 
+    /** @var array<string, mixed> */
     protected array $grid = [];
 
+    /** @var array<string, mixed> */
     protected array $stroke = [];
 
+    /** @var array<string, mixed> */
     protected array $markers = [];
 
+    /** @var array<string, mixed> */
     protected array $dataLabels = [];
 
+    /** @var array<string, mixed> */
     protected array $options = [];
 
     public function __construct()
@@ -122,6 +132,9 @@ abstract class Chart implements ChartContract
         return $this;
     }
 
+    /**
+     * @param  array<int, string|int|float>  $labels
+     */
     public function labels(array $labels): self
     {
         $this->labels = $labels;
@@ -129,6 +142,9 @@ abstract class Chart implements ChartContract
         return $this;
     }
 
+    /**
+     * @param  array<int, mixed>  $data
+     */
     public function dataset(string $name, array $data): self
     {
         $this->datasets[] = Dataset::make($name)->data($data);
@@ -136,6 +152,9 @@ abstract class Chart implements ChartContract
         return $this;
     }
 
+    /**
+     * @param  array<int, Dataset|array<string, mixed>>  $datasets
+     */
     public function datasets(array $datasets): self
     {
         foreach ($datasets as $dataset) {
@@ -153,6 +172,9 @@ abstract class Chart implements ChartContract
         return $this;
     }
 
+    /**
+     * @param  array<int, string>  $colors
+     */
     public function colors(array $colors): self
     {
         $this->colors = $colors;
@@ -272,6 +294,9 @@ abstract class Chart implements ChartContract
         return $this;
     }
 
+    /**
+     * @param  array<string, mixed>  $config
+     */
     public function xaxis(array $config): self
     {
         $this->xaxis = array_merge_recursive($this->xaxis, $config);
@@ -279,6 +304,9 @@ abstract class Chart implements ChartContract
         return $this;
     }
 
+    /**
+     * @param  array<string, mixed>  $config
+     */
     public function yaxis(array $config): self
     {
         $this->yaxis = array_merge_recursive($this->yaxis, $config);
@@ -286,6 +314,9 @@ abstract class Chart implements ChartContract
         return $this;
     }
 
+    /**
+     * @param  array<string, mixed>  $config
+     */
     public function grid(array $config): self
     {
         $this->grid = array_merge_recursive($this->grid, $config);
@@ -293,6 +324,9 @@ abstract class Chart implements ChartContract
         return $this;
     }
 
+    /**
+     * @param  array<string, mixed>  $config
+     */
     public function stroke(array $config): self
     {
         $this->stroke = array_merge_recursive($this->stroke, $config);
@@ -300,6 +334,9 @@ abstract class Chart implements ChartContract
         return $this;
     }
 
+    /**
+     * @param  array<string, mixed>  $config
+     */
     public function markers(array $config): self
     {
         $this->markers = array_merge_recursive($this->markers, $config);
@@ -307,6 +344,9 @@ abstract class Chart implements ChartContract
         return $this;
     }
 
+    /**
+     * @param  array<string, mixed>  $config
+     */
     public function dataLabels(array $config): self
     {
         $this->dataLabels = array_merge_recursive($this->dataLabels, $config);
@@ -314,6 +354,9 @@ abstract class Chart implements ChartContract
         return $this;
     }
 
+    /**
+     * @param  array<string, mixed>  $options
+     */
     public function options(array $options): self
     {
         $this->options = array_merge_recursive($this->options, $options);
@@ -321,6 +364,9 @@ abstract class Chart implements ChartContract
         return $this;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toPayload(): array
     {
         return $this->toPayloadObject()->toArray();
@@ -375,10 +421,6 @@ abstract class Chart implements ChartContract
         }
 
         foreach ($this->datasets as $dataset) {
-            if (! $dataset instanceof Dataset) {
-                continue;
-            }
-
             if ($dataset->data === []) {
                 throw EmptyDatasetException::forDataset($dataset->name);
             }
@@ -391,10 +433,6 @@ abstract class Chart implements ChartContract
         $expected = count($this->labels);
 
         foreach ($this->datasets as $dataset) {
-            if (! $dataset instanceof Dataset) {
-                continue;
-            }
-
             $actual = count($dataset->data);
 
             if ($actual !== $expected) {

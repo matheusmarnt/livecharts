@@ -21,6 +21,9 @@ class AssetManager
         $this->assets[$key] = true;
     }
 
+    /**
+     * @return list<array{src: string|null, fallback?: string}>
+     */
     public function getRequiredScripts(): array
     {
         $scripts = [];

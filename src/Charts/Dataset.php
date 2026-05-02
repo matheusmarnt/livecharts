@@ -6,6 +6,10 @@ namespace Matheusmarnt\LiveCharts\Charts;
 
 class Dataset
 {
+    /**
+     * @param  array<int, mixed>  $data
+     * @param  array<string, mixed>  $meta
+     */
     public function __construct(
         public string $name,
         public array $data,
@@ -19,6 +23,9 @@ class Dataset
         return new self($name, []);
     }
 
+    /**
+     * @param  array<int, mixed>  $data
+     */
     public function data(array $data): self
     {
         $this->data = $data;
@@ -40,6 +47,9 @@ class Dataset
         return $this;
     }
 
+    /**
+     * @param  array<string, mixed>  $meta
+     */
     public function meta(array $meta): self
     {
         $this->meta = $meta;
@@ -47,6 +57,9 @@ class Dataset
         return $this;
     }
 
+    /**
+     * @return array{name: string, data: array<int, mixed>, color: string|null, type: string|null, meta: array<string, mixed>}
+     */
     public function toArray(): array
     {
         return [

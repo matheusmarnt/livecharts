@@ -10,6 +10,8 @@ interface EngineAdapter
 {
     /**
      * Transform a normalized ChartPayload into engine-native options array.
+     *
+     * @return array<string, mixed>
      */
     public function build(ChartPayload $payload): array;
 

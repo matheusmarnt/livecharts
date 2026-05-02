@@ -17,6 +17,9 @@ class ApexChartsAdapter implements EngineAdapter
         'treemap', 'bubble',
     ];
 
+    /**
+     * @return array<string, mixed>
+     */
     public function build(ChartPayload $payload): array
     {
         if (! in_array($payload->type, self::SUPPORTED_TYPES, true)) {

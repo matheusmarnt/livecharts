@@ -14,6 +14,7 @@ use Matheusmarnt\LiveCharts\Support\ChartPayload;
 
 class LiveChartsComponent extends Component
 {
+    /** @var array<string, mixed> */
     public array $payload;
 
     public string $id;
