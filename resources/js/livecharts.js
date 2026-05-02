@@ -16,9 +16,44 @@ document.addEventListener('alpine:init', () => {
 
         render() {
             if (this.constructor === 'ApexCharts') {
-                this.instance = new ApexCharts(this.$refs.chart, this.options);
+                const apexOptions = {
+                    ...this.options,
+                    chart: {
+                        ...this.options.chart,
+                        events: {
+                            dataPointSelection: (event, chartContext, config) => {
+                                if (this.payload.onDataPointClick) {
+                                    this.$wire.dispatch(this.payload.onDataPointClick, {
+                                        seriesIndex: config.seriesIndex,
+                                        dataPointIndex: config.dataPointIndex,
+                                        value: config.w.globals.series[config.seriesIndex][config.dataPointIndex],
+                                        label: config.w.globals.labels[config.dataPointIndex]
+                                    });
+                                }
+                            }
+                        }
+                    }
+                };
+                this.instance = new ApexCharts(this.$refs.chart, apexOptions);
             } else if (this.constructor === 'Chart') {
-                this.instance = new Chart(this.$refs.chart, this.options);
+                const chartjsOptions = {
+                    ...this.options,
+                    onClick: (event, elements) => {
+                        if (elements.length > 0 && this.payload.onDataPointClick) {
+                            const element = elements[0];
+                            const datasetIndex = element.datasetIndex;
+                            const index = element.index;
+                            
+                            this.$wire.dispatch(this.payload.onDataPointClick, {
+                                datasetIndex: datasetIndex,
+                                index: index,
+                                value: this.instance.data.datasets[datasetIndex].data[index],
+                                label: this.instance.data.labels[index]
+                            });
+                        }
+                    }
+                };
+                this.instance = new Chart(this.$refs.chart, chartjsOptions);
             }
 
             if (this.instance) {

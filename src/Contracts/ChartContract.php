@@ -28,5 +28,7 @@ interface ChartContract
 
     public function options(array $options): self;
 
+    public function onDataPointClick(string $event): self;
+
     public function toPayload(): array;
 }

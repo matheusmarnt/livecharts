@@ -7,6 +7,9 @@ namespace Matheusmarnt\LiveCharts\Charts;
 use Matheusmarnt\LiveCharts\Contracts\ChartContract;
 use Matheusmarnt\LiveCharts\Support\ChartPayload;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 abstract class Chart implements ChartContract
 {
     protected string $type = 'line';
@@ -42,6 +45,8 @@ abstract class Chart implements ChartContract
     protected bool $tooltip = true;
 
     protected int $pollEvery = 0;
+
+    protected ?string $dataPointClickEvent = null;
 
     protected array $options = [];
 
@@ -187,6 +192,13 @@ abstract class Chart implements ChartContract
         return $this;
     }
 
+    public function onDataPointClick(string $event): self
+    {
+        $this->dataPointClickEvent = $event;
+
+        return $this;
+    }
+
     public function options(array $options): self
     {
         $this->options = array_merge_recursive($this->options, $options);
@@ -214,6 +226,7 @@ abstract class Chart implements ChartContract
             legend: $this->legend,
             tooltip: $this->tooltip,
             pollEvery: $this->pollEvery,
+            onDataPointClick: $this->dataPointClickEvent,
             options: $this->options,
         ))->toArray();
     }
