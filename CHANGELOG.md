@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.1](https://github.com/matheusmarnt/livecharts/compare/v1.18.0...v1.18.1) (2026-05-02)
+
+
+### Bug Fixes
+
+* **alpine:** wire morph.updating + commit.applied Livewire hooks ([#44](https://github.com/matheusmarnt/livecharts/issues/44)) ([d5f789d](https://github.com/matheusmarnt/livecharts/commit/d5f789d48815e6613a6efb5b3b6df59179435338))
+
 ## [1.18.0](https://github.com/matheusmarnt/livecharts/compare/v1.17.0...v1.18.0) (2026-05-02)
 
 
