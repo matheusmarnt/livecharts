@@ -30,10 +30,10 @@ class ChartPayload implements Arrayable, Jsonable, JsonSerializable
         public int $pollEvery = 0,
         public ?string $onDataPointClick = null,
         public array $options = [],
-        ) {}
+    ) {}
 
-        public function toArray(): array
-        {
+    public function toArray(): array
+    {
         return [
             'type' => $this->type,
             'engine' => $this->engine,
@@ -42,7 +42,7 @@ class ChartPayload implements Arrayable, Jsonable, JsonSerializable
             'height' => $this->height,
             'width' => $this->width,
             'labels' => $this->labels,
-            'datasets' => array_map(fn($dataset) => $dataset->toArray(), $this->datasets),
+            'datasets' => array_map(fn ($dataset) => $dataset->toArray(), $this->datasets),
             'colors' => $this->colors,
             'theme' => $this->theme,
             'stacked' => $this->stacked,
@@ -55,7 +55,7 @@ class ChartPayload implements Arrayable, Jsonable, JsonSerializable
             'onDataPointClick' => $this->onDataPointClick,
             'options' => $this->options,
         ];
-        }
+    }
 
     public function toJson($options = 0): string
     {
