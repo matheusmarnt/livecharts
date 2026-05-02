@@ -3,7 +3,7 @@
 use Matheusmarnt\LiveCharts\Charts\GenericChart;
 
 it('includes onDataPointClick in the payload', function () {
-    $chart = (new GenericChart())
+    $chart = (new GenericChart)
         ->onDataPointClick('my-event');
 
     $payload = $chart->toPayload();
