@@ -54,6 +54,10 @@ abstract class Chart implements ChartContract
 
     protected ?string $scrollEvent = null;
 
+    protected ?string $broadcastChannel = null;
+
+    protected ?string $broadcastEvent = null;
+
     protected array $options = [];
 
     public function __construct()
@@ -226,6 +230,20 @@ abstract class Chart implements ChartContract
         return $this;
     }
 
+    public function broadcastOn(string $channel): self
+    {
+        $this->broadcastChannel = $channel;
+
+        return $this;
+    }
+
+    public function broadcastAs(string $event): self
+    {
+        $this->broadcastEvent = $event;
+
+        return $this;
+    }
+
     public function options(array $options): self
     {
         $this->options = array_merge_recursive($this->options, $options);
@@ -257,6 +275,8 @@ abstract class Chart implements ChartContract
             onZoom: $this->zoomEvent,
             onSelection: $this->selectionEvent,
             onScroll: $this->scrollEvent,
+            broadcastOn: $this->broadcastChannel,
+            broadcastAs: $this->broadcastEvent,
             options: $this->options,
         ))->toArray();
     }
