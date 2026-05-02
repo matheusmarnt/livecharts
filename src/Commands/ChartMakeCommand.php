@@ -17,12 +17,12 @@ class ChartMakeCommand extends GeneratorCommand
 
     protected function getStub(): string
     {
-        return __DIR__ . '/../../resources/stubs/chart.php.stub';
+        return __DIR__.'/../../resources/stubs/chart.php.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace): string
     {
-        return $rootNamespace . '\Charts';
+        return $rootNamespace.'\Charts';
     }
 
     protected function replacePlaceholders($stub, $name): string
