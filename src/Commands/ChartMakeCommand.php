@@ -25,15 +25,16 @@ class ChartMakeCommand extends GeneratorCommand
         return $rootNamespace.'\Charts';
     }
 
-    protected function replacePlaceholders($stub, $name): string
+    protected function replacePlaceholders(string $stub, string $name): string
     {
-        $stub = str_replace(
+        $type = $this->option('type');
+        $engine = $this->option('engine') ?? config('livecharts.engine', 'apexcharts');
+
+        return str_replace(
             ['{{ type }}', '{{ engine }}'],
-            [$this->option('type'), $this->option('engine') ?? config('livecharts.engine', 'apexcharts')],
+            [is_string($type) ? $type : 'line', is_string($engine) ? $engine : 'apexcharts'],
             $stub
         );
-
-        return $stub;
     }
 
     protected function buildClass($name): string
@@ -43,6 +44,9 @@ class ChartMakeCommand extends GeneratorCommand
         return $this->replacePlaceholders($stub, $name);
     }
 
+    /**
+     * @return array<int, array<int, mixed>>
+     */
     protected function getOptions(): array
     {
         return [
