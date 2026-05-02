@@ -30,7 +30,10 @@ class LiveChartsComponent extends Component
         $adapter = EngineFactory::resolve($this->payload['engine']);
         $options = $adapter->build(new ChartPayload(...$this->payload));
 
-        return view('livecharts::livewire.livecharts', [
+        /** @var view-string $view */
+        $view = 'livecharts::livewire.livecharts';
+
+        return view($view, [
             'options' => $options,
             'adapter' => $adapter,
         ]);
