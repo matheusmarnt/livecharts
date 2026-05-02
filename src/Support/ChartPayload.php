@@ -8,11 +8,24 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use JsonSerializable;
 use Matheusmarnt\LiveCharts\Charts\Dataset;
+use RuntimeException;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 class ChartPayload implements Arrayable, Jsonable, JsonSerializable
 {
     /**
+     * @param  array<int, string|int|float>  $labels
      * @param  array<int, Dataset>  $datasets
+     * @param  array<int, string>  $colors
+     * @param  array<string, mixed>  $xaxis
+     * @param  array<string, mixed>  $yaxis
+     * @param  array<string, mixed>  $grid
+     * @param  array<string, mixed>  $stroke
+     * @param  array<string, mixed>  $markers
+     * @param  array<string, mixed>  $dataLabels
+     * @param  array<string, mixed>  $options
      */
     public function __construct(
         public string $type,
@@ -47,6 +60,9 @@ class ChartPayload implements Arrayable, Jsonable, JsonSerializable
         public array $options = [],
     ) {}
 
+    /**
+     * @return array<string, mixed>
+     */
     public function toArray(): array
     {
         return [
@@ -85,7 +101,13 @@ class ChartPayload implements Arrayable, Jsonable, JsonSerializable
 
     public function toJson($options = 0): string
     {
-        return json_encode($this->jsonSerialize(), $options);
+        $encoded = json_encode($this->jsonSerialize(), $options);
+
+        if ($encoded === false) {
+            throw new RuntimeException('Failed to encode ChartPayload to JSON: '.json_last_error_msg());
+        }
+
+        return $encoded;
     }
 
     public function jsonSerialize(): mixed

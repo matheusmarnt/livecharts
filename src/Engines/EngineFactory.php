@@ -14,6 +14,8 @@ class EngineFactory
 
     /**
      * Register a new engine adapter.
+     *
+     * @param  class-string<EngineAdapter>  $adapter
      */
     public static function register(string $name, string $adapter): void
     {
