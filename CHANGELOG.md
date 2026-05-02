@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/matheusmarnt/livecharts/compare/v1.4.0...v1.4.1) (2026-05-02)
+
+
+### Miscellaneous Chores
+
+* add workflow_dispatch to release-please for recovery ([698c2d8](https://github.com/matheusmarnt/livecharts/commit/698c2d819669c2c892a9a746be027d09b453278c))
+
 ## [1.4.0](https://github.com/matheusmarnt/livecharts/compare/v1.3.0...v1.4.0) (2026-05-02)
 
 
