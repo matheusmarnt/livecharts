@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.0](https://github.com/matheusmarnt/livecharts/compare/v1.4.1...v1.5.0) (2026-05-02)
+
+
+### Features
+
+* implement interaction events ([fe486a8](https://github.com/matheusmarnt/livecharts/commit/fe486a84268b8ae8d340836125ca189af9a710f4))
+* implement interaction events (onZoom, onSelection, onScroll) ([5185404](https://github.com/matheusmarnt/livecharts/commit/5185404f699d7b62f4f6de87fd4d9c1b4fb82917))
+
 ## [1.4.1](https://github.com/matheusmarnt/livecharts/compare/v1.4.0...v1.4.1) (2026-05-02)
 
 
