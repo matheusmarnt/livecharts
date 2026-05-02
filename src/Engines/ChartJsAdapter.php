@@ -45,11 +45,12 @@ class ChartJsAdapter implements EngineAdapter
             'data' => [
                 'labels' => $payload->labels,
                 'datasets' => array_map(fn ($dataset) => [
-                    'label' => $dataset['name'],
-                    'data' => $dataset['data'],
-                    'backgroundColor' => $isSingleSeries ? $payload->colors : ($dataset['color'] ?? $payload->colors[0] ?? null),
-                    'borderColor' => $isSingleSeries ? '#fff' : ($dataset['color'] ?? $payload->colors[0] ?? null),
-                    'fill' => $payload->type === 'area',
+                    'type' => $dataset->type,
+                    'label' => $dataset->name,
+                    'data' => $dataset->data,
+                    'backgroundColor' => $isSingleSeries ? $payload->colors : ($dataset->color ?? $payload->colors[0] ?? null),
+                    'borderColor' => $isSingleSeries ? '#fff' : ($dataset->color ?? $payload->colors[0] ?? null),
+                    'fill' => $payload->type === 'area' || $dataset->type === 'area',
                     'tension' => 0.4, // Default smooth lines
                 ], $payload->datasets),
             ],

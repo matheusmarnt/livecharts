@@ -26,14 +26,14 @@ class Dataset
         return $this;
     }
 
-    public function color(string $color): self
+    public function color(?string $color): self
     {
         $this->color = $color;
 
         return $this;
     }
 
-    public function type(string $type): self
+    public function type(?string $type): self
     {
         $this->type = $type;
 
