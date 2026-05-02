@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.13.0](https://github.com/matheusmarnt/livecharts/compare/v1.12.0...v1.13.0) (2026-05-02)
+
+
+### Features
+
+* implement specialized configuration helpers (xaxis, yaxis, grid, etc) ([83dc14b](https://github.com/matheusmarnt/livecharts/commit/83dc14be2e33d0d488a26cf51fb68c7860ca5bf8))
+* specialized configuration helpers ([4e8c897](https://github.com/matheusmarnt/livecharts/commit/4e8c89773147ac6ac8706cb4250219508bae761f))
+
 ## [1.12.0](https://github.com/matheusmarnt/livecharts/compare/v1.11.0...v1.12.0) (2026-05-02)
 
 
