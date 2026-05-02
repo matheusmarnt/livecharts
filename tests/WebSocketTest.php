@@ -4,6 +4,7 @@ use Matheusmarnt\LiveCharts\Charts\GenericChart;
 
 it('includes broadcast configuration in the payload', function () {
     $chart = (new GenericChart)
+        ->dataset('Series', [1])
         ->broadcastOn('my-channel')
         ->broadcastAs('my-event');
 

@@ -4,6 +4,7 @@ use Matheusmarnt\LiveCharts\Charts\GenericChart;
 
 it('can set specialized configuration helpers', function () {
     $chart = GenericChart::make()
+        ->dataset('Series', [1, 2])
         ->xaxis(['categories' => ['A', 'B']])
         ->yaxis(['title' => ['text' => 'Y']])
         ->grid(['show' => false])

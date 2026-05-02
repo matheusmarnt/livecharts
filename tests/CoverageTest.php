@@ -20,6 +20,7 @@ it('dataset can set all properties', function () {
 
 it('chart can set all common properties', function () {
     $chart = GenericChart::make()
+        ->dataset('Series', [1])
         ->title('Title')
         ->subtitle('Subtitle')
         ->height(400)
