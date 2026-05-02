@@ -10,22 +10,22 @@ it('can register and retrieve required scripts', function () {
     $scripts = $manager->getRequiredScripts();
 
     expect($scripts)->toHaveCount(1);
-    expect($scripts[0])->toBe(config('livecharts.assets.cdn.apexcharts'));
+    expect($scripts[0]['src'])->toBe(config('livecharts.assets.cdn.apexcharts'));
 });
 
 it('can register multiple assets', function () {
     config()->set('livecharts.assets.cdn.chartjs-treemap', 'https://example.com/treemap.js');
     config()->set('livecharts.assets.cdn.chartjs', 'https://example.com/chartjs.js');
 
-    $manager = new AssetManager;
+    $manager = new AssetManager();
     $manager->registerAsset('chartjs');
     $manager->registerAsset('chartjs-treemap');
 
     $scripts = $manager->getRequiredScripts();
 
     expect($scripts)->toHaveCount(2);
-    expect($scripts)->toContain('https://example.com/chartjs.js');
-    expect($scripts)->toContain('https://example.com/treemap.js');
+    expect($scripts[0]['src'])->toBe('https://example.com/chartjs.js');
+    expect($scripts[1]['src'])->toBe('https://example.com/treemap.js');
 });
 
 it('marks scripts as rendered', function () {
