@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.0](https://github.com/matheusmarnt/livecharts/compare/v1.3.0...v1.4.0) (2026-05-02)
+
+
+### Features
+
+* update engine versions ([fe36ba8](https://github.com/matheusmarnt/livecharts/commit/fe36ba88458ceac6fc717d6ff46f80559d1f796f))
+* update engine versions to ApexCharts v5.10.6 and Chart.js v4.5.1 ([f46af0b](https://github.com/matheusmarnt/livecharts/commit/f46af0b2d35b667da990276af674e872bf555c78))
+
 ## [1.3.0](https://github.com/matheusmarnt/livecharts/compare/v1.2.0...v1.3.0) (2026-05-02)
 
 
