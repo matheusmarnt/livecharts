@@ -11,3 +11,6 @@ parameters:
         -
             message: "#^Called 'env' outside of the config directory which returns null when the config is cached, use 'config'\\.$#"
             path: config/livecharts.php
+        -
+            message: "#^Parameter \\#1 \\$view of function view expects view\\-string\\|null, string given\\.$#"
+            path: src/LiveChartsServiceProvider.php
