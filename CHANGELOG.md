@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/matheusmarnt/livecharts/compare/v1.19.0...v2.0.0) (2026-05-02)
+
+
+### ⚠ BREAKING CHANGES
+
+* drop EngineFactory static state in favor of container singleton ([#48](https://github.com/matheusmarnt/livecharts/issues/48))
+
+### Code Refactoring
+
+* drop EngineFactory static state in favor of container singleton ([#48](https://github.com/matheusmarnt/livecharts/issues/48)) ([f3a94e0](https://github.com/matheusmarnt/livecharts/commit/f3a94e09da813cb00806fdd115db73dba2424339))
+
 ## [1.19.0](https://github.com/matheusmarnt/livecharts/compare/v1.18.1...v1.19.0) (2026-05-02)
 
 
