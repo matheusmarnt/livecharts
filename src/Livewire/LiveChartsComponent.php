@@ -6,6 +6,7 @@ namespace Matheusmarnt\LiveCharts\Livewire;
 
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
+use Matheusmarnt\LiveCharts\Charts\Dataset;
 use Matheusmarnt\LiveCharts\Contracts\ChartContract;
 use Matheusmarnt\LiveCharts\Engines\EngineFactory;
 use Matheusmarnt\LiveCharts\Support\AssetManager;
@@ -32,7 +33,7 @@ class LiveChartsComponent extends Component
 
         // Reconstruct datasets as objects for the adapter
         $datasets = array_map(function ($d) {
-            return new \Matheusmarnt\LiveCharts\Charts\Dataset(
+            return new Dataset(
                 name: $d['name'],
                 data: $d['data'],
                 color: $d['color'] ?? null,
@@ -42,7 +43,7 @@ class LiveChartsComponent extends Component
         }, $payload['datasets']);
 
         $adapter = EngineFactory::resolve($payload['engine']);
-        
+
         $chartPayload = new ChartPayload(
             type: $payload['type'],
             engine: $payload['engine'],

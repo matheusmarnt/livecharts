@@ -10,7 +10,7 @@ it('apexcharts adapter handles single-series charts', function () {
         type: 'pie',
         engine: 'apexcharts',
         datasets: [
-            Dataset::make('Data')->data([10, 20, 30])
+            Dataset::make('Data')->data([10, 20, 30]),
         ]
     );
 
@@ -25,7 +25,7 @@ it('chartjs adapter handles donut as doughnut', function () {
         type: 'donut',
         engine: 'chartjs',
         datasets: [
-            Dataset::make('Data')->data([10, 20, 30])
+            Dataset::make('Data')->data([10, 20, 30]),
         ]
     );
 
@@ -40,7 +40,7 @@ it('chartjs adapter applies colors to datasets', function () {
         type: 'bar',
         engine: 'chartjs',
         datasets: [
-            Dataset::make('S1')->data([1, 2])->color('#ff0000')
+            Dataset::make('S1')->data([1, 2])->color('#ff0000'),
         ]
     );
 

@@ -1,7 +1,7 @@
 <?php
 
-use Matheusmarnt\LiveCharts\Charts\GenericChart;
 use Matheusmarnt\LiveCharts\Charts\Dataset;
+use Matheusmarnt\LiveCharts\Charts\GenericChart;
 use Matheusmarnt\LiveCharts\Engines\ApexChartsAdapter;
 use Matheusmarnt\LiveCharts\Engines\ChartJsAdapter;
 
@@ -13,7 +13,7 @@ it('apexcharts adapter includes dataset type for mixed charts', function () {
             Dataset::make('Line Series')->data([15, 25])->type('line'),
         ]);
 
-    $adapter = new ApexChartsAdapter();
+    $adapter = new ApexChartsAdapter;
     $options = $adapter->build($chart->toPayloadObject());
 
     expect($options['series'][0]['type'])->toBeNull();
@@ -28,7 +28,7 @@ it('chartjs adapter includes dataset type for mixed charts', function () {
             Dataset::make('Line Series')->data([15, 25])->type('line'),
         ]);
 
-    $adapter = new ChartJsAdapter();
+    $adapter = new ChartJsAdapter;
     $options = $adapter->build($chart->toPayloadObject());
 
     expect($options['data']['datasets'][0]['type'])->toBeNull();
