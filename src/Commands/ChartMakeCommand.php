@@ -46,7 +46,7 @@ class ChartMakeCommand extends GeneratorCommand
     protected function getOptions(): array
     {
         return [
-            ['type', 't', InputOption::VALUE_OPTIONAL, 'The type of the chart', 'line'],
+            ['type', 't', InputOption::VALUE_OPTIONAL, 'The type of the chart (line, bar, area, pie, donut, radar, scatter, bubble, heatmap)', 'line'],
             ['engine', 'e', InputOption::VALUE_OPTIONAL, 'The engine of the chart'],
         ];
     }
