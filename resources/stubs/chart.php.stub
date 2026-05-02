@@ -1,0 +1,36 @@
+<?php
+
+namespace {{ namespace }};
+
+use Matheusmarnt\LiveCharts\Charts\Chart;
+use Matheusmarnt\LiveCharts\Charts\Dataset;
+
+class {{ class }} extends Chart
+{
+    protected string $type = '{{ type }}';
+
+    protected string $engine = '{{ engine }}';
+
+    public function labels(): array
+    {
+        return [
+            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+        ];
+    }
+
+    public function datasets(): array
+    {
+        return [
+            Dataset::make('Series 1')
+                ->data([10, 20, 30, 40, 50, 60])
+                ->color('#3B82F6'),
+        ];
+    }
+
+    public function options(): array
+    {
+        return [
+            //
+        ];
+    }
+}

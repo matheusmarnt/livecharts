@@ -3,6 +3,7 @@
 namespace Matheusmarnt\LiveCharts;
 
 use Livewire\Livewire;
+use Matheusmarnt\LiveCharts\Commands\ChartMakeCommand;
 use Matheusmarnt\LiveCharts\Commands\InstallCommand;
 use Matheusmarnt\LiveCharts\Engines\EngineFactory;
 use Matheusmarnt\LiveCharts\Livewire\LiveChartsComponent;
@@ -22,7 +23,10 @@ class LiveChartsServiceProvider extends PackageServiceProvider
             ->name('livecharts')
             ->hasConfigFile()
             ->hasViews()
-            ->hasCommand(InstallCommand::class);
+            ->hasCommands([
+                InstallCommand::class,
+                ChartMakeCommand::class,
+            ]);
     }
 
     public function packageRegistered(): void
