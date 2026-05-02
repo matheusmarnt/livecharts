@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.19.0](https://github.com/matheusmarnt/livecharts/compare/v1.18.1...v1.19.0) (2026-05-02)
+
+
+### Features
+
+* **install:** publish chart class stubs interactively ([#46](https://github.com/matheusmarnt/livecharts/issues/46)) ([b9f5598](https://github.com/matheusmarnt/livecharts/commit/b9f5598c312c8f00416cc6fee9f0b2d28d199a45))
+
 ## [1.18.1](https://github.com/matheusmarnt/livecharts/compare/v1.18.0...v1.18.1) (2026-05-02)
 
 
