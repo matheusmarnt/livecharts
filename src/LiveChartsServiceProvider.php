@@ -6,6 +6,9 @@ use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 use Matheusmarnt\LiveCharts\Engines\EngineFactory;
+use Matheusmarnt\LiveCharts\Livewire\LiveChartsComponent;
+use Matheusmarnt\LiveCharts\Commands\InstallCommand;
+use Livewire\Livewire;
 
 class LiveChartsServiceProvider extends PackageServiceProvider
 {
@@ -19,7 +22,8 @@ class LiveChartsServiceProvider extends PackageServiceProvider
         $package
             ->name('livecharts')
             ->hasConfigFile()
-            ->hasViews();
+            ->hasViews()
+            ->hasCommand(InstallCommand::class);
     }
 
     public function packageRegistered(): void
@@ -34,5 +38,7 @@ class LiveChartsServiceProvider extends PackageServiceProvider
         foreach (config('livecharts.engines', []) as $name => $adapter) {
             EngineFactory::register($name, $adapter);
         }
+
+        Livewire::component('livecharts', LiveChartsComponent::class);
     }
 }
