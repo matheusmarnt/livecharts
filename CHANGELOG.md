@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.17.0](https://github.com/matheusmarnt/livecharts/compare/v1.16.1...v1.17.0) (2026-05-02)
+
+
+### Features
+
+* **facade:** expose LiveCharts::registerEngine() per PRD §7.3.2 ([#40](https://github.com/matheusmarnt/livecharts/issues/40)) ([0241973](https://github.com/matheusmarnt/livecharts/commit/02419735482d134722c8dd6d7f33206f90135d23))
+
 ## [1.16.1](https://github.com/matheusmarnt/livecharts/compare/v1.16.0...v1.16.1) (2026-05-02)
 
 
