@@ -82,6 +82,7 @@ jobs:
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Install dependencies
+        shell: bash
         env:
           COMPOSER_AUDIT: '0'
         run: |
