@@ -24,11 +24,13 @@ it('can create specialized charts via facade', function () {
 });
 
 it('specialized charts have correct default types', function () {
-    expect(LiveCharts::line()->toPayload()['type'])->toBe('line');
-    expect(LiveCharts::bar()->toPayload()['type'])->toBe('bar');
-    expect(LiveCharts::pie()->toPayload()['type'])->toBe('pie');
-    expect(LiveCharts::radar()->toPayload()['type'])->toBe('radar');
-    expect(LiveCharts::scatter()->toPayload()['type'])->toBe('scatter');
-    expect(LiveCharts::bubble()->toPayload()['type'])->toBe('bubble');
-    expect(LiveCharts::heatmap()->toPayload()['type'])->toBe('heatmap');
+    $seed = fn ($chart) => $chart->dataset('Series', [1]);
+
+    expect($seed(LiveCharts::line())->toPayload()['type'])->toBe('line');
+    expect($seed(LiveCharts::bar())->toPayload()['type'])->toBe('bar');
+    expect($seed(LiveCharts::pie())->toPayload()['type'])->toBe('pie');
+    expect($seed(LiveCharts::radar())->toPayload()['type'])->toBe('radar');
+    expect($seed(LiveCharts::scatter())->toPayload()['type'])->toBe('scatter');
+    expect($seed(LiveCharts::bubble())->toPayload()['type'])->toBe('bubble');
+    expect($seed(LiveCharts::heatmap())->toPayload()['type'])->toBe('heatmap');
 });

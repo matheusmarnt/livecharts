@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Matheusmarnt\LiveCharts\Charts;
 
 use Matheusmarnt\LiveCharts\Contracts\ChartContract;
+use Matheusmarnt\LiveCharts\Exceptions\DataShapeMismatchException;
+use Matheusmarnt\LiveCharts\Exceptions\EmptyDatasetException;
 use Matheusmarnt\LiveCharts\Support\ChartPayload;
 
 /**
@@ -12,6 +14,16 @@ use Matheusmarnt\LiveCharts\Support\ChartPayload;
  */
 abstract class Chart implements ChartContract
 {
+    /**
+     * Chart types whose label count must match each dataset's data count.
+     *
+     * @var list<string>
+     */
+    protected const TYPES_REQUIRING_LABEL_MATCH = [
+        'line', 'bar', 'area', 'scatter', 'radar', 'bubble',
+        'pie', 'donut', 'doughnut', 'radialBar', 'polarArea',
+    ];
+
     protected string $type = 'line';
 
     protected string $engine;
@@ -316,6 +328,8 @@ abstract class Chart implements ChartContract
 
     public function toPayloadObject(): ChartPayload
     {
+        $this->validate();
+
         return new ChartPayload(
             type: $this->type,
             engine: $this->engine,
@@ -348,5 +362,44 @@ abstract class Chart implements ChartContract
             dataLabels: $this->dataLabels,
             options: $this->options,
         );
+    }
+
+    /**
+     * @throws EmptyDatasetException
+     * @throws DataShapeMismatchException
+     */
+    protected function validate(): void
+    {
+        if ($this->datasets === []) {
+            throw EmptyDatasetException::forChart($this->type);
+        }
+
+        foreach ($this->datasets as $dataset) {
+            if (! $dataset instanceof Dataset) {
+                continue;
+            }
+
+            if ($dataset->data === []) {
+                throw EmptyDatasetException::forDataset($dataset->name);
+            }
+        }
+
+        if ($this->labels === [] || ! in_array($this->type, self::TYPES_REQUIRING_LABEL_MATCH, true)) {
+            return;
+        }
+
+        $expected = count($this->labels);
+
+        foreach ($this->datasets as $dataset) {
+            if (! $dataset instanceof Dataset) {
+                continue;
+            }
+
+            $actual = count($dataset->data);
+
+            if ($actual !== $expected) {
+                throw DataShapeMismatchException::forDataset($dataset->name, $expected, $actual);
+            }
+        }
     }
 }

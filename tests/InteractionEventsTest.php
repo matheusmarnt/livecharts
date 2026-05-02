@@ -4,6 +4,7 @@ use Matheusmarnt\LiveCharts\Charts\GenericChart;
 
 it('includes all interaction events in the payload', function () {
     $chart = (new GenericChart)
+        ->dataset('Series', [1])
         ->onDataPointClick('clicked')
         ->onZoom('zoomed')
         ->onSelection('selected')
