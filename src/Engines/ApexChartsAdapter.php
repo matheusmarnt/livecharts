@@ -20,7 +20,7 @@ class ApexChartsAdapter implements EngineAdapter
                 'toolbar' => ['show' => $payload->toolbar],
                 'zoom' => ['enabled' => $payload->zoom],
             ],
-            'series' => array_map(fn($dataset) => [
+            'series' => array_map(fn ($dataset) => [
                 'name' => $dataset['name'],
                 'data' => $dataset['data'],
             ], $payload->datasets),

@@ -10,6 +10,6 @@ class LiveCharts
 {
     public function make(): GenericChart
     {
-        return new GenericChart();
+        return new GenericChart;
     }
 }

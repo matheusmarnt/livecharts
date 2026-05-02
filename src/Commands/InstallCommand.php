@@ -29,16 +29,16 @@ class InstallCommand extends Command
     {
         $this->call('vendor:publish', [
             '--provider' => "Matheusmarnt\LiveCharts\LiveChartsServiceProvider",
-            '--tag' => "livecharts-config",
+            '--tag' => 'livecharts-config',
         ]);
     }
 
     protected function publishAssets(): void
     {
         $this->info('Publishing assets...');
-        
+
         $jsPath = resource_path('js/livecharts.js');
-        
+
         if (File::exists($jsPath) && ! $this->confirm('livecharts.js already exists. Overwrite?', false)) {
             return;
         }
