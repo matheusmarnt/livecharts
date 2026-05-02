@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.10.0](https://github.com/matheusmarnt/livecharts/compare/v1.9.0...v1.10.0) (2026-05-02)
+
+
+### Features
+
+* add logo to README.md ([950da56](https://github.com/matheusmarnt/livecharts/commit/950da560f8092e0b759ab94eb3b2fb5f1428cda7))
+* add logo to README.md ([a6172e7](https://github.com/matheusmarnt/livecharts/commit/a6172e744339a99ff80a39684d4a360a5308f11c))
+
 ## [1.9.0](https://github.com/matheusmarnt/livecharts/compare/v1.8.0...v1.9.0) (2026-05-02)
 
 
