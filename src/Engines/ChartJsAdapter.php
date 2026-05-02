@@ -83,6 +83,6 @@ class ChartJsAdapter implements EngineAdapter
 
     public function version(): string
     {
-        return '^4.0';
+        return '^4.5.1';
     }
 }

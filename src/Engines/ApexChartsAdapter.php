@@ -59,6 +59,6 @@ class ApexChartsAdapter implements EngineAdapter
 
     public function version(): string
     {
-        return '^3.41';
+        return '^5.10.6';
     }
 }
