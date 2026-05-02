@@ -2,11 +2,13 @@
 
 namespace Matheusmarnt\LiveCharts;
 
+use Illuminate\Support\Facades\Blade;
 use Livewire\Livewire;
 use Matheusmarnt\LiveCharts\Commands\ChartMakeCommand;
 use Matheusmarnt\LiveCharts\Commands\InstallCommand;
 use Matheusmarnt\LiveCharts\Engines\EngineFactory;
 use Matheusmarnt\LiveCharts\Livewire\LiveChartsComponent;
+use Matheusmarnt\LiveCharts\Support\AssetManager;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -34,6 +36,10 @@ class LiveChartsServiceProvider extends PackageServiceProvider
         $this->app->singleton(LiveCharts::class, function () {
             return new LiveCharts;
         });
+
+        $this->app->singleton(AssetManager::class, function () {
+            return new AssetManager;
+        });
     }
 
     public function packageBooted(): void
@@ -43,5 +49,9 @@ class LiveChartsServiceProvider extends PackageServiceProvider
         }
 
         Livewire::component('livecharts', LiveChartsComponent::class);
+
+        Blade::directive('liveChartsScripts', function () {
+            return "<?php echo view('livecharts::scripts')->render(); ?>";
+        });
     }
 }
