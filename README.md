@@ -1,3 +1,7 @@
+<p align="center">
+    <img src="art/livecharts.png" alt="LiveCharts Logo" width="300">
+</p>
+
 # LiveCharts
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/matheusmarnt/livecharts.svg?style=flat-square)](https://packagist.org/packages/matheusmarnt/livecharts)
