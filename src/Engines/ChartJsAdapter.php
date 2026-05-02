@@ -21,7 +21,10 @@ class ChartJsAdapter implements EngineAdapter
         $options = [
             'responsive' => true,
             'maintainAspectRatio' => false,
-            'scales' => $this->buildScales($payload),
+            'scales' => array_merge_recursive($this->buildScales($payload), [
+                'x' => $payload->xaxis,
+                'y' => $payload->yaxis,
+            ]),
             'plugins' => [
                 'title' => [
                     'display' => (bool) $payload->title,
@@ -37,6 +40,7 @@ class ChartJsAdapter implements EngineAdapter
                 'tooltip' => [
                     'enabled' => $payload->tooltip,
                 ],
+                'datalabels' => $payload->dataLabels,
             ],
         ];
 
@@ -51,7 +55,9 @@ class ChartJsAdapter implements EngineAdapter
                     'backgroundColor' => $isSingleSeries ? $payload->colors : ($dataset->color ?? $payload->colors[0] ?? null),
                     'borderColor' => $isSingleSeries ? '#fff' : ($dataset->color ?? $payload->colors[0] ?? null),
                     'fill' => $payload->type === 'area' || $dataset->type === 'area',
-                    'tension' => 0.4, // Default smooth lines
+                    'tension' => ($payload->stroke['curve'] ?? null) === 'smooth' ? 0.4 : 0, // Basic mapping
+                    ...$payload->stroke, // Merge remaining stroke options
+                    'point' => $payload->markers, // Basic mapping
                 ], $payload->datasets),
             ],
             'options' => array_merge_recursive($options, $payload->options),

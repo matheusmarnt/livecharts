@@ -28,6 +28,18 @@ interface ChartContract
 
     public function options(array $options): self;
 
+    public function xaxis(array $config): self;
+
+    public function yaxis(array $config): self;
+
+    public function grid(array $config): self;
+
+    public function stroke(array $config): self;
+
+    public function markers(array $config): self;
+
+    public function dataLabels(array $config): self;
+
     public function onDataPointClick(string $event): self;
 
     public function onZoom(string $event): self;
