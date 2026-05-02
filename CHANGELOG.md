@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.14.0](https://github.com/matheusmarnt/livecharts/compare/v1.13.0...v1.14.0) (2026-05-02)
+
+
+### Features
+
+* setup Astro Starlight documentation site ([5217dbd](https://github.com/matheusmarnt/livecharts/commit/5217dbd306c71899bc8e1c44a3622e36615a8c6a))
+* setup documentation site ([3bcb5d2](https://github.com/matheusmarnt/livecharts/commit/3bcb5d24c9da1b91adb45847559b421aa9cc9885))
+
 ## [1.13.0](https://github.com/matheusmarnt/livecharts/compare/v1.12.0...v1.13.0) (2026-05-02)
 
 
