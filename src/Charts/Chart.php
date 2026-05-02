@@ -252,6 +252,11 @@ abstract class Chart implements ChartContract
         return $this;
     }
 
+    public function poll(int $ms): self
+    {
+        return $this->pollEvery($ms);
+    }
+
     public function onDataPointClick(string $event): self
     {
         $this->dataPointClickEvent = $event;
