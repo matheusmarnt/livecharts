@@ -1,10 +1,10 @@
 <?php
 
-use Matheusmarnt\LiveCharts\Support\AssetManager;
 use Illuminate\Support\Facades\Blade;
+use Matheusmarnt\LiveCharts\Support\AssetManager;
 
 it('can register and retrieve required scripts', function () {
-    $manager = new AssetManager();
+    $manager = new AssetManager;
     $manager->registerEngine('apexcharts');
 
     $scripts = $manager->getRequiredScripts();
@@ -14,7 +14,7 @@ it('can register and retrieve required scripts', function () {
 });
 
 it('marks scripts as rendered', function () {
-    $manager = new AssetManager();
+    $manager = new AssetManager;
     expect($manager->hasBeenRendered())->toBeFalse();
 
     $manager->markAsRendered();
@@ -23,6 +23,6 @@ it('marks scripts as rendered', function () {
 
 it('renders the blade directive correctly', function () {
     $directive = Blade::compileString('@liveChartsScripts');
-    
+
     expect($directive)->toContain("echo view('livecharts::scripts')->render()");
 });

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Matheusmarnt\LiveCharts\Livewire;
 
 use Illuminate\Contracts\View\View;
-use Matheusmarnt\LiveCharts\Support\AssetManager;
 use Livewire\Component;
 use Matheusmarnt\LiveCharts\Contracts\ChartContract;
 use Matheusmarnt\LiveCharts\Engines\EngineFactory;
+use Matheusmarnt\LiveCharts\Support\AssetManager;
 use Matheusmarnt\LiveCharts\Support\ChartPayload;
 
 class LiveChartsComponent extends Component
