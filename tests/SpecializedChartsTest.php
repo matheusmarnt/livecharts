@@ -1,15 +1,15 @@
 <?php
 
-use Matheusmarnt\LiveCharts\Facades\LiveCharts;
-use Matheusmarnt\LiveCharts\Charts\LineChart;
-use Matheusmarnt\LiveCharts\Charts\BarChart;
 use Matheusmarnt\LiveCharts\Charts\AreaChart;
-use Matheusmarnt\LiveCharts\Charts\PieChart;
+use Matheusmarnt\LiveCharts\Charts\BarChart;
+use Matheusmarnt\LiveCharts\Charts\BubbleChart;
 use Matheusmarnt\LiveCharts\Charts\DonutChart;
+use Matheusmarnt\LiveCharts\Charts\HeatmapChart;
+use Matheusmarnt\LiveCharts\Charts\LineChart;
+use Matheusmarnt\LiveCharts\Charts\PieChart;
 use Matheusmarnt\LiveCharts\Charts\RadarChart;
 use Matheusmarnt\LiveCharts\Charts\ScatterChart;
-use Matheusmarnt\LiveCharts\Charts\BubbleChart;
-use Matheusmarnt\LiveCharts\Charts\HeatmapChart;
+use Matheusmarnt\LiveCharts\Facades\LiveCharts;
 
 it('can create specialized charts via facade', function () {
     expect(LiveCharts::line())->toBeInstanceOf(LineChart::class);
