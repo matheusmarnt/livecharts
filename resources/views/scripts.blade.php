@@ -5,7 +5,11 @@
 @endphp
 
 @foreach($scripts as $script)
-    <script src="{{ $script }}" defer></script>
+    @if(isset($script['fallback']))
+        <script src="{{ $script['src'] }}" onerror="this.onerror=null;this.src='{{ $script['fallback'] }}';" defer></script>
+    @else
+        <script src="{{ $script['src'] }}" defer></script>
+    @endif
 @endforeach
 
 @unless(config('livecharts.assets.auto_inject', true) === false)
