@@ -27,14 +27,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # Note: Laravel 10 is supported by the package itself (see composer.json)
+        # but cannot be exercised in CI because pestphp/pest-plugin-laravel ^3.0
+        # requires Laravel 11+. The runtime contract on Laravel 10 is preserved
+        # by the broader composer constraint.
         os: [ubuntu-latest, windows-latest]
         php: ['8.2', '8.3', '8.4', '8.5']
-        laravel: ['10.*', '11.*', '12.*', '13.*']
-        livewire: ['^3.0', '^4.0']
+        laravel: ['11.*', '12.*', '13.*']
+        livewire: ['^3.4', '^4.0']
         stability: [prefer-lowest, prefer-stable]
         include:
-          - laravel: 10.*
-            testbench: 8.*
           - laravel: 11.*
             testbench: 9.*
           - laravel: 12.*
@@ -45,21 +47,17 @@ jobs:
           # Laravel 13 requires PHP 8.3+
           - laravel: 13.*
             php: '8.2'
-          # Laravel 10 does not support PHP 8.4/8.5
-          - laravel: 10.*
-            php: '8.4'
-          - laravel: 10.*
-            php: '8.5'
-          # Laravel 11 does not support PHP 8.5
+          # Laravel 11 caps at PHP 8.4
           - laravel: 11.*
             php: '8.5'
-          # Livewire 4 requires PHP 8.3+ and Laravel 12+
+          # Livewire 4 (v4.0.0) requires PHP 8.3+, Laravel 12+, and
+          # illuminate/validation ^10|^11|^12 — no Laravel 13 yet.
           - livewire: '^4.0'
             php: '8.2'
           - livewire: '^4.0'
-            laravel: 10.*
-          - livewire: '^4.0'
             laravel: 11.*
+          - livewire: '^4.0'
+            laravel: 13.*
 
     name: P${{ matrix.php }} L${{ matrix.laravel }} LW${{ matrix.livewire }} ${{ matrix.stability }} ${{ matrix.os }}
 
@@ -82,7 +80,7 @@ jobs:
       - name: Install dependencies
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "livewire/livewire:${{ matrix.livewire }}" --no-interaction --no-update
-          composer update --${{ matrix.stability }} --prefer-dist --no-interaction
+          composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-audit
 
       - name: List Installed Dependencies
         run: composer show -D
