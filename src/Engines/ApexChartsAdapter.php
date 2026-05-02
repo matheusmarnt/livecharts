@@ -11,6 +11,8 @@ class ApexChartsAdapter implements EngineAdapter
 {
     public function build(ChartPayload $payload): array
     {
+        $isSingleSeries = in_array($payload->type, ['pie', 'donut', 'radialBar']);
+
         $options = [
             'chart' => [
                 'type' => $payload->type,
@@ -20,10 +22,12 @@ class ApexChartsAdapter implements EngineAdapter
                 'toolbar' => ['show' => $payload->toolbar],
                 'zoom' => ['enabled' => $payload->zoom],
             ],
-            'series' => array_map(fn ($dataset) => [
-                'name' => $dataset['name'],
-                'data' => $dataset['data'],
-            ], $payload->datasets),
+            'series' => $isSingleSeries 
+                ? ($payload->datasets[0]['data'] ?? [])
+                : array_map(fn($dataset) => [
+                    'name' => $dataset['name'],
+                    'data' => $dataset['data'],
+                ], $payload->datasets),
             'labels' => $payload->labels,
             'title' => [
                 'text' => $payload->title,
