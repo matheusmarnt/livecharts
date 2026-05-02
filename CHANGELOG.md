@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.12.0](https://github.com/matheusmarnt/livecharts/compare/v1.11.0...v1.12.0) (2026-05-02)
+
+
+### Features
+
+* implement mixed chart types and fix dataset object mapping ([db53751](https://github.com/matheusmarnt/livecharts/commit/db53751fba3abd2cf89dc4c349d936350f9e7646))
+* implement mixed charts support ([5fe0396](https://github.com/matheusmarnt/livecharts/commit/5fe039624d069afa63450337d54a7aa5ce8b459d))
+
 ## [1.11.0](https://github.com/matheusmarnt/livecharts/compare/v1.10.0...v1.11.0) (2026-05-02)
 
 
