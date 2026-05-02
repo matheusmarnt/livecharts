@@ -118,7 +118,11 @@ abstract class Chart implements ChartContract
             if ($dataset instanceof Dataset) {
                 $this->datasets[] = $dataset;
             } else {
-                $this->datasets[] = Dataset::make($dataset['name'])->data($dataset['data']);
+                $this->datasets[] = Dataset::make($dataset['name'])
+                    ->data($dataset['data'])
+                    ->color($dataset['color'] ?? null)
+                    ->type($dataset['type'] ?? null)
+                    ->meta($dataset['meta'] ?? []);
             }
         }
 
@@ -253,7 +257,12 @@ abstract class Chart implements ChartContract
 
     public function toPayload(): array
     {
-        return (new ChartPayload(
+        return $this->toPayloadObject()->toArray();
+    }
+
+    public function toPayloadObject(): ChartPayload
+    {
+        return new ChartPayload(
             type: $this->type,
             engine: $this->engine,
             title: $this->title,
@@ -278,6 +287,6 @@ abstract class Chart implements ChartContract
             broadcastOn: $this->broadcastChannel,
             broadcastAs: $this->broadcastEvent,
             options: $this->options,
-        ))->toArray();
+        );
     }
 }

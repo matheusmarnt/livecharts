@@ -1,5 +1,6 @@
 <?php
 
+use Matheusmarnt\LiveCharts\Charts\Dataset;
 use Matheusmarnt\LiveCharts\Engines\ApexChartsAdapter;
 use Matheusmarnt\LiveCharts\Engines\EngineFactory;
 use Matheusmarnt\LiveCharts\Exceptions\UnknownEngineException;
@@ -21,7 +22,7 @@ it('apexcharts adapter builds correct options', function () {
         engine: 'apexcharts',
         title: 'Test Chart',
         datasets: [
-            ['name' => 'Series 1', 'data' => [10, 20, 30]],
+            Dataset::make('Series 1')->data([10, 20, 30]),
         ],
         labels: ['A', 'B', 'C']
     );

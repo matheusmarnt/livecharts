@@ -28,10 +28,51 @@ class LiveChartsComponent extends Component
 
     public function render(): View
     {
-        $adapter = EngineFactory::resolve($this->payload['engine']);
-        $options = $adapter->build(new ChartPayload(...$this->payload));
+        $payload = $this->payload;
 
-        app(AssetManager::class)->registerEngine($this->payload['engine']);
+        // Reconstruct datasets as objects for the adapter
+        $datasets = array_map(function ($d) {
+            return new \Matheusmarnt\LiveCharts\Charts\Dataset(
+                name: $d['name'],
+                data: $d['data'],
+                color: $d['color'] ?? null,
+                type: $d['type'] ?? null,
+                meta: $d['meta'] ?? []
+            );
+        }, $payload['datasets']);
+
+        $adapter = EngineFactory::resolve($payload['engine']);
+        
+        $chartPayload = new ChartPayload(
+            type: $payload['type'],
+            engine: $payload['engine'],
+            title: $payload['title'] ?? null,
+            subtitle: $payload['subtitle'] ?? null,
+            height: $payload['height'],
+            width: $payload['width'],
+            labels: $payload['labels'],
+            datasets: $datasets,
+            colors: $payload['colors'],
+            theme: $payload['theme'],
+            stacked: $payload['stacked'],
+            sparkline: $payload['sparkline'],
+            zoom: $payload['zoom'],
+            toolbar: $payload['toolbar'],
+            legend: $payload['legend'],
+            tooltip: $payload['tooltip'],
+            pollEvery: $payload['pollEvery'],
+            onDataPointClick: $payload['onDataPointClick'] ?? null,
+            onZoom: $payload['onZoom'] ?? null,
+            onSelection: $payload['onSelection'] ?? null,
+            onScroll: $payload['onScroll'] ?? null,
+            broadcastOn: $payload['broadcastOn'] ?? null,
+            broadcastAs: $payload['broadcastAs'] ?? null,
+            options: $payload['options']
+        );
+
+        $options = $adapter->build($chartPayload);
+
+        app(AssetManager::class)->registerEngine($payload['engine']);
 
         /** @var view-string $view */
         $view = 'livecharts::livewire.livecharts';
