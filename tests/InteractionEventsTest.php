@@ -3,7 +3,7 @@
 use Matheusmarnt\LiveCharts\Charts\GenericChart;
 
 it('includes all interaction events in the payload', function () {
-    $chart = (new GenericChart())
+    $chart = (new GenericChart)
         ->onDataPointClick('clicked')
         ->onZoom('zoomed')
         ->onSelection('selected')
