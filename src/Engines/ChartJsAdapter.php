@@ -5,13 +5,24 @@ declare(strict_types=1);
 namespace Matheusmarnt\LiveCharts\Engines;
 
 use Matheusmarnt\LiveCharts\Contracts\EngineAdapter;
+use Matheusmarnt\LiveCharts\Exceptions\InvalidChartTypeException;
 use Matheusmarnt\LiveCharts\Support\AssetManager;
 use Matheusmarnt\LiveCharts\Support\ChartPayload;
 
 class ChartJsAdapter implements EngineAdapter
 {
+    /** @var list<string> */
+    public const SUPPORTED_TYPES = [
+        'line', 'bar', 'area', 'pie', 'donut', 'doughnut', 'polarArea',
+        'scatter', 'radar', 'bubble', 'candlestick', 'matrix', 'sankey', 'treemap',
+    ];
+
     public function build(ChartPayload $payload): array
     {
+        if (! in_array($payload->type, self::SUPPORTED_TYPES, true)) {
+            throw InvalidChartTypeException::forEngine($payload->type, 'chartjs', self::SUPPORTED_TYPES);
+        }
+
         $this->registerRequiredAssets($payload);
 
         $isSingleSeries = in_array($payload->type, ['pie', 'donut', 'doughnut', 'polarArea']);

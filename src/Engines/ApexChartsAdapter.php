@@ -5,12 +5,24 @@ declare(strict_types=1);
 namespace Matheusmarnt\LiveCharts\Engines;
 
 use Matheusmarnt\LiveCharts\Contracts\EngineAdapter;
+use Matheusmarnt\LiveCharts\Exceptions\InvalidChartTypeException;
 use Matheusmarnt\LiveCharts\Support\ChartPayload;
 
 class ApexChartsAdapter implements EngineAdapter
 {
+    /** @var list<string> */
+    public const SUPPORTED_TYPES = [
+        'line', 'bar', 'area', 'pie', 'donut', 'radialBar', 'polarArea',
+        'scatter', 'heatmap', 'radar', 'candlestick', 'boxPlot', 'rangeBar',
+        'treemap', 'bubble',
+    ];
+
     public function build(ChartPayload $payload): array
     {
+        if (! in_array($payload->type, self::SUPPORTED_TYPES, true)) {
+            throw InvalidChartTypeException::forEngine($payload->type, 'apexcharts', self::SUPPORTED_TYPES);
+        }
+
         $isSingleSeries = in_array($payload->type, ['pie', 'donut', 'radialBar', 'polarArea']);
 
         $options = [
