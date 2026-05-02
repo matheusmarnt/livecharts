@@ -15,12 +15,12 @@ class InstallCommand extends Command
 
     public function handle(): int
     {
-        $this->info('Installing LiveCharts...');
+        $this->info(__('livecharts::livecharts.install.starting'));
 
         $this->publishConfiguration();
         $this->publishAssets();
 
-        $this->info('LiveCharts installed successfully.');
+        $this->info(__('livecharts::livecharts.install.completed'));
 
         return self::SUCCESS;
     }
@@ -35,17 +35,17 @@ class InstallCommand extends Command
 
     protected function publishAssets(): void
     {
-        $this->info('Publishing assets...');
+        $this->info(__('livecharts::livecharts.install.publishing_assets'));
 
         $jsPath = resource_path('js/livecharts.js');
 
-        if (File::exists($jsPath) && ! $this->confirm('livecharts.js already exists. Overwrite?', false)) {
+        if (File::exists($jsPath) && ! $this->confirm(__('livecharts::livecharts.install.overwrite_js'), false)) {
             return;
         }
 
         File::ensureDirectoryExists(dirname($jsPath));
         File::copy(__DIR__.'/../../resources/js/livecharts.js', $jsPath);
 
-        $this->info("Assets published to [{$jsPath}]");
+        $this->info(__('livecharts::livecharts.install.js_published', ['path' => $jsPath]));
     }
 }

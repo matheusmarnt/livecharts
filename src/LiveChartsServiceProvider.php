@@ -27,6 +27,7 @@ class LiveChartsServiceProvider extends PackageServiceProvider
             ->name('livecharts')
             ->hasConfigFile()
             ->hasViews()
+            ->hasTranslations()
             ->hasCommands([
                 InstallCommand::class,
                 ChartMakeCommand::class,

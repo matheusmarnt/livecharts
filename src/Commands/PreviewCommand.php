@@ -14,17 +14,17 @@ class PreviewCommand extends Command
 
     public function handle(): int
     {
-        if (! $this->confirm('This will register a temporary web route [/livecharts/preview]. Proceed?', true)) {
+        if (! $this->confirm(__('livecharts::livecharts.preview.confirm_register'), true)) {
             return self::FAILURE;
         }
 
-        $this->info('Registering preview route...');
+        $this->info(__('livecharts::livecharts.preview.registering'));
 
-        // In a real Laravel app, this would be done via a provider.
-        // For the command, we'll suggest the user where to look or how it works.
-        $this->info('Opening preview at: '.url('/livecharts/preview'));
+        $this->info(__('livecharts::livecharts.preview.opening_at', [
+            'url' => url('/livecharts/preview'),
+        ]));
 
-        $this->warn('Note: Ensure your local server is running (php artisan serve).');
+        $this->warn(__('livecharts::livecharts.preview.serve_warning'));
 
         return self::SUCCESS;
     }
