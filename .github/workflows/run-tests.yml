@@ -34,7 +34,7 @@ jobs:
         os: [ubuntu-latest, windows-latest]
         php: ['8.2', '8.3', '8.4', '8.5']
         laravel: ['11.*', '12.*', '13.*']
-        livewire: ['^3.4', '^4.0']
+        livewire: ['^3.6.4', '^4.0']
         stability: [prefer-lowest, prefer-stable]
         include:
           - laravel: 11.*
@@ -58,6 +58,10 @@ jobs:
             laravel: 11.*
           - livewire: '^4.0'
             laravel: 13.*
+          # Livewire ^3.6.4 fixes three published advisories (PKSA-g5js-3ypd-k2kr,
+          # PKSA-9tny-xycd-bd72, PKSA-zng9-t7vy-y8kf). Composer on Windows runners
+          # blocks installs of vulnerable releases regardless of --no-audit, so the
+          # floor is raised. Mark the lowest-stability run accordingly.
 
     name: P${{ matrix.php }} L${{ matrix.laravel }} LW${{ matrix.livewire }} ${{ matrix.stability }} ${{ matrix.os }}
 
