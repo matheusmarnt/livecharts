@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.0](https://github.com/matheusmarnt/livecharts/compare/v1.1.0...v1.2.0) (2026-05-02)
+
+
+### Features
+
+* asset auto-injection and more chart classes ([8e13332](https://github.com/matheusmarnt/livecharts/commit/8e13332930bad87fff790c370d1e6a8a39ce2714))
+* implement asset auto-injection and more specialized chart classes ([b084671](https://github.com/matheusmarnt/livecharts/commit/b0846719df1186d7617a3504277782630f97053e))
+
 ## [1.1.0](https://github.com/matheusmarnt/livecharts/compare/v1.0.0...v1.1.0) (2026-05-02)
 
 
