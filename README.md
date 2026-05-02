@@ -1,33 +1,52 @@
 <p align="center">
-    <img src="art/livecharts.png" alt="LiveCharts Logo" width="750">
+    <img src="art/livecharts.png" alt="LiveCharts" width="750" />
 </p>
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/matheusmarnt/livecharts.svg?style=flat-square)](https://packagist.org/packages/matheusmarnt/livecharts)
-[![GitHub Tests Action Status](https://github.com/matheusmarnt/livecharts/actions/workflows/run-tests.yml/badge.svg)](https://github.com/matheusmarnt/livecharts/actions/workflows/run-tests.yml)
-[![GitHub Code Style Action Status](https://github.com/matheusmarnt/livecharts/actions/workflows/fix-php-code-style-issues.yml/badge.svg)](https://github.com/matheusmarnt/livecharts/actions/workflows/fix-php-code-style-issues.yml)
-[![Total Downloads](https://img.shields.io/packagist/dt/matheusmarnt/livecharts.svg?style=flat-square)](https://packagist.org/packages/matheusmarnt/livecharts)
+<p align="center">
+    <a href="https://packagist.org/packages/matheusmarnt/livecharts"><img src="https://img.shields.io/packagist/v/matheusmarnt/livecharts.svg?style=flat-square" alt="Latest Version on Packagist" /></a>
+    <a href="https://github.com/matheusmarnt/livecharts/actions?query=workflow%3Atests+branch%3Amain"><img src="https://img.shields.io/github/actions/workflow/status/matheusmarnt/livecharts/run-tests.yml?branch=main&label=tests&style=flat-square" alt="Tests" /></a>
+    <a href="https://github.com/matheusmarnt/livecharts/actions?query=workflow%3A%22Fix+PHP+code+style+issues%22+branch%3Amain"><img src="https://img.shields.io/github/actions/workflow/status/matheusmarnt/livecharts/fix-php-code-style-issues.yml?branch=main&label=code+style&style=flat-square" alt="Code Style" /></a>
+    <a href="https://packagist.org/packages/matheusmarnt/livecharts"><img src="https://img.shields.io/packagist/dt/matheusmarnt/livecharts.svg?style=flat-square" alt="Total Downloads" /></a>
+    <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square" alt="License" /></a>
+    <a href="https://laravel.com"><img src="https://img.shields.io/badge/Laravel-10%7C11%7C12%7C13-FF2D20?style=flat-square&logo=laravel&logoColor=white" alt="Laravel" /></a>
+    <a href="https://livewire.laravel.com"><img src="https://img.shields.io/badge/Livewire-3%7C4-FB70A9?style=flat-square" alt="Livewire" /></a>
+</p>
 
-Elevate your data visualization with reactive charts in Laravel.
+# LiveCharts
 
-LiveCharts is a unified chart abstraction layer for the Laravel framework. It eliminates the friction of integrating JavaScript charting libraries by providing a pure PHP API to define, configure, and render charts—abstracting ApexCharts and Chart.js—and delivering them to the browser via a single Livewire component.
+Reactive chart abstraction for Laravel — pure PHP API, multi-engine rendering, Livewire delivery.
 
-## Installation
+LiveCharts unifies ApexCharts and Chart.js behind a single fluent PHP API. Define charts in PHP, render them with one Livewire component, and update them reactively from your application state — no JavaScript boilerplate, no engine-specific configuration leaking into your views.
 
-You can install the package via composer:
+## Features
+
+- **Fluent + class-based builders** — `LiveCharts::line()->labels(...)->dataset(...)` or `class extends Chart`
+- **18 chart types** — line, bar, area, pie, donut, radar, scatter, bubble, heatmap, range bar, radial bar, polar area, box plot, treemap, candlestick, matrix, sankey, plus a generic factory
+- **Multi-engine** — ApexCharts and Chart.js out of the box, with `LiveCharts::registerEngine()` for custom adapters
+- **Livewire-native rendering** — single `<livewire:livecharts :chart="$chart" />` component handles mount, hydration, and re-render
+- **Reactive updates** — bind chart data to Livewire properties; the component re-renders when state changes
+- **Polling** — `Chart::poll(5000)` + `wire:poll="refresh"` integration with a `livecharts:refreshed` event for userland data hydration
+- **Interaction events** — `onDataPointClick`, `onZoom`, `onSelection`, `onScroll` map directly to Livewire events
+- **Broadcasting** — push chart updates over Laravel Echo channels with `broadcastOn()` / `broadcastAs()`
+- **Theme detection** — `auto`, `light`, or `dark` modes with Tailwind `.dark` class auto-detection
+- **CDN or local assets** — switch between jsDelivr CDNs and self-hosted bundles via config
+- **Stub publishing** — `livecharts:install` can publish chart class stubs to `stubs/livecharts` for project-level customization
+- **i18n** — ships with `en`, `pt_BR`, and `es` translations
+- **Type-safe** — PHPStan level 8, PHP 8.2+, strict types throughout
+
+## Quick Start
 
 ```bash
 composer require matheusmarnt/livecharts
-```
-
-Install assets and configuration:
-
-```bash
 php artisan livecharts:install
 ```
 
-## Basic Usage
+This will:
+1. Publish `config/livecharts.php`
+2. Copy `resources/js/livecharts.js` to your application (CDN-mode default)
+3. Optionally publish chart class stubs to `stubs/livecharts`
 
-### Fluent Builder
+Then build a chart and render it:
 
 ```php
 use Matheusmarnt\LiveCharts\Facades\LiveCharts;
@@ -35,25 +54,47 @@ use Matheusmarnt\LiveCharts\Facades\LiveCharts;
 $chart = LiveCharts::line()
     ->title('Monthly Revenue')
     ->labels(['Jan', 'Feb', 'Mar'])
-    ->dataset('2024', [100, 200, 150])
+    ->dataset('2026', [100, 200, 150])
     ->colors(['#3B82F6']);
 ```
-
-In your Blade view:
 
 ```blade
 <livewire:livecharts :chart="$chart" />
 ```
 
-### Class-Based Charts
+Place the asset directive once in your layout `<head>`:
 
-Generate a new chart class:
+```blade
+@liveChartsScripts
+```
+
+## Building Charts
+
+### Fluent builder
+
+Every method returns `$this`, so chains read top-down:
+
+```php
+LiveCharts::bar()
+    ->title('Sales by Region')
+    ->subtitle('Q1 2026')
+    ->labels(['North', 'South', 'East', 'West'])
+    ->dataset('Sales', [400, 300, 600, 250])
+    ->colors(['#10B981'])
+    ->stacked()
+    ->height(420)
+    ->theme('auto');
+```
+
+Available factories: `line`, `bar`, `area`, `pie`, `donut`, `radar`, `scatter`, `bubble`, `heatmap`, `rangeBar`, `radialBar`, `polarArea`, `boxPlot`, `treemap`, `candlestick`, `matrix`, `sankey`, plus `make()` for the generic factory.
+
+### Class-based charts
+
+Generate a dedicated class for reusable charts:
 
 ```bash
 php artisan make:chart RevenueChart --type=bar
 ```
-
-Then define your logic in `app/Charts/RevenueChart.php`:
 
 ```php
 namespace App\Charts;
@@ -65,45 +106,104 @@ class RevenueChart extends Chart
 {
     protected string $type = 'bar';
 
-    public function datasets(): array
+    public function __construct()
     {
-        return [
-            Dataset::make('Revenue')
-                ->data([400, 300, 600])
-                ->color('#10B981'),
-        ];
+        parent::__construct();
+
+        $this
+            ->title('Revenue')
+            ->labels(['Jan', 'Feb', 'Mar'])
+            ->datasets([
+                Dataset::make('2026')->data([400, 300, 600])->color('#10B981'),
+            ]);
     }
 }
 ```
 
-## Features
+```blade
+<livewire:livecharts :chart="new App\Charts\RevenueChart" />
+```
+
+> **Stubs:** running `livecharts:install` and accepting the stubs prompt publishes the generator stub to `stubs/livecharts/chart.stub`. Edit that file to customize the boilerplate emitted by `make:chart`.
+
+## Reactive Charts
 
 ### Polling
-Keep your charts updated automatically:
 
 ```php
-$chart->pollEvery(5000); // 5 seconds
+$chart->poll(5000); // refresh every 5 seconds
 ```
 
-### Events
-Interact with data points from Livewire:
+The Livewire component subscribes via `wire:poll="refresh"` and dispatches a browser event on every tick:
 
-```php
-$chart->onDataPointClick('chart-clicked');
+```js
+window.addEventListener('livecharts:refreshed', (e) => {
+    // e.detail.id — chart DOM id
+})
 ```
 
-In your parent Livewire component:
+Hydrate fresh data inside `refresh()` on a parent Livewire component, or react to the event on the client.
+
+### Click and zoom events
 
 ```php
+$chart
+    ->onDataPointClick('chart-clicked')
+    ->onZoom('chart-zoomed')
+    ->onSelection('chart-selected');
+```
+
+In the parent component:
+
+```php
+use Livewire\Attributes\On;
+
 #[On('chart-clicked')]
-public function handleChartClick($data)
+public function handle(array $data): void
 {
-    // $data contains: seriesIndex, dataPointIndex, value, label
+    // $data: ['seriesIndex' => 0, 'dataPointIndex' => 2, 'value' => 150, 'label' => 'Mar']
 }
 ```
 
-### Dark Mode
-Automatic dark mode detection based on Tailwind's `.dark` class.
+### Broadcasting
+
+```php
+$chart->broadcastOn('private-charts.'.$user->id)->broadcastAs('chart.updated');
+```
+
+Subscribe via Laravel Echo and the chart re-renders when the channel fires.
+
+## Multi-Engine
+
+The default engine is `apexcharts`. Override globally in `config/livecharts.php` or per chart:
+
+```php
+LiveCharts::line()->engine('chartjs')->labels(...)->dataset(...);
+```
+
+Register a custom adapter at runtime:
+
+```php
+use App\LiveCharts\Engines\HighchartsAdapter;
+use Matheusmarnt\LiveCharts\Facades\LiveCharts;
+
+LiveCharts::registerEngine('highcharts', HighchartsAdapter::class);
+```
+
+Implement `Matheusmarnt\LiveCharts\Contracts\EngineAdapter` and the engine becomes selectable from any chart.
+
+## Commands
+
+| Command | Description |
+|---|---|
+| `livecharts:install` | Publish config, copy the JS runtime, optionally publish chart stubs |
+| `make:chart {name}` | Generate a new chart class under `app/Charts` |
+| `livecharts:preview` | Print the URL of a debug route that renders one of every chart type |
+
+## Documentation
+
+- [Installation guide](docs/installation.md) — step-by-step setup, asset modes, engine selection, customization
+- [PRD](PRD.md) — product requirements, architecture decisions, full API surface
 
 ## Testing
 
@@ -111,17 +211,19 @@ Automatic dark mode detection based on Tailwind's `.dark` class.
 composer test
 ```
 
+Runs the Pest suite (49 tests / 137 assertions) against the package's testbench harness.
+
 ## Changelog
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+See [CHANGELOG](CHANGELOG.md) for release history.
 
 ## Contributing
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+See [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## Security
 
-If you discover any security related issues, please email matheusmarnt@gmail.com instead of using the issue tracker.
+If you discover a security vulnerability, please email matheusmarnt@gmail.com instead of opening a public issue.
 
 ## Credits
 
@@ -130,4 +232,4 @@ If you discover any security related issues, please email matheusmarnt@gmail.com
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+MIT — see [LICENSE](LICENSE.md).
