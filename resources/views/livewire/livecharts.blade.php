@@ -1,12 +1,14 @@
 <div
-    x-data="livecharts({
-        id: '{{ $id }}',
-        options: @js($options),
-        constructor: '{{ $adapter->jsConstructor() }}',
-        payload: @js($payload)
-    })"
-    id="{{ $id }}"
-    class="livecharts-container {{ $class }}"
+    {{ $attributes->merge([
+        'x-data' => "livecharts({
+            id: '{$id}',
+            options: " . json_encode($options) . ",
+            constructor: '{$adapter->jsConstructor()}',
+            payload: " . json_encode($payload) . "
+        })",
+        'id' => $id,
+        'class' => 'livecharts-container ' . $class,
+    ]) }}
     wire:ignore
     @if($payload['pollEvery'] > 0)
         wire:poll.{{ $payload['pollEvery'] }}ms
