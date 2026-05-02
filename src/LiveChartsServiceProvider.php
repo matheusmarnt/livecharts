@@ -62,6 +62,10 @@ class LiveChartsServiceProvider extends PackageServiceProvider
             $this->publishes([
                 __DIR__.'/../resources/dist' => public_path('vendor/livecharts/js'),
             ], 'livecharts-assets');
+
+            $this->publishes([
+                __DIR__.'/../resources/stubs' => base_path('stubs/livecharts'),
+            ], 'livecharts-stubs');
         }
 
         $this->registerRoutes();

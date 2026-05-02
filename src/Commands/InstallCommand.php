@@ -19,6 +19,7 @@ class InstallCommand extends Command
 
         $this->publishConfiguration();
         $this->publishAssets();
+        $this->publishStubs();
 
         $this->info(__('livecharts::livecharts.install.completed'));
 
@@ -47,5 +48,18 @@ class InstallCommand extends Command
         File::copy(__DIR__.'/../../resources/js/livecharts.js', $jsPath);
 
         $this->info(__('livecharts::livecharts.install.js_published', ['path' => $jsPath]));
+    }
+
+    protected function publishStubs(): void
+    {
+        if (! $this->confirm(__('livecharts::livecharts.install.publish_stubs'), false)) {
+            return;
+        }
+
+        $this->call('vendor:publish', [
+            '--tag' => 'livecharts-stubs',
+        ]);
+
+        $this->info(__('livecharts::livecharts.install.stubs_published', ['path' => base_path('stubs/livecharts')]));
     }
 }
