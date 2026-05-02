@@ -22,9 +22,21 @@ use Matheusmarnt\LiveCharts\Charts\RangeBarChart;
 use Matheusmarnt\LiveCharts\Charts\SankeyChart;
 use Matheusmarnt\LiveCharts\Charts\ScatterChart;
 use Matheusmarnt\LiveCharts\Charts\TreemapChart;
+use Matheusmarnt\LiveCharts\Contracts\EngineAdapter;
+use Matheusmarnt\LiveCharts\Engines\EngineFactory;
 
 class LiveCharts
 {
+    /**
+     * Register a new engine adapter at runtime.
+     *
+     * @param  class-string<EngineAdapter>  $adapter
+     */
+    public function registerEngine(string $name, string $adapter): void
+    {
+        EngineFactory::register($name, $adapter);
+    }
+
     public function make(): GenericChart
     {
         return new GenericChart;
