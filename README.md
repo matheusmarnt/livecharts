@@ -1,8 +1,6 @@
 <p align="center">
-    <img src="art/livecharts.png" alt="LiveCharts Logo" width="300">
+    <img src="art/livecharts.png" alt="LiveCharts Logo" width="750">
 </p>
-
-# LiveCharts
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/matheusmarnt/livecharts.svg?style=flat-square)](https://packagist.org/packages/matheusmarnt/livecharts)
 [![GitHub Tests Action Status](https://github.com/matheusmarnt/livecharts/actions/workflows/run-tests.yml/badge.svg)](https://github.com/matheusmarnt/livecharts/actions/workflows/run-tests.yml)
