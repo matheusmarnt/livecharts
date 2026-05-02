@@ -28,6 +28,11 @@ class LiveChartsComponent extends Component
         $this->class = $class;
     }
 
+    public function refresh(): void
+    {
+        $this->dispatch('livecharts:refreshed', id: $this->id);
+    }
+
     public function render(): View
     {
         $payload = $this->payload;
