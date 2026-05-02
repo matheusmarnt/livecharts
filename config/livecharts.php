@@ -60,8 +60,8 @@ return [
     'assets' => [
         'auto_inject' => true,
         'cdn' => [
-            'apexcharts' => 'https://cdn.jsdelivr.net/npm/apexcharts@latest',
-            'chartjs' => 'https://cdn.jsdelivr.net/npm/chart.js@latest/dist/chart.umd.min.js',
+            'apexcharts' => 'https://cdn.jsdelivr.net/npm/apexcharts@5.10.6',
+            'chartjs' => 'https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js',
         ],
     ],
 ];
