@@ -3,8 +3,8 @@
 namespace Matheusmarnt\LiveCharts\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Orchestra\Testbench\TestCase as Orchestra;
 use Matheusmarnt\LiveCharts\LiveChartsServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
 {
