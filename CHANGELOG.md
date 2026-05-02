@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.15.0](https://github.com/matheusmarnt/livecharts/compare/v1.14.0...v1.15.0) (2026-05-02)
+
+
+### Features
+
+* **exceptions:** add InvalidChartType, EmptyDataset, DataShapeMismatch ([#33](https://github.com/matheusmarnt/livecharts/issues/33)) ([a7c3ae2](https://github.com/matheusmarnt/livecharts/commit/a7c3ae2daf501c1a2cc92249db91999649f9f8d5))
+
+
+### Bug Fixes
+
+* resolve persistent PHPStan view-string error in ServiceProvider ([daf5788](https://github.com/matheusmarnt/livecharts/commit/daf578870171c7cc8d689b20dbd25e34ae122d7e))
+* resolve PHPStan view-string error and improve test coverage for CI ([c2d7e64](https://github.com/matheusmarnt/livecharts/commit/c2d7e64c26c9d818d22bf5ae88fcf89de1ae3aee))
+
 ## [1.14.0](https://github.com/matheusmarnt/livecharts/compare/v1.13.0...v1.14.0) (2026-05-02)
 
 
