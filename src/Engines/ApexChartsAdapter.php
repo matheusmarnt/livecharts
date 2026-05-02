@@ -11,7 +11,7 @@ class ApexChartsAdapter implements EngineAdapter
 {
     public function build(ChartPayload $payload): array
     {
-        $isSingleSeries = in_array($payload->type, ['pie', 'donut', 'radialBar']);
+        $isSingleSeries = in_array($payload->type, ['pie', 'donut', 'radialBar', 'polarArea']);
 
         $options = [
             'chart' => [
