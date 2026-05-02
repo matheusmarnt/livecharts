@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace Matheusmarnt\LiveCharts\Engines;
 
 use Matheusmarnt\LiveCharts\Contracts\EngineAdapter;
+use Matheusmarnt\LiveCharts\Support\AssetManager;
 use Matheusmarnt\LiveCharts\Support\ChartPayload;
 
 class ChartJsAdapter implements EngineAdapter
 {
     public function build(ChartPayload $payload): array
     {
+        $this->registerRequiredAssets($payload);
+
         $isSingleSeries = in_array($payload->type, ['pie', 'donut', 'doughnut', 'polarArea']);
 
         $chartType = $payload->type === 'donut' ? 'doughnut' : $payload->type;
@@ -56,7 +59,7 @@ class ChartJsAdapter implements EngineAdapter
 
     protected function buildScales(ChartPayload $payload): array
     {
-        if (in_array($payload->type, ['pie', 'donut', 'doughnut', 'polarArea', 'radar'])) {
+        if (in_array($payload->type, ['pie', 'donut', 'doughnut', 'polarArea', 'radar', 'sankey', 'treemap', 'matrix'])) {
             return [];
         }
 
@@ -69,6 +72,29 @@ class ChartJsAdapter implements EngineAdapter
                 'stacked' => $payload->stacked,
             ],
         ];
+    }
+
+    protected function registerRequiredAssets(ChartPayload $payload): void
+    {
+        $assetManager = app(AssetManager::class);
+
+        if ($payload->type === 'treemap') {
+            $assetManager->registerAsset('chartjs-treemap');
+        }
+
+        if ($payload->type === 'matrix') {
+            $assetManager->registerAsset('chartjs-matrix');
+        }
+
+        if ($payload->type === 'sankey') {
+            $assetManager->registerAsset('chartjs-sankey');
+        }
+
+        if ($payload->type === 'candlestick') {
+            $assetManager->registerAsset('chartjs-luxon');
+            $assetManager->registerAsset('chartjs-adapter-luxon');
+            $assetManager->registerAsset('chartjs-financial');
+        }
     }
 
     public function jsConstructor(): string
