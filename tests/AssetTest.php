@@ -17,7 +17,7 @@ it('can register multiple assets', function () {
     config()->set('livecharts.assets.cdn.chartjs-treemap', 'https://example.com/treemap.js');
     config()->set('livecharts.assets.cdn.chartjs', 'https://example.com/chartjs.js');
 
-    $manager = new AssetManager();
+    $manager = new AssetManager;
     $manager->registerAsset('chartjs');
     $manager->registerAsset('chartjs-treemap');
 
