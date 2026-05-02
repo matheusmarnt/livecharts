@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.18.0](https://github.com/matheusmarnt/livecharts/compare/v1.17.0...v1.18.0) (2026-05-02)
+
+
+### Features
+
+* **polling:** wire Chart::poll() and LiveChartsComponent::refresh() ([#42](https://github.com/matheusmarnt/livecharts/issues/42)) ([7d0a88a](https://github.com/matheusmarnt/livecharts/commit/7d0a88a8fb42ca60da9d85882f8b468bfc3cfff2))
+
 ## [1.17.0](https://github.com/matheusmarnt/livecharts/compare/v1.16.1...v1.17.0) (2026-05-02)
 
 
