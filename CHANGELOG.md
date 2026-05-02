@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.16.1](https://github.com/matheusmarnt/livecharts/compare/v1.16.0...v1.16.1) (2026-05-02)
+
+
+### Miscellaneous Chores
+
+* **phpstan:** raise level from 5 to 8 ([#37](https://github.com/matheusmarnt/livecharts/issues/37)) ([6f3ad13](https://github.com/matheusmarnt/livecharts/commit/6f3ad136c6d7abea6b6135db61b5d337365abc8e))
+
 ## [1.16.0](https://github.com/matheusmarnt/livecharts/compare/v1.15.0...v1.16.0) (2026-05-02)
 
 
