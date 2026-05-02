@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0](https://github.com/matheusmarnt/livecharts/compare/v1.0.0...v1.1.0) (2026-05-02)
+
+
+### Features
+
+* expand Chart.js adapter support and options mapping ([a1cff7a](https://github.com/matheusmarnt/livecharts/commit/a1cff7ac38bddc949658953ccb39c9091d92e4d4))
+* expand Chart.js adapter support and options mapping ([e1195d3](https://github.com/matheusmarnt/livecharts/commit/e1195d387a6ed94953ffcc6b6f60183f9525e987))
+
 ## 1.0.0 (2026-05-02)
 
 
