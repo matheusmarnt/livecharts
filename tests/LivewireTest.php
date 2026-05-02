@@ -1,11 +1,11 @@
 <?php
 
-use Matheusmarnt\LiveCharts\Livewire\LiveChartsComponent;
-use Matheusmarnt\LiveCharts\Charts\GenericChart;
 use Livewire\Livewire;
+use Matheusmarnt\LiveCharts\Charts\GenericChart;
+use Matheusmarnt\LiveCharts\Livewire\LiveChartsComponent;
 
 it('can render the livecharts component', function () {
-    $chart = (new GenericChart())
+    $chart = (new GenericChart)
         ->type('line')
         ->title('Test Chart')
         ->labels(['A', 'B'])

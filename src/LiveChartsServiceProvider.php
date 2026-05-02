@@ -2,13 +2,12 @@
 
 namespace Matheusmarnt\LiveCharts;
 
-use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
-
+use Livewire\Livewire;
+use Matheusmarnt\LiveCharts\Commands\InstallCommand;
 use Matheusmarnt\LiveCharts\Engines\EngineFactory;
 use Matheusmarnt\LiveCharts\Livewire\LiveChartsComponent;
-use Matheusmarnt\LiveCharts\Commands\InstallCommand;
-use Livewire\Livewire;
+use Spatie\LaravelPackageTools\Package;
+use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 class LiveChartsServiceProvider extends PackageServiceProvider
 {
@@ -29,7 +28,7 @@ class LiveChartsServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         $this->app->singleton(LiveCharts::class, function () {
-            return new LiveCharts();
+            return new LiveCharts;
         });
     }
 

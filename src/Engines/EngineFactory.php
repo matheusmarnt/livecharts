@@ -35,6 +35,6 @@ class EngineFactory
 
         $adapter = static::$engines[$name];
 
-        return new $adapter();
+        return new $adapter;
     }
 }

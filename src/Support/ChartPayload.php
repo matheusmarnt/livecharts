@@ -41,7 +41,7 @@ class ChartPayload implements Arrayable, Jsonable, JsonSerializable
             'height' => $this->height,
             'width' => $this->width,
             'labels' => $this->labels,
-            'datasets' => array_map(fn($dataset) => $dataset->toArray(), $this->datasets),
+            'datasets' => array_map(fn ($dataset) => $dataset->toArray(), $this->datasets),
             'colors' => $this->colors,
             'theme' => $this->theme,
             'stacked' => $this->stacked,

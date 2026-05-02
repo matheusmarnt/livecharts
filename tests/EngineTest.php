@@ -1,9 +1,9 @@
 <?php
 
-use Matheusmarnt\LiveCharts\Engines\EngineFactory;
 use Matheusmarnt\LiveCharts\Engines\ApexChartsAdapter;
-use Matheusmarnt\LiveCharts\Support\ChartPayload;
+use Matheusmarnt\LiveCharts\Engines\EngineFactory;
 use Matheusmarnt\LiveCharts\Exceptions\UnknownEngineException;
+use Matheusmarnt\LiveCharts\Support\ChartPayload;
 
 it('can register and resolve engines', function () {
     EngineFactory::register('test', ApexChartsAdapter::class);
@@ -21,12 +21,12 @@ it('apexcharts adapter builds correct options', function () {
         engine: 'apexcharts',
         title: 'Test Chart',
         datasets: [
-            ['name' => 'Series 1', 'data' => [10, 20, 30]]
+            ['name' => 'Series 1', 'data' => [10, 20, 30]],
         ],
         labels: ['A', 'B', 'C']
     );
 
-    $adapter = new ApexChartsAdapter();
+    $adapter = new ApexChartsAdapter;
     $options = $adapter->build($payload);
 
     expect($options['chart']['type'])->toBe('line');

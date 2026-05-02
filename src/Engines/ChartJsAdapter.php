@@ -16,7 +16,7 @@ class ChartJsAdapter implements EngineAdapter
             'type' => $payload->type,
             'data' => [
                 'labels' => $payload->labels,
-                'datasets' => array_map(fn($dataset) => [
+                'datasets' => array_map(fn ($dataset) => [
                     'label' => $dataset['name'],
                     'data' => $dataset['data'],
                     'backgroundColor' => $dataset['color'],
