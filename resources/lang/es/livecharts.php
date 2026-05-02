@@ -17,6 +17,8 @@ return [
         'publishing_assets' => 'Publicando assets...',
         'overwrite_js' => 'livecharts.js ya existe. ¿Sobrescribir?',
         'js_published' => 'Assets publicados en [:path]',
+        'publish_stubs' => '¿Publicar stubs de clases de gráfico en stubs/livecharts?',
+        'stubs_published' => 'Stubs publicados en [:path]',
     ],
 
     'preview' => [
