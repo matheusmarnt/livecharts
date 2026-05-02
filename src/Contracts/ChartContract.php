@@ -30,5 +30,11 @@ interface ChartContract
 
     public function onDataPointClick(string $event): self;
 
+    public function onZoom(string $event): self;
+
+    public function onSelection(string $event): self;
+
+    public function onScroll(string $event): self;
+
     public function toPayload(): array;
 }

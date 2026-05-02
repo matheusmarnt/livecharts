@@ -30,6 +30,21 @@ document.addEventListener('alpine:init', () => {
                                         label: config.w.globals.labels[config.dataPointIndex]
                                     });
                                 }
+                            },
+                            zoomed: (chartContext, { xaxis, yaxis }) => {
+                                if (this.payload.onZoom) {
+                                    this.$wire.dispatch(this.payload.onZoom, { xaxis, yaxis });
+                                }
+                            },
+                            selection: (chartContext, { xaxis, yaxis }) => {
+                                if (this.payload.onSelection) {
+                                    this.$wire.dispatch(this.payload.onSelection, { xaxis, yaxis });
+                                }
+                            },
+                            scrolled: (chartContext, { xaxis, yaxis }) => {
+                                if (this.payload.onScroll) {
+                                    this.$wire.dispatch(this.payload.onScroll, { xaxis, yaxis });
+                                }
                             }
                         }
                     }
