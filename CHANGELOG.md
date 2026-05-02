@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.8.0](https://github.com/matheusmarnt/livecharts/compare/v1.7.0...v1.8.0) (2026-05-02)
+
+
+### Features
+
+* Chart.js plugins support ([f175bc9](https://github.com/matheusmarnt/livecharts/commit/f175bc974df7e3362f5e1f9b3d5dcdd91696d499))
+* implement Chart.js plugins support (Treemap, Matrix, Sankey, Financial) ([345ed67](https://github.com/matheusmarnt/livecharts/commit/345ed67079becedd215b5007582004662e362e4c))
+
 ## [1.7.0](https://github.com/matheusmarnt/livecharts/compare/v1.6.0...v1.7.0) (2026-05-02)
 
 
