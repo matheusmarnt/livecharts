@@ -5,9 +5,6 @@ declare(strict_types=1);
 namespace Matheusmarnt\LiveCharts\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Route;
-use Matheusmarnt\LiveCharts\Facades\LiveCharts;
 
 class PreviewCommand extends Command
 {
@@ -25,8 +22,8 @@ class PreviewCommand extends Command
 
         // In a real Laravel app, this would be done via a provider.
         // For the command, we'll suggest the user where to look or how it works.
-        $this->info('Opening preview at: ' . url('/livecharts/preview'));
-        
+        $this->info('Opening preview at: '.url('/livecharts/preview'));
+
         $this->warn('Note: Ensure your local server is running (php artisan serve).');
 
         return self::SUCCESS;
