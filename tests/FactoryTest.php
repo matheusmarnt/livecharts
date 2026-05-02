@@ -1,22 +1,22 @@
 <?php
 
-use Matheusmarnt\LiveCharts\LiveCharts;
-use Matheusmarnt\LiveCharts\Charts\RadarChart;
-use Matheusmarnt\LiveCharts\Charts\ScatterChart;
-use Matheusmarnt\LiveCharts\Charts\BubbleChart;
-use Matheusmarnt\LiveCharts\Charts\HeatmapChart;
-use Matheusmarnt\LiveCharts\Charts\RangeBarChart;
-use Matheusmarnt\LiveCharts\Charts\RadialBarChart;
-use Matheusmarnt\LiveCharts\Charts\PolarAreaChart;
 use Matheusmarnt\LiveCharts\Charts\BoxPlotChart;
-use Matheusmarnt\LiveCharts\Charts\TreemapChart;
+use Matheusmarnt\LiveCharts\Charts\BubbleChart;
 use Matheusmarnt\LiveCharts\Charts\CandlestickChart;
+use Matheusmarnt\LiveCharts\Charts\HeatmapChart;
 use Matheusmarnt\LiveCharts\Charts\MatrixChart;
+use Matheusmarnt\LiveCharts\Charts\PolarAreaChart;
+use Matheusmarnt\LiveCharts\Charts\RadarChart;
+use Matheusmarnt\LiveCharts\Charts\RadialBarChart;
+use Matheusmarnt\LiveCharts\Charts\RangeBarChart;
 use Matheusmarnt\LiveCharts\Charts\SankeyChart;
+use Matheusmarnt\LiveCharts\Charts\ScatterChart;
+use Matheusmarnt\LiveCharts\Charts\TreemapChart;
+use Matheusmarnt\LiveCharts\LiveCharts;
 
 it('factory methods return correct instances', function () {
-    $lc = new LiveCharts();
-    
+    $lc = new LiveCharts;
+
     expect($lc->radar())->toBeInstanceOf(RadarChart::class)
         ->and($lc->scatter())->toBeInstanceOf(ScatterChart::class)
         ->and($lc->bubble())->toBeInstanceOf(BubbleChart::class)
