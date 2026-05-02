@@ -1,5 +1,8 @@
 <?php
 
+use Matheusmarnt\LiveCharts\Engines\ApexChartsAdapter;
+use Matheusmarnt\LiveCharts\Engines\ChartJsAdapter;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -45,8 +48,8 @@ return [
     |--------------------------------------------------------------------------
     */
     'engines' => [
-        'apexcharts' => \Matheusmarnt\LiveCharts\Engines\ApexChartsAdapter::class,
-        'chartjs' => \Matheusmarnt\LiveCharts\Engines\ChartJsAdapter::class,
+        'apexcharts' => ApexChartsAdapter::class,
+        'chartjs' => ChartJsAdapter::class,
     ],
 
     /*
