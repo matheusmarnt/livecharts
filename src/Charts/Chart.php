@@ -48,6 +48,12 @@ abstract class Chart implements ChartContract
 
     protected ?string $dataPointClickEvent = null;
 
+    protected ?string $zoomEvent = null;
+
+    protected ?string $selectionEvent = null;
+
+    protected ?string $scrollEvent = null;
+
     protected array $options = [];
 
     public function __construct()
@@ -199,6 +205,27 @@ abstract class Chart implements ChartContract
         return $this;
     }
 
+    public function onZoom(string $event): self
+    {
+        $this->zoomEvent = $event;
+
+        return $this;
+    }
+
+    public function onSelection(string $event): self
+    {
+        $this->selectionEvent = $event;
+
+        return $this;
+    }
+
+    public function onScroll(string $event): self
+    {
+        $this->scrollEvent = $event;
+
+        return $this;
+    }
+
     public function options(array $options): self
     {
         $this->options = array_merge_recursive($this->options, $options);
@@ -227,6 +254,9 @@ abstract class Chart implements ChartContract
             tooltip: $this->tooltip,
             pollEvery: $this->pollEvery,
             onDataPointClick: $this->dataPointClickEvent,
+            onZoom: $this->zoomEvent,
+            onSelection: $this->selectionEvent,
+            onScroll: $this->scrollEvent,
             options: $this->options,
         ))->toArray();
     }

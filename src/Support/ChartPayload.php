@@ -29,6 +29,9 @@ class ChartPayload implements Arrayable, Jsonable, JsonSerializable
         public bool $tooltip = true,
         public int $pollEvery = 0,
         public ?string $onDataPointClick = null,
+        public ?string $onZoom = null,
+        public ?string $onSelection = null,
+        public ?string $onScroll = null,
         public array $options = [],
     ) {}
 
@@ -53,6 +56,9 @@ class ChartPayload implements Arrayable, Jsonable, JsonSerializable
             'tooltip' => $this->tooltip,
             'pollEvery' => $this->pollEvery,
             'onDataPointClick' => $this->onDataPointClick,
+            'onZoom' => $this->onZoom,
+            'onSelection' => $this->onSelection,
+            'onScroll' => $this->onScroll,
             'options' => $this->options,
         ];
     }
