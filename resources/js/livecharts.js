@@ -27,15 +27,42 @@ document.addEventListener('alpine:init', () => {
         },
 
         update(newPayload) {
-            // Basic logic: if data only change, soft update. Else hard reset.
-            // For now, simple re-render for POC.
-            if (this.instance && this.instance.destroy) {
-                this.instance.destroy();
+            if (!this.instance) {
+                this.render();
+                return;
             }
-            
-            // Re-resolve options from payload logic would go here if done in JS
-            // But since Livewire re-renders the whole x-data, Alpine will re-init.
-            // This update() is a placeholder for future reactive optimization.
+
+            // Check if structural changes occurred
+            const structural = JSON.stringify(this.payload.type) !== JSON.stringify(newPayload.type) ||
+                             JSON.stringify(this.payload.labels) !== JSON.stringify(newPayload.labels) ||
+                             JSON.stringify(this.payload.options) !== JSON.stringify(newPayload.options);
+
+            if (structural) {
+                this.destroy();
+                this.options = newPayload.options;
+                this.payload = newPayload;
+                this.render();
+            } else {
+                // Soft update for ApexCharts
+                if (this.constructor === 'ApexCharts') {
+                    this.instance.updateSeries(newPayload.datasets.map(d => ({
+                        name: d.name,
+                        data: d.data
+                    })));
+                } 
+                // Soft update for Chart.js
+                else if (this.constructor === 'Chart') {
+                    this.instance.data.datasets = newPayload.datasets.map(d => ({
+                        label: d.name,
+                        data: d.data,
+                        backgroundColor: d.color,
+                        borderColor: d.color
+                    }));
+                    this.instance.update();
+                }
+                
+                this.payload = newPayload;
+            }
         },
 
         destroy() {
