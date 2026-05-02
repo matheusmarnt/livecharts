@@ -1,5 +1,5 @@
-# Guia de Upgrade
+# Upgrade Guide
 
 ## v1.0.0
 
-Versão inicial. Nenhuma alteração necessária para quem está começando.
+Initial version. No changes required for new users.

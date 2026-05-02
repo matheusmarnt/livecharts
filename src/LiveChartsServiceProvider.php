@@ -5,6 +5,8 @@ namespace Matheusmarnt\LiveCharts;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
+use Matheusmarnt\LiveCharts\Engines\EngineFactory;
+
 class LiveChartsServiceProvider extends PackageServiceProvider
 {
     public function configurePackage(Package $package): void
@@ -18,5 +20,19 @@ class LiveChartsServiceProvider extends PackageServiceProvider
             ->name('livecharts')
             ->hasConfigFile()
             ->hasViews();
+    }
+
+    public function packageRegistered(): void
+    {
+        $this->app->singleton(LiveCharts::class, function () {
+            return new LiveCharts();
+        });
+    }
+
+    public function packageBooted(): void
+    {
+        foreach (config('livecharts.engines', []) as $name => $adapter) {
+            EngineFactory::register($name, $adapter);
+        }
     }
 }
