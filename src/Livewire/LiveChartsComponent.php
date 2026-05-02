@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Matheusmarnt\LiveCharts\Livewire;
 
 use Illuminate\Contracts\View\View;
+use Matheusmarnt\LiveCharts\Support\AssetManager;
 use Livewire\Component;
 use Matheusmarnt\LiveCharts\Contracts\ChartContract;
 use Matheusmarnt\LiveCharts\Engines\EngineFactory;
@@ -29,6 +30,8 @@ class LiveChartsComponent extends Component
     {
         $adapter = EngineFactory::resolve($this->payload['engine']);
         $options = $adapter->build(new ChartPayload(...$this->payload));
+
+        app(AssetManager::class)->registerEngine($this->payload['engine']);
 
         /** @var view-string $view */
         $view = 'livecharts::livewire.livecharts';
