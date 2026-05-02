@@ -9,11 +9,11 @@ it('apexcharts adapter handles single-series charts', function () {
         type: 'pie',
         engine: 'apexcharts',
         datasets: [
-            ['name' => 'Data', 'data' => [10, 20, 30]]
+            ['name' => 'Data', 'data' => [10, 20, 30]],
         ]
     );
 
-    $adapter = new ApexChartsAdapter();
+    $adapter = new ApexChartsAdapter;
     $options = $adapter->build($payload);
 
     expect($options['series'])->toBe([10, 20, 30]);
@@ -24,11 +24,11 @@ it('chartjs adapter handles donut as doughnut', function () {
         type: 'donut',
         engine: 'chartjs',
         datasets: [
-            ['name' => 'Data', 'data' => [10, 20, 30]]
+            ['name' => 'Data', 'data' => [10, 20, 30]],
         ]
     );
 
-    $adapter = new ChartJsAdapter();
+    $adapter = new ChartJsAdapter;
     $options = $adapter->build($payload);
 
     expect($options['type'])->toBe('doughnut');
@@ -39,11 +39,11 @@ it('chartjs adapter applies colors to datasets', function () {
         type: 'bar',
         engine: 'chartjs',
         datasets: [
-            ['name' => 'S1', 'data' => [1, 2], 'color' => '#ff0000']
+            ['name' => 'S1', 'data' => [1, 2], 'color' => '#ff0000'],
         ]
     );
 
-    $adapter = new ChartJsAdapter();
+    $adapter = new ChartJsAdapter;
     $options = $adapter->build($payload);
 
     expect($options['data']['datasets'][0]['backgroundColor'])->toBe('#ff0000');
