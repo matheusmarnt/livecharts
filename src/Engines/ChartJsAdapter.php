@@ -11,16 +11,17 @@ class ChartJsAdapter implements EngineAdapter
 {
     public function build(ChartPayload $payload): array
     {
-        // Basic Chart.js implementation (to be expanded in v2)
+        $isSingleSeries = in_array($payload->type, ['pie', 'donut', 'doughnut', 'polarArea']);
+
         return [
-            'type' => $payload->type,
+            'type' => $payload->type === 'donut' ? 'doughnut' : $payload->type,
             'data' => [
                 'labels' => $payload->labels,
-                'datasets' => array_map(fn ($dataset) => [
+                'datasets' => array_map(fn($dataset) => [
                     'label' => $dataset['name'],
                     'data' => $dataset['data'],
-                    'backgroundColor' => $dataset['color'],
-                    'borderColor' => $dataset['color'],
+                    'backgroundColor' => $isSingleSeries ? $payload->colors : ($dataset['color'] ?? $payload->colors[0] ?? null),
+                    'borderColor' => $isSingleSeries ? '#fff' : ($dataset['color'] ?? $payload->colors[0] ?? null),
                 ], $payload->datasets),
             ],
             'options' => array_merge_recursive([
