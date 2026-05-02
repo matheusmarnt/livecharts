@@ -23,21 +23,45 @@ concurrency:
 jobs:
   test:
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 5
+    timeout-minutes: 10
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
-        php: [8.5, 8.4, 8.3]
-        laravel: [13.*, 12.*]
+        php: ['8.2', '8.3', '8.4', '8.5']
+        laravel: ['10.*', '11.*', '12.*', '13.*']
+        livewire: ['^3.0', '^4.0']
         stability: [prefer-lowest, prefer-stable]
         include:
-          - laravel: 13.*
-            testbench: 11.*
+          - laravel: 10.*
+            testbench: 8.*
+          - laravel: 11.*
+            testbench: 9.*
           - laravel: 12.*
             testbench: 10.*
+          - laravel: 13.*
+            testbench: 11.*
+        exclude:
+          # Laravel 13 requires PHP 8.3+
+          - laravel: 13.*
+            php: '8.2'
+          # Laravel 10 does not support PHP 8.4/8.5
+          - laravel: 10.*
+            php: '8.4'
+          - laravel: 10.*
+            php: '8.5'
+          # Laravel 11 does not support PHP 8.5
+          - laravel: 11.*
+            php: '8.5'
+          # Livewire 4 requires PHP 8.3+ and Laravel 12+
+          - livewire: '^4.0'
+            php: '8.2'
+          - livewire: '^4.0'
+            laravel: 10.*
+          - livewire: '^4.0'
+            laravel: 11.*
 
-    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
+    name: P${{ matrix.php }} L${{ matrix.laravel }} LW${{ matrix.livewire }} ${{ matrix.stability }} ${{ matrix.os }}
 
     steps:
       - name: Checkout code
@@ -57,7 +81,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "livewire/livewire:${{ matrix.livewire }}" --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
       - name: List Installed Dependencies
