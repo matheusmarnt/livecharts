@@ -7,13 +7,14 @@ use Matheusmarnt\LiveCharts\Exceptions\UnknownEngineException;
 use Matheusmarnt\LiveCharts\Support\ChartPayload;
 
 it('can register and resolve engines', function () {
-    EngineFactory::register('test', ApexChartsAdapter::class);
+    $factory = app(EngineFactory::class);
+    $factory->register('test', ApexChartsAdapter::class);
 
-    expect(EngineFactory::resolve('test'))->toBeInstanceOf(ApexChartsAdapter::class);
+    expect($factory->resolve('test'))->toBeInstanceOf(ApexChartsAdapter::class);
 });
 
 it('throws exception for unknown engine', function () {
-    EngineFactory::resolve('non-existent');
+    app(EngineFactory::class)->resolve('non-existent');
 })->throws(UnknownEngineException::class);
 
 it('apexcharts adapter builds correct options', function () {

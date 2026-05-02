@@ -48,7 +48,7 @@ class LiveChartsComponent extends Component
             );
         }, $payload['datasets']);
 
-        $adapter = EngineFactory::resolve($payload['engine']);
+        $adapter = app(EngineFactory::class)->resolve($payload['engine']);
 
         $chartPayload = new ChartPayload(
             type: $payload['type'],
