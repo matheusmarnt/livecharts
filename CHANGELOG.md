@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.9.0](https://github.com/matheusmarnt/livecharts/compare/v1.8.0...v1.9.0) (2026-05-02)
+
+
+### Features
+
+* asset resilience (Local + CDN fallback) ([f422044](https://github.com/matheusmarnt/livecharts/commit/f4220445b2643b40a12953d30e3bdd704395fd56))
+* implement asset resilience with local dependencies and CDN fallback ([5f1dcaa](https://github.com/matheusmarnt/livecharts/commit/5f1dcaad435f49622582462ce2ecd74eb589b52e))
+
 ## [1.8.0](https://github.com/matheusmarnt/livecharts/compare/v1.7.0...v1.8.0) (2026-05-02)
 
 
