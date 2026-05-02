@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.7.0](https://github.com/matheusmarnt/livecharts/compare/v1.6.0...v1.7.0) (2026-05-02)
+
+
+### Features
+
+* implement WebSocket integration ([de216b5](https://github.com/matheusmarnt/livecharts/commit/de216b55092e5f0a7b54bc4843fe650b28de3183))
+* implement WebSocket integration via Laravel Echo ([d1a2a73](https://github.com/matheusmarnt/livecharts/commit/d1a2a7338c8f1883e0680ce6f962d32a739c54a0))
+
 ## [1.6.0](https://github.com/matheusmarnt/livecharts/compare/v1.5.0...v1.6.0) (2026-05-02)
 
 
