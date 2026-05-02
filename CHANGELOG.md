@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.6.0](https://github.com/matheusmarnt/livecharts/compare/v1.5.0...v1.6.0) (2026-05-02)
+
+
+### Features
+
+* implement deep integration (Livewire, Alpine, JS, Tailwind) ([6afbc33](https://github.com/matheusmarnt/livecharts/commit/6afbc33050ff26f0b7529dcedfc65ee662c6967c))
+* implement full integration with Livewire attributes, Alpine.js, and JS global access ([18bf823](https://github.com/matheusmarnt/livecharts/commit/18bf82361e61fd7de6b0e5baad12b22b7b18db5c))
+
 ## [1.5.0](https://github.com/matheusmarnt/livecharts/compare/v1.4.1...v1.5.0) (2026-05-02)
 
 
