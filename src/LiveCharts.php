@@ -6,14 +6,22 @@ namespace Matheusmarnt\LiveCharts;
 
 use Matheusmarnt\LiveCharts\Charts\AreaChart;
 use Matheusmarnt\LiveCharts\Charts\BarChart;
+use Matheusmarnt\LiveCharts\Charts\BoxPlotChart;
 use Matheusmarnt\LiveCharts\Charts\BubbleChart;
+use Matheusmarnt\LiveCharts\Charts\CandlestickChart;
 use Matheusmarnt\LiveCharts\Charts\DonutChart;
 use Matheusmarnt\LiveCharts\Charts\GenericChart;
 use Matheusmarnt\LiveCharts\Charts\HeatmapChart;
 use Matheusmarnt\LiveCharts\Charts\LineChart;
+use Matheusmarnt\LiveCharts\Charts\MatrixChart;
 use Matheusmarnt\LiveCharts\Charts\PieChart;
+use Matheusmarnt\LiveCharts\Charts\PolarAreaChart;
 use Matheusmarnt\LiveCharts\Charts\RadarChart;
+use Matheusmarnt\LiveCharts\Charts\RadialBarChart;
+use Matheusmarnt\LiveCharts\Charts\RangeBarChart;
+use Matheusmarnt\LiveCharts\Charts\SankeyChart;
 use Matheusmarnt\LiveCharts\Charts\ScatterChart;
+use Matheusmarnt\LiveCharts\Charts\TreemapChart;
 
 class LiveCharts
 {
@@ -65,5 +73,45 @@ class LiveCharts
     public function heatmap(): HeatmapChart
     {
         return new HeatmapChart;
+    }
+
+    public function rangeBar(): RangeBarChart
+    {
+        return new RangeBarChart;
+    }
+
+    public function radialBar(): RadialBarChart
+    {
+        return new RadialBarChart;
+    }
+
+    public function polarArea(): PolarAreaChart
+    {
+        return new PolarAreaChart;
+    }
+
+    public function boxPlot(): BoxPlotChart
+    {
+        return new BoxPlotChart;
+    }
+
+    public function treemap(): TreemapChart
+    {
+        return new TreemapChart;
+    }
+
+    public function candlestick(): CandlestickChart
+    {
+        return new CandlestickChart;
+    }
+
+    public function matrix(): MatrixChart
+    {
+        return new MatrixChart;
+    }
+
+    public function sankey(): SankeyChart
+    {
+        return new SankeyChart;
     }
 }
