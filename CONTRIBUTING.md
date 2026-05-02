@@ -1,24 +1,24 @@
-# Contribuindo para LiveCharts
+# Contributing to LiveCharts
 
-Obrigado por considerar contribuir para o LiveCharts!
+Thank you for considering contributing to LiveCharts!
 
-## Processo de Desenvolvimento
+## Development Process
 
-1. Crie uma branch para sua alteração: `feat/minha-funcionalidade` ou `fix/meu-bug`.
-2. Escreva testes para suas alterações.
-3. Garanta que todos os testes passem: `composer test`.
-4. Siga os padrões de código do Laravel usando o Pint: `composer format`.
-5. Envie um Pull Request.
+1. Create a branch for your change: `feat/my-feature` or `fix/my-bug`.
+2. Write tests for your changes.
+3. Ensure all tests pass: `composer test`.
+4. Follow Laravel code standards using Pint: `composer format`.
+5. Submit a Pull Request.
 
-## Padrões de Commit
+## Commit Standards
 
-Usamos Conventional Commits:
-- `feat:` para novas funcionalidades.
-- `fix:` para correções de bugs.
-- `docs:` para documentação.
-- `refactor:` para alterações de código que não corrigem bugs nem adicionam funcionalidades.
+We use Conventional Commits:
+- `feat:` for new features.
+- `fix:` for bug fixes.
+- `docs:` for documentation.
+- `refactor:` for code changes that neither fix bugs nor add features.
 
-## Testes
+## Testing
 
 ```bash
 composer test
