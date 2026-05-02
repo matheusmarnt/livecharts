@@ -10,8 +10,10 @@ class DataShapeMismatchException extends Exception
 {
     public static function forDataset(string $datasetName, int $expected, int $actual): self
     {
-        return new self(
-            "Dataset [{$datasetName}] data count mismatch: expected {$expected} points (matching labels), got {$actual}."
-        );
+        return new self(trans('livecharts::livecharts.exceptions.data_shape_mismatch', [
+            'name' => $datasetName,
+            'expected' => $expected,
+            'actual' => $actual,
+        ]));
     }
 }

@@ -10,15 +10,15 @@ class EmptyDatasetException extends Exception
 {
     public static function forChart(string $chartType): self
     {
-        return new self(
-            "Chart of type [{$chartType}] has no datasets. Add at least one dataset via dataset() or datasets()."
-        );
+        return new self(trans('livecharts::livecharts.exceptions.empty_dataset_chart', [
+            'type' => $chartType,
+        ]));
     }
 
     public static function forDataset(string $name): self
     {
-        return new self(
-            "Dataset [{$name}] has no data points. Provide values via Dataset::data()."
-        );
+        return new self(trans('livecharts::livecharts.exceptions.empty_dataset_named', [
+            'name' => $name,
+        ]));
     }
 }

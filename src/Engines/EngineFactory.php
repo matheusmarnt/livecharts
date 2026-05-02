@@ -28,9 +28,10 @@ class EngineFactory
     public static function resolve(string $name): EngineAdapter
     {
         if (! isset(static::$engines[$name])) {
-            $registered = implode(', ', array_keys(static::$engines));
-
-            throw new UnknownEngineException("Engine [{$name}] not registered. Available: [{$registered}]");
+            throw new UnknownEngineException(trans('livecharts::livecharts.exceptions.unknown_engine', [
+                'name' => $name,
+                'registered' => implode(', ', array_keys(static::$engines)),
+            ]));
         }
 
         $adapter = static::$engines[$name];
