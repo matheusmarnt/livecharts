@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.16.0](https://github.com/matheusmarnt/livecharts/compare/v1.15.0...v1.16.0) (2026-05-02)
+
+
+### Features
+
+* **i18n:** add en, pt-BR, and es translations ([#34](https://github.com/matheusmarnt/livecharts/issues/34)) ([c23e272](https://github.com/matheusmarnt/livecharts/commit/c23e272f4a8bb295c9a40f9e2be41c409ca3379f))
+
+
+### Bug Fixes
+
+* **livewire:** bind id/class/x-data directly without \$attributes ([#36](https://github.com/matheusmarnt/livecharts/issues/36)) ([0fb234c](https://github.com/matheusmarnt/livecharts/commit/0fb234ce9fafbcf1ad66b9b6af4e279742c054fc))
+
 ## [1.15.0](https://github.com/matheusmarnt/livecharts/compare/v1.14.0...v1.15.0) (2026-05-02)
 
 
