@@ -10,6 +10,9 @@ use JsonSerializable;
 
 class ChartPayload implements Arrayable, Jsonable, JsonSerializable
 {
+    /**
+     * @param array<int, \Matheusmarnt\LiveCharts\Charts\Dataset> $datasets
+     */
     public function __construct(
         public string $type,
         public string $engine,

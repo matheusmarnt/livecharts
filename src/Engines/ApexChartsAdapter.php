@@ -22,11 +22,12 @@ class ApexChartsAdapter implements EngineAdapter
                 'toolbar' => ['show' => $payload->toolbar],
                 'zoom' => ['enabled' => $payload->zoom],
             ],
-            'series' => $isSingleSeries
-                ? ($payload->datasets[0]['data'] ?? [])
-                : array_map(fn ($dataset) => [
-                    'name' => $dataset['name'],
-                    'data' => $dataset['data'],
+            'series' => $isSingleSeries 
+                ? ($payload->datasets[0]->data ?? [])
+                : array_map(fn($dataset) => [
+                    'name' => $dataset->name,
+                    'data' => $dataset->data,
+                    'type' => $dataset->type,
                 ], $payload->datasets),
             'labels' => $payload->labels,
             'title' => [
