@@ -32,6 +32,8 @@ class ChartPayload implements Arrayable, Jsonable, JsonSerializable
         public ?string $onZoom = null,
         public ?string $onSelection = null,
         public ?string $onScroll = null,
+        public ?string $broadcastOn = null,
+        public ?string $broadcastAs = null,
         public array $options = [],
     ) {}
 
@@ -59,6 +61,8 @@ class ChartPayload implements Arrayable, Jsonable, JsonSerializable
             'onZoom' => $this->onZoom,
             'onSelection' => $this->onSelection,
             'onScroll' => $this->onScroll,
+            'broadcastOn' => $this->broadcastOn,
+            'broadcastAs' => $this->broadcastAs,
             'options' => $this->options,
         ];
     }
