@@ -3,7 +3,7 @@
 use Matheusmarnt\LiveCharts\Charts\GenericChart;
 
 it('includes broadcast configuration in the payload', function () {
-    $chart = (new GenericChart())
+    $chart = (new GenericChart)
         ->broadcastOn('my-channel')
         ->broadcastAs('my-event');
 
