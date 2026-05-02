@@ -7,11 +7,12 @@ namespace Matheusmarnt\LiveCharts\Support;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
 use JsonSerializable;
+use Matheusmarnt\LiveCharts\Charts\Dataset;
 
 class ChartPayload implements Arrayable, Jsonable, JsonSerializable
 {
     /**
-     * @param array<int, \Matheusmarnt\LiveCharts\Charts\Dataset> $datasets
+     * @param  array<int, Dataset>  $datasets
      */
     public function __construct(
         public string $type,
