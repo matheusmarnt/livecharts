@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.11.0](https://github.com/matheusmarnt/livecharts/compare/v1.10.0...v1.11.0) (2026-05-02)
+
+
+### Features
+
+* implement livecharts:preview command and gallery view ([5be3d34](https://github.com/matheusmarnt/livecharts/commit/5be3d345009e94e53919beccb633041a8d63b5da))
+* implement preview command ([06eaf81](https://github.com/matheusmarnt/livecharts/commit/06eaf8154ceb1c08ea3564504346e0bf8bebc1f2))
+
 ## [1.10.0](https://github.com/matheusmarnt/livecharts/compare/v1.9.0...v1.10.0) (2026-05-02)
 
 
