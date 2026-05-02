@@ -58,6 +58,18 @@ abstract class Chart implements ChartContract
 
     protected ?string $broadcastEvent = null;
 
+    protected array $xaxis = [];
+
+    protected array $yaxis = [];
+
+    protected array $grid = [];
+
+    protected array $stroke = [];
+
+    protected array $markers = [];
+
+    protected array $dataLabels = [];
+
     protected array $options = [];
 
     public function __construct()
@@ -248,6 +260,48 @@ abstract class Chart implements ChartContract
         return $this;
     }
 
+    public function xaxis(array $config): self
+    {
+        $this->xaxis = array_merge_recursive($this->xaxis, $config);
+
+        return $this;
+    }
+
+    public function yaxis(array $config): self
+    {
+        $this->yaxis = array_merge_recursive($this->yaxis, $config);
+
+        return $this;
+    }
+
+    public function grid(array $config): self
+    {
+        $this->grid = array_merge_recursive($this->grid, $config);
+
+        return $this;
+    }
+
+    public function stroke(array $config): self
+    {
+        $this->stroke = array_merge_recursive($this->stroke, $config);
+
+        return $this;
+    }
+
+    public function markers(array $config): self
+    {
+        $this->markers = array_merge_recursive($this->markers, $config);
+
+        return $this;
+    }
+
+    public function dataLabels(array $config): self
+    {
+        $this->dataLabels = array_merge_recursive($this->dataLabels, $config);
+
+        return $this;
+    }
+
     public function options(array $options): self
     {
         $this->options = array_merge_recursive($this->options, $options);
@@ -286,6 +340,12 @@ abstract class Chart implements ChartContract
             onScroll: $this->scrollEvent,
             broadcastOn: $this->broadcastChannel,
             broadcastAs: $this->broadcastEvent,
+            xaxis: $this->xaxis,
+            yaxis: $this->yaxis,
+            grid: $this->grid,
+            stroke: $this->stroke,
+            markers: $this->markers,
+            dataLabels: $this->dataLabels,
             options: $this->options,
         );
     }
