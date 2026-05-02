@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.0](https://github.com/matheusmarnt/livecharts/compare/v1.2.0...v1.3.0) (2026-05-02)
+
+
+### Features
+
+* comprehensive 2026 chart types ([5724062](https://github.com/matheusmarnt/livecharts/commit/5724062fc0a707cebac95de62c75a9f330566b09))
+* implement comprehensive 2026 chart types for ApexCharts and Chart.js ([4571a54](https://github.com/matheusmarnt/livecharts/commit/4571a542d7bc57bcb835d4d3225f4b9dc26043c7))
+
 ## [1.2.0](https://github.com/matheusmarnt/livecharts/compare/v1.1.0...v1.2.0) (2026-05-02)
 
 
