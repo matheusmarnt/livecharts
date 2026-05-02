@@ -27,6 +27,8 @@ use Matheusmarnt\LiveCharts\Engines\EngineFactory;
 
 class LiveCharts
 {
+    public function __construct(protected EngineFactory $engines) {}
+
     /**
      * Register a new engine adapter at runtime.
      *
@@ -34,7 +36,7 @@ class LiveCharts
      */
     public function registerEngine(string $name, string $adapter): void
     {
-        EngineFactory::register($name, $adapter);
+        $this->engines->register($name, $adapter);
     }
 
     public function make(): GenericChart

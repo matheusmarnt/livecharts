@@ -15,7 +15,7 @@ use Matheusmarnt\LiveCharts\Charts\TreemapChart;
 use Matheusmarnt\LiveCharts\LiveCharts;
 
 it('factory methods return correct instances', function () {
-    $lc = new LiveCharts;
+    $lc = app(LiveCharts::class);
 
     expect($lc->radar())->toBeInstanceOf(RadarChart::class)
         ->and($lc->scatter())->toBeInstanceOf(ScatterChart::class)

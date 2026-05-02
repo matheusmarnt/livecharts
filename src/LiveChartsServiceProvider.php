@@ -37,8 +37,12 @@ class LiveChartsServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
-        $this->app->singleton(LiveCharts::class, function () {
-            return new LiveCharts;
+        $this->app->singleton(EngineFactory::class, function () {
+            return new EngineFactory;
+        });
+
+        $this->app->singleton(LiveCharts::class, function ($app) {
+            return new LiveCharts($app->make(EngineFactory::class));
         });
 
         $this->app->singleton(AssetManager::class, function () {
@@ -48,8 +52,10 @@ class LiveChartsServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
+        $factory = $this->app->make(EngineFactory::class);
+
         foreach (config('livecharts.engines', []) as $name => $adapter) {
-            EngineFactory::register($name, $adapter);
+            $factory->register($name, $adapter);
         }
 
         Livewire::component('livecharts', LiveChartsComponent::class);

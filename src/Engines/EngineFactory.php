@@ -10,16 +10,16 @@ use Matheusmarnt\LiveCharts\Exceptions\UnknownEngineException;
 class EngineFactory
 {
     /** @var array<string, class-string<EngineAdapter>> */
-    protected static array $engines = [];
+    protected array $engines = [];
 
     /**
      * Register a new engine adapter.
      *
      * @param  class-string<EngineAdapter>  $adapter
      */
-    public static function register(string $name, string $adapter): void
+    public function register(string $name, string $adapter): void
     {
-        static::$engines[$name] = $adapter;
+        $this->engines[$name] = $adapter;
     }
 
     /**
@@ -27,17 +27,27 @@ class EngineFactory
      *
      * @throws UnknownEngineException
      */
-    public static function resolve(string $name): EngineAdapter
+    public function resolve(string $name): EngineAdapter
     {
-        if (! isset(static::$engines[$name])) {
+        if (! isset($this->engines[$name])) {
             throw new UnknownEngineException(trans('livecharts::livecharts.exceptions.unknown_engine', [
                 'name' => $name,
-                'registered' => implode(', ', array_keys(static::$engines)),
+                'registered' => implode(', ', array_keys($this->engines)),
             ]));
         }
 
-        $adapter = static::$engines[$name];
+        $adapter = $this->engines[$name];
 
         return new $adapter;
+    }
+
+    /**
+     * Get the names of all registered engines.
+     *
+     * @return array<int, string>
+     */
+    public function names(): array
+    {
+        return array_keys($this->engines);
     }
 }
