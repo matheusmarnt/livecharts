@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Matheusmarnt\LiveCharts\Engines;
 
-use Matheusmarnt\LiveCharts\Contracts\EngineAdapter;
-use Matheusmarnt\LiveCharts\Exceptions\InvalidChartTypeException;
 use Matheusmarnt\LiveCharts\Support\ChartPayload;
 
-class ApexChartsAdapter implements EngineAdapter
+class ApexChartsAdapter extends BaseEngineAdapter
 {
     /** @var list<string> */
     public const SUPPORTED_TYPES = [
@@ -17,16 +15,27 @@ class ApexChartsAdapter implements EngineAdapter
         'treemap', 'bubble',
     ];
 
+    public function engineName(): string
+    {
+        return 'apexcharts';
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function supportedTypes(): array
+    {
+        return self::SUPPORTED_TYPES;
+    }
+
     /**
      * @return array<string, mixed>
      */
     public function build(ChartPayload $payload): array
     {
-        if (! in_array($payload->type, self::SUPPORTED_TYPES, true)) {
-            throw InvalidChartTypeException::forEngine($payload->type, 'apexcharts', self::SUPPORTED_TYPES);
-        }
+        $this->assertTypeSupported($payload);
 
-        $isSingleSeries = in_array($payload->type, ['pie', 'donut', 'radialBar', 'polarArea']);
+        $isSingleSeries = $this->isSingleSeries($payload->type);
 
         $options = [
             'chart' => [
@@ -44,14 +53,14 @@ class ApexChartsAdapter implements EngineAdapter
                     'data' => $dataset->data,
                     'type' => $dataset->type,
                 ], $payload->datasets),
-            'labels' => $payload->labels,
+            'labels' => $this->normalizeLabels($payload),
             'title' => [
                 'text' => $payload->title,
             ],
             'subtitle' => [
                 'text' => $payload->subtitle,
             ],
-            'colors' => $payload->colors,
+            'colors' => $this->normalizeColors($payload),
             'legend' => ['show' => $payload->legend],
             'tooltip' => ['enabled' => $payload->tooltip],
             'xaxis' => $payload->xaxis,
