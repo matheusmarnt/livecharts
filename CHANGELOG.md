@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.1](https://github.com/matheusmarnt/livecharts/compare/v2.5.0...v2.5.1) (2026-05-03)
+
+
+### Bug Fixes
+
+* **adapters:** omit empty optional fields to prevent ApexCharts array/object type errors ([#72](https://github.com/matheusmarnt/livecharts/issues/72)) ([8e256df](https://github.com/matheusmarnt/livecharts/commit/8e256df993fc89d0e567d76584b7986934982746))
+
 ## [2.5.0](https://github.com/matheusmarnt/livecharts/compare/v2.4.1...v2.5.0) (2026-05-03)
 
 
