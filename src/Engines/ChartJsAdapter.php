@@ -48,30 +48,50 @@ class ChartJsAdapter extends BaseEngineAdapter
         ]);
 
         $plugins = [
-            'title' => [
-                'display' => (bool) $payload->title,
-                'text' => $payload->title,
-            ],
-            'subtitle' => [
-                'display' => (bool) $payload->subtitle,
-                'text' => $payload->subtitle,
-            ],
-            'legend' => [
-                'display' => $payload->legend,
-            ],
-            'tooltip' => [
-                'enabled' => $payload->tooltip,
-            ],
+            'title' => $this->buildTitlePlugin($payload),
+            'subtitle' => $this->buildSubtitlePlugin($payload),
+            'legend' => $this->buildLegendPlugin($payload),
+            'tooltip' => $this->buildTooltipPlugin($payload),
         ];
 
         if (! empty($payload->dataLabels)) {
             $plugins['datalabels'] = $payload->dataLabels;
         }
 
+        if ($payload->dataLabelsColor !== null) {
+            $datalabels = $plugins['datalabels'] ?? [];
+            $datalabels['color'] = $this->pickColor($payload->dataLabelsColor);
+            $datalabels = array_merge($datalabels, $this->themedSidecar('dataLabelsColor', $payload->dataLabelsColor));
+            $plugins['datalabels'] = $datalabels;
+        }
+
+        $scales = array_merge_recursive($this->buildScales($payload), $scaleOverrides);
+
+        if ($payload->labelsColor !== null) {
+            $ticksBlock = ['color' => $this->pickColor($payload->labelsColor)];
+            $ticksBlock = array_merge($ticksBlock, $this->themedSidecar('labelsColor', $payload->labelsColor));
+            $scales['x']['ticks'] = array_merge($scales['x']['ticks'] ?? [], $ticksBlock);
+            $scales['y']['ticks'] = array_merge($scales['y']['ticks'] ?? [], $ticksBlock);
+        }
+
+        if ($payload->axisColor !== null) {
+            $borderBlock = ['color' => $this->pickColor($payload->axisColor)];
+            $borderBlock = array_merge($borderBlock, $this->themedSidecar('axisColor', $payload->axisColor));
+            $scales['x']['border'] = array_merge($scales['x']['border'] ?? [], $borderBlock);
+            $scales['y']['border'] = array_merge($scales['y']['border'] ?? [], $borderBlock);
+        }
+
+        if ($payload->gridColor !== null) {
+            $gridBlock = ['color' => $this->pickColor($payload->gridColor)];
+            $gridBlock = array_merge($gridBlock, $this->themedSidecar('gridColor', $payload->gridColor));
+            $scales['x']['grid'] = array_merge($scales['x']['grid'] ?? [], $gridBlock);
+            $scales['y']['grid'] = array_merge($scales['y']['grid'] ?? [], $gridBlock);
+        }
+
         $options = [
             'responsive' => true,
             'maintainAspectRatio' => false,
-            'scales' => array_merge_recursive($this->buildScales($payload), $scaleOverrides),
+            'scales' => $scales,
             'plugins' => $plugins,
         ];
 
@@ -79,20 +99,152 @@ class ChartJsAdapter extends BaseEngineAdapter
             'type' => $chartType,
             'data' => [
                 'labels' => $this->normalizeLabels($payload),
-                'datasets' => array_map(fn ($dataset) => [
-                    'type' => $dataset->type,
-                    'label' => $dataset->name,
-                    'data' => $dataset->data,
-                    'backgroundColor' => $isSingleSeries ? $colors : ($dataset->color ?? $colors[0] ?? null),
-                    'borderColor' => $isSingleSeries ? '#fff' : ($dataset->color ?? $colors[0] ?? null),
-                    'fill' => $payload->type === 'area' || $dataset->type === 'area',
-                    'tension' => ($payload->stroke['curve'] ?? null) === 'smooth' ? 0.4 : 0, // Basic mapping
-                    ...$payload->stroke, // Merge remaining stroke options
-                    'point' => $payload->markers, // Basic mapping
-                ], $payload->datasets),
+                'datasets' => array_map(
+                    fn ($dataset, int $idx) => $this->buildDataset($dataset, $idx, $colors, $isSingleSeries, $payload),
+                    $payload->datasets,
+                    array_keys($payload->datasets),
+                ),
             ],
             'options' => array_merge_recursive($options, $payload->options),
         ];
+    }
+
+    /**
+     * @param  list<string>  $colors
+     * @return array<string, mixed>
+     */
+    private function buildDataset(mixed $dataset, int $idx, array $colors, bool $isSingleSeries, ChartPayload $payload): array
+    {
+        if ($isSingleSeries) {
+            $bg = $colors;
+            $border = '#fff';
+        } else {
+            $bg = $dataset->background?->lightHex() ?? $colors[$idx] ?? ($colors[0] ?? null);
+            $border = $dataset->border?->lightHex() ?? $bg;
+        }
+
+        $row = [
+            'type' => $dataset->type,
+            'label' => $dataset->name,
+            'data' => $dataset->data,
+            'backgroundColor' => $bg,
+            'borderColor' => $border,
+            'fill' => $payload->type === 'area' || $dataset->type === 'area',
+            'tension' => ($payload->stroke['curve'] ?? null) === 'smooth' ? 0.4 : 0,
+            ...$payload->stroke,
+            'point' => $payload->markers,
+        ];
+
+        if (! $isSingleSeries && $dataset->background !== null) {
+            $row = array_merge($row, $this->themedSidecar('datasetBackground_'.$idx, $dataset->background));
+        }
+
+        if (! $isSingleSeries && $dataset->border !== null) {
+            $row = array_merge($row, $this->themedSidecar('datasetBorder_'.$idx, $dataset->border));
+        }
+
+        return $row;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function buildTitlePlugin(ChartPayload $payload): array
+    {
+        $plugin = [
+            'display' => (bool) $payload->title,
+            'text' => $payload->title,
+        ];
+
+        if ($payload->titleColor !== null) {
+            $plugin['color'] = $this->pickColor($payload->titleColor);
+            $plugin = array_merge($plugin, $this->themedSidecar('titleColor', $payload->titleColor));
+        }
+
+        if ($payload->titleFont !== null) {
+            $plugin['font'] = array_filter([
+                'size' => $payload->titleFont['size'] ?? null,
+                'weight' => $payload->titleFont['weight'] ?? null,
+                'family' => $payload->titleFont['family'] ?? null,
+            ], fn ($v) => $v !== null);
+        }
+
+        return $plugin;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function buildSubtitlePlugin(ChartPayload $payload): array
+    {
+        $plugin = [
+            'display' => (bool) $payload->subtitle,
+            'text' => $payload->subtitle,
+        ];
+
+        if ($payload->subtitleColor !== null) {
+            $plugin['color'] = $this->pickColor($payload->subtitleColor);
+            $plugin = array_merge($plugin, $this->themedSidecar('subtitleColor', $payload->subtitleColor));
+        }
+
+        return $plugin;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function buildLegendPlugin(ChartPayload $payload): array
+    {
+        $plugin = ['display' => $payload->legend];
+
+        if ($payload->legendColor !== null) {
+            $labels = ['color' => $this->pickColor($payload->legendColor)];
+            $labels = array_merge($labels, $this->themedSidecar('legendColor', $payload->legendColor));
+            $plugin['labels'] = $labels;
+        }
+
+        if ($payload->legendFont !== null) {
+            $fontBlock = array_filter([
+                'size' => $payload->legendFont['size'] ?? null,
+                'weight' => $payload->legendFont['weight'] ?? null,
+                'family' => $payload->legendFont['family'] ?? null,
+            ], fn ($v) => $v !== null);
+
+            if (! empty($fontBlock)) {
+                $plugin['labels'] = array_merge($plugin['labels'] ?? [], ['font' => $fontBlock]);
+            }
+        }
+
+        return $plugin;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function buildTooltipPlugin(ChartPayload $payload): array
+    {
+        $plugin = ['enabled' => $payload->tooltip];
+
+        if ($payload->tooltipColor !== null) {
+            $plugin['titleColor'] = $this->pickColor($payload->tooltipColor);
+            $plugin['bodyColor'] = $this->pickColor($payload->tooltipColor);
+            $plugin = array_merge($plugin, $this->themedSidecar('tooltipColor', $payload->tooltipColor));
+        }
+
+        if ($payload->tooltipFont !== null) {
+            $fontBlock = array_filter([
+                'size' => $payload->tooltipFont['size'] ?? null,
+                'weight' => $payload->tooltipFont['weight'] ?? null,
+                'family' => $payload->tooltipFont['family'] ?? null,
+            ], fn ($v) => $v !== null);
+
+            if (! empty($fontBlock)) {
+                $plugin['titleFont'] = $fontBlock;
+                $plugin['bodyFont'] = $fontBlock;
+            }
+        }
+
+        return $plugin;
     }
 
     /**

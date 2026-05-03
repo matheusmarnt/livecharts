@@ -14,6 +14,8 @@ class AssetManager
 
     protected bool $bootstrapPushed = false;
 
+    protected bool $configBridgePushed = false;
+
     protected bool $scriptsRendered = false;
 
     protected string $packageRoot;
@@ -51,6 +53,12 @@ class AssetManager
         if (! $this->bootstrapPushed && config('livecharts.assets.auto_inject', true)) {
             $bootstrap = $this->getBootstrapScript();
             if ($bootstrap !== null && $bootstrap !== '') {
+                if (! $this->configBridgePushed) {
+                    $strategy = config('livecharts.theme.auto_detect', 'class');
+                    $configJs = 'window.LiveChartsConfig=window.LiveChartsConfig||{};window.LiveChartsConfig.themeStrategy='.json_encode($strategy).';';
+                    $bootstrap = $configJs."\n".$bootstrap;
+                    $this->configBridgePushed = true;
+                }
                 $html .= "<script>{$bootstrap}</script>\n";
                 $this->bootstrapPushed = true;
             }

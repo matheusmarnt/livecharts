@@ -69,6 +69,7 @@ export default defineConfig({
 						{ label: 'Reactivity & Polling', slug: 'usage/reactivity' },
 						{ label: 'Interactive Events', slug: 'usage/events' },
 						{ label: 'Theming', slug: 'usage/theming' },
+						{ label: 'Color Customization', slug: 'usage/customization' },
 						{ label: 'Asset Management', slug: 'usage/asset-management' },
 						{ label: 'Artisan Generator', slug: 'usage/artisan-generator' },
 					],
@@ -85,7 +86,8 @@ export default defineConfig({
 				{
 					label: 'Reference',
 					items: [
-						{ label: 'Chart API', slug: 'reference/chart-api' },
+						{ label: 'Color Tokens', slug: 'reference/color-tokens' },
+							{ label: 'Chart API', slug: 'reference/chart-api' },
 						{ label: 'Dataset API', slug: 'reference/dataset-api' },
 						{ label: 'Artisan Commands', slug: 'reference/commands' },
 						{ label: 'Configuration File', slug: 'reference/configuration' },

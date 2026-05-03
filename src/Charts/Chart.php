@@ -6,9 +6,14 @@ namespace Matheusmarnt\LiveCharts\Charts;
 
 use Matheusmarnt\LiveCharts\Contracts\ChartContract;
 use Matheusmarnt\LiveCharts\Engines\EngineFactory;
+use Matheusmarnt\LiveCharts\Enums\ThemeMode;
+use Matheusmarnt\LiveCharts\Enums\TwColor;
+use Matheusmarnt\LiveCharts\Enums\TwPalette;
 use Matheusmarnt\LiveCharts\Exceptions\DataShapeMismatchException;
 use Matheusmarnt\LiveCharts\Exceptions\EmptyDatasetException;
 use Matheusmarnt\LiveCharts\Support\ChartPayload;
+use Matheusmarnt\LiveCharts\Support\ColorResolver;
+use Matheusmarnt\LiveCharts\Support\ColorValue;
 
 /**
  * @phpstan-consistent-constructor
@@ -57,10 +62,37 @@ abstract class Chart implements ChartContract
     /** @var array<int, Dataset> */
     protected array $datasets = [];
 
-    /** @var array<int, string> */
+    /** @var list<ColorValue> */
     protected array $colors = [];
 
     protected string $theme = 'auto';
+
+    protected ?ColorValue $titleColor = null;
+
+    protected ?ColorValue $subtitleColor = null;
+
+    protected ?ColorValue $legendColor = null;
+
+    protected ?ColorValue $labelsColor = null;
+
+    protected ?ColorValue $tooltipColor = null;
+
+    protected ?ColorValue $axisColor = null;
+
+    protected ?ColorValue $gridColor = null;
+
+    protected ?ColorValue $dataLabelsColor = null;
+
+    protected ?ColorValue $backgroundColor = null;
+
+    /** @var array{size?: int, weight?: string, family?: string}|null */
+    protected ?array $titleFont = null;
+
+    /** @var array{size?: int, weight?: string, family?: string}|null */
+    protected ?array $legendFont = null;
+
+    /** @var array{size?: int, weight?: string, family?: string}|null */
+    protected ?array $tooltipFont = null;
 
     protected bool $stacked = false;
 
@@ -112,6 +144,7 @@ abstract class Chart implements ChartContract
     public function __construct()
     {
         $this->engine = config('livecharts.engine', 'apexcharts');
+        $this->theme = config('livecharts.theme.mode', 'auto');
     }
 
     public static function make(): static
@@ -189,11 +222,11 @@ abstract class Chart implements ChartContract
     }
 
     /**
-     * @param  array<int, string>  $colors
+     * @param  array<int, string|TwColor|ColorValue|array{dark?: TwColor|string, light?: TwColor|string}>  $colors
      */
     public function colors(array $colors): self
     {
-        $this->colors = $colors;
+        $this->colors = ColorResolver::resolveList($colors);
 
         return $this;
     }
@@ -212,9 +245,9 @@ abstract class Chart implements ChartContract
         return $this;
     }
 
-    public function theme(string $theme): self
+    public function theme(ThemeMode|string $mode): self
     {
-        $this->theme = $theme;
+        $this->theme = $mode instanceof ThemeMode ? $mode->value : $mode;
 
         return $this;
     }
@@ -257,6 +290,111 @@ abstract class Chart implements ChartContract
     public function tooltip(bool $tooltip = true): self
     {
         $this->tooltip = $tooltip;
+
+        return $this;
+    }
+
+    public function titleColor(TwColor|string|null $dark = null, TwColor|string|null $light = null): self
+    {
+        $this->titleColor = ColorResolver::resolvePair($dark, $light);
+
+        return $this;
+    }
+
+    public function subtitleColor(TwColor|string|null $dark = null, TwColor|string|null $light = null): self
+    {
+        $this->subtitleColor = ColorResolver::resolvePair($dark, $light);
+
+        return $this;
+    }
+
+    public function legendColor(TwColor|string|null $dark = null, TwColor|string|null $light = null): self
+    {
+        $this->legendColor = ColorResolver::resolvePair($dark, $light);
+
+        return $this;
+    }
+
+    public function labelsColor(TwColor|string|null $dark = null, TwColor|string|null $light = null): self
+    {
+        $this->labelsColor = ColorResolver::resolvePair($dark, $light);
+
+        return $this;
+    }
+
+    public function tooltipColor(TwColor|string|null $dark = null, TwColor|string|null $light = null): self
+    {
+        $this->tooltipColor = ColorResolver::resolvePair($dark, $light);
+
+        return $this;
+    }
+
+    public function axisColor(TwColor|string|null $dark = null, TwColor|string|null $light = null): self
+    {
+        $this->axisColor = ColorResolver::resolvePair($dark, $light);
+
+        return $this;
+    }
+
+    public function gridColor(TwColor|string|null $dark = null, TwColor|string|null $light = null): self
+    {
+        $this->gridColor = ColorResolver::resolvePair($dark, $light);
+
+        return $this;
+    }
+
+    public function dataLabelsColor(TwColor|string|null $dark = null, TwColor|string|null $light = null): self
+    {
+        $this->dataLabelsColor = ColorResolver::resolvePair($dark, $light);
+
+        return $this;
+    }
+
+    public function backgroundColor(TwColor|string|null $dark = null, TwColor|string|null $light = null): self
+    {
+        $this->backgroundColor = ColorResolver::resolvePair($dark, $light);
+
+        return $this;
+    }
+
+    public function palette(TwPalette $palette): self
+    {
+        $pairs = $palette->pairs();
+
+        $this->colors = array_map(
+            fn (array $pair) => ColorValue::pair($pair['dark'], $pair['light']),
+            $pairs,
+        );
+
+        return $this;
+    }
+
+    public function titleFont(?int $size = null, ?string $weight = null, ?string $family = null): self
+    {
+        $this->titleFont = array_filter(
+            ['size' => $size, 'weight' => $weight, 'family' => $family],
+            fn ($v) => $v !== null,
+        );
+
+        return $this;
+    }
+
+    public function legendFont(?int $size = null, ?string $weight = null, ?string $family = null): self
+    {
+        $this->legendFont = array_filter(
+            ['size' => $size, 'weight' => $weight, 'family' => $family],
+            fn ($v) => $v !== null,
+        );
+
+        return $this;
+    }
+
+    public function tooltipFont(?int $size = null, ?string $weight = null, ?string $family = null): self
+    {
+        $this->tooltipFont = array_filter(
+            ['size' => $size, 'weight' => $weight, 'family' => $family],
+            fn ($v) => $v !== null,
+        );
 
         return $this;
     }
@@ -432,6 +570,18 @@ abstract class Chart implements ChartContract
             markers: $this->markers,
             dataLabels: $this->dataLabels,
             options: $this->options,
+            titleColor: $this->titleColor,
+            subtitleColor: $this->subtitleColor,
+            legendColor: $this->legendColor,
+            labelsColor: $this->labelsColor,
+            tooltipColor: $this->tooltipColor,
+            axisColor: $this->axisColor,
+            gridColor: $this->gridColor,
+            dataLabelsColor: $this->dataLabelsColor,
+            backgroundColor: $this->backgroundColor,
+            titleFont: $this->titleFont,
+            legendFont: $this->legendFont,
+            tooltipFont: $this->tooltipFont,
         );
     }
 

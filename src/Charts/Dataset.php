@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Matheusmarnt\LiveCharts\Charts;
 
+use Matheusmarnt\LiveCharts\Enums\TwColor;
+use Matheusmarnt\LiveCharts\Support\ColorResolver;
+use Matheusmarnt\LiveCharts\Support\ColorValue;
+
 class Dataset
 {
     /**
@@ -13,7 +17,8 @@ class Dataset
     public function __construct(
         public string $name,
         public array $data,
-        public ?string $color = null,
+        public ?ColorValue $background = null,
+        public ?ColorValue $border = null,
         public ?string $type = null,
         public array $meta = [],
     ) {}
@@ -33,9 +38,28 @@ class Dataset
         return $this;
     }
 
-    public function color(?string $color): self
+    /**
+     * Sets both background and border to the same color (convenience sugar).
+     */
+    public function color(TwColor|ColorValue|string|null $color): self
     {
-        $this->color = $color;
+        $resolved = ColorResolver::resolve($color);
+        $this->background = $resolved;
+        $this->border = $resolved;
+
+        return $this;
+    }
+
+    public function backgroundColor(TwColor|string|null $dark = null, TwColor|string|null $light = null): self
+    {
+        $this->background = ColorResolver::resolvePair($dark, $light);
+
+        return $this;
+    }
+
+    public function borderColor(TwColor|string|null $dark = null, TwColor|string|null $light = null): self
+    {
+        $this->border = ColorResolver::resolvePair($dark, $light);
 
         return $this;
     }
@@ -58,14 +82,15 @@ class Dataset
     }
 
     /**
-     * @return array{name: string, data: array<int, mixed>, color: string|null, type: string|null, meta: array<string, mixed>}
+     * @return array{name: string, data: array<int, mixed>, background: array{dark: string, light: string}|null, border: array{dark: string, light: string}|null, type: string|null, meta: array<string, mixed>}
      */
     public function toArray(): array
     {
         return [
             'name' => $this->name,
             'data' => $this->data,
-            'color' => $this->color,
+            'background' => $this->background?->jsonSerialize(),
+            'border' => $this->border?->jsonSerialize(),
             'type' => $this->type,
             'meta' => $this->meta,
         ];
