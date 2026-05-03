@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.0](https://github.com/matheusmarnt/livecharts/compare/v2.4.1...v2.5.0) (2026-05-03)
+
+
+### Features
+
+* **engine:** add availableEnginesForType to expose multi-engine support ([#70](https://github.com/matheusmarnt/livecharts/issues/70)) ([5bbec7f](https://github.com/matheusmarnt/livecharts/commit/5bbec7fc3ab4f3c3fe12e8655b5faf22cb36f5a8))
+
 ## [2.4.1](https://github.com/matheusmarnt/livecharts/compare/v2.4.0...v2.4.1) (2026-05-03)
 
 
