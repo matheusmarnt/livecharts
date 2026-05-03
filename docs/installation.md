@@ -100,6 +100,7 @@ namespace App\Charts;
 
 use Matheusmarnt\LiveCharts\Charts\Chart;
 use Matheusmarnt\LiveCharts\Charts\Dataset;
+use Matheusmarnt\LiveCharts\Enums\TwColor;
 
 class RevenueChart extends Chart
 {
@@ -113,7 +114,9 @@ class RevenueChart extends Chart
             ->title('Revenue')
             ->labels(['Jan', 'Feb', 'Mar'])
             ->datasets([
-                Dataset::make('2026')->data([400, 300, 600])->color('#10B981'),
+                Dataset::make('2026')
+                    ->data([400, 300, 600])
+                    ->backgroundColor(dark: TwColor::Emerald400, light: TwColor::Emerald600),
             ]);
     }
 }
@@ -250,10 +253,75 @@ The `@liveChartsScripts` directive emits the right `<script>` tags for the activ
 ### Theme
 
 ```php
-$chart->theme('auto'); // 'auto' | 'light' | 'dark'
+use Matheusmarnt\LiveCharts\Enums\ThemeMode;
+
+$chart->theme(ThemeMode::Auto);   // enum form (recommended)
+$chart->theme('auto');            // string form — still supported
 ```
 
-`auto` follows Tailwind's `.dark` class on `<html>` (default) or the `prefers-color-scheme` media query — switch via `theme.auto_detect` in `config/livecharts.php`.
+Available modes: `ThemeMode::Auto`, `ThemeMode::Light`, `ThemeMode::Dark`.
+
+`auto` follows Tailwind's `.dark` class on `<html>` (default) or the `prefers-color-scheme` media query:
+
+```php
+// config/livecharts.php
+'theme' => [
+    'mode'        => env('LIVECHARTS_THEME', 'auto'),
+    'auto_detect' => env('LIVECHARTS_THEME_DETECT', 'class'), // 'class' | 'media'
+],
+```
+
+Charts re-color **live** when the theme toggles — the JS observer patches `updateOptions` / `chart.update` directly, no Livewire roundtrip required.
+
+### Color tokens
+
+v2.6+ ships `TwColor`, a 289-case backed enum covering all Tailwind v4 color families. Every chart element accepts `dark:` / `light:` named-arg pairs:
+
+```php
+use Matheusmarnt\LiveCharts\Enums\TwColor;
+
+$chart
+    ->titleColor(dark: TwColor::Amber300, light: TwColor::Amber600)
+    ->legendColor(dark: TwColor::Slate200, light: TwColor::Slate700)
+    ->gridColor(dark: TwColor::Slate800, light: TwColor::Slate200)
+    ->tooltipColor(dark: TwColor::White, light: TwColor::Slate900)
+    ->backgroundColor(dark: TwColor::Slate900, light: TwColor::White);
+```
+
+Single-value form sets both themes to the same hex:
+
+```php
+$chart->titleColor(TwColor::Slate500);
+$chart->titleColor('#6b7280'); // plain hex still works
+```
+
+Dataset-level background/border split:
+
+```php
+use Matheusmarnt\LiveCharts\Charts\Dataset;
+
+Dataset::make('Revenue')
+    ->data([100, 200, 150])
+    ->backgroundColor(dark: TwColor::Emerald400, light: TwColor::Emerald600)
+    ->borderColor(dark: TwColor::Emerald300, light: TwColor::Emerald700);
+```
+
+Palette presets auto-fill dataset colors:
+
+```php
+use Matheusmarnt\LiveCharts\Enums\TwPalette;
+
+$chart->palette(TwPalette::Vibrant); // Vibrant | Muted | Monochrome | Pastel | Neon
+```
+
+Helper methods on `TwColor`:
+
+```php
+TwColor::Sky500->withAlpha(0.6);  // 'rgba(14,165,233,0.6)'
+TwColor::Sky500->lighter(2);      // TwColor::Sky300
+TwColor::Sky500->darker(1);       // TwColor::Sky600
+TwColor::ramp('sky');             // [Sky50, Sky100, ..., Sky950]
+```
 
 ### Layout primitives
 
