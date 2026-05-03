@@ -64,9 +64,10 @@ $chart = LiveCharts::line()
 <livewire:livecharts :chart="$chart" />
 ```
 
-Place the asset directive once in your layout `<head>`:
+Place the asset directive once in your layout, **before the closing `</body>` tag** (or in the `<head>` when using a Blade layout with `@extends`/`@section`):
 
 ```blade
+{{-- before </body>, after all chart components --}}
 @liveChartsScripts
 ```
 
@@ -212,7 +213,7 @@ Implement `Matheusmarnt\LiveCharts\Contracts\EngineAdapter` and the engine becom
 composer test
 ```
 
-Runs the Pest suite (127 tests / 439 assertions) against the package's testbench harness — including 17 Pest arch rules, payload + adapter routing for every chart type, and integration tests for UC-01 dashboard, UC-02 drill-down, UC-03 polling, and UC-04 multi-tenant flows. CI matrix: PHP 8.2-8.5 × Laravel 11/12/13 × Livewire 3/4 × prefer-lowest/stable × Ubuntu/Windows, with a `--min=90` coverage gate and PHPStan level 8 enforcement.
+Runs the Pest suite (158 tests / 508 assertions) against the package's testbench harness — including 17 Pest arch rules, payload + adapter routing for every chart type, and integration tests for UC-01 dashboard, UC-02 drill-down, UC-03 polling, and UC-04 multi-tenant flows. CI matrix: PHP 8.2-8.5 × Laravel 11/12/13 × Livewire 3/4 × prefer-lowest/stable × Ubuntu/Windows, with a `--min=90` coverage gate and PHPStan level 8 enforcement.
 
 ## Changelog
 
