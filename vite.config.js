@@ -1,24 +1,47 @@
 import { defineConfig } from 'vite';
 
-export default defineConfig({
-    build: {
-        lib: {
-            entry: 'resources/js/livecharts.js',
-            name: 'LiveCharts',
-            fileName: () => 'livecharts.js',
-            formats: ['iife'],
-        },
-        outDir: 'resources/dist',
-        emptyOutDir: true,
-        rollupOptions: {
-            external: ['ApexCharts', 'Chart'],
-            output: {
-                globals: {
-                    ApexCharts: 'ApexCharts',
-                    Chart: 'Chart',
+const targets = {
+    livecharts: {
+        entry: 'resources/js/livecharts.js',
+        name: 'LiveCharts',
+        external: ['ApexCharts', 'Chart'],
+        globals: { ApexCharts: 'ApexCharts', Chart: 'Chart' },
+    },
+    apexcharts: {
+        entry: 'resources/js/engines/apexcharts.js',
+        name: 'LiveChartsApex',
+        external: [],
+        globals: {},
+    },
+    chartjs: {
+        entry: 'resources/js/engines/chartjs.js',
+        name: 'LiveChartsChart',
+        external: [],
+        globals: {},
+    },
+};
+
+export default defineConfig(({ mode }) => {
+    const target = targets[mode] ?? targets.livecharts;
+    const fileName = mode in targets ? mode : 'livecharts';
+
+    return {
+        build: {
+            lib: {
+                entry: target.entry,
+                name: target.name,
+                fileName: () => `${fileName}.js`,
+                formats: ['iife'],
+            },
+            outDir: 'resources/dist',
+            emptyOutDir: mode === 'livecharts',
+            rollupOptions: {
+                external: target.external,
+                output: {
+                    globals: target.globals,
+                    extend: true,
                 },
-                extend: true,
             },
         },
-    },
+    };
 });
