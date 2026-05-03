@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.7.0](https://github.com/matheusmarnt/livecharts/compare/v2.6.0...v2.7.0) (2026-05-03)
+
+
+### Features
+
+* **install:** apply Laravel Prompts visual pattern to livecharts:install ([a773f23](https://github.com/matheusmarnt/livecharts/commit/a773f23463082865a9e64060175aba857d77134e))
+
+
+### Bug Fixes
+
+* ColorValue roundtrip, sidecar dot-paths, tooltip CSS, CDN URL, install Prompts UI ([f688443](https://github.com/matheusmarnt/livecharts/commit/f688443164b853008e10554f2f5bb0d51b7ab209))
+* **rendering:** ColorValue roundtrip, sidecar dot-paths, tooltip CSS injection, CDN URL ([f469e8d](https://github.com/matheusmarnt/livecharts/commit/f469e8d484f2f098061cc1fb6fec9f8ecfa3e017))
+
 ## [2.6.0](https://github.com/matheusmarnt/livecharts/compare/v2.5.2...v2.6.0) (2026-05-03)
 
 
