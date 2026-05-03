@@ -7,6 +7,8 @@ Chart.js is the alternate engine. It supports line, bar, pie, doughnut, radar, p
 
 ## Selecting the Engine
 
+Chart.js is auto-selected for types it supports exclusively (matrix, sankey). For types supported by both engines, ApexCharts is preferred unless you call `->engine('chartjs')` explicitly.
+
 ```php
 use Matheusmarnt\LiveCharts\Chart;
 

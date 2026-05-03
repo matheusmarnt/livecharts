@@ -39,6 +39,36 @@ Both first-party adapters extend `BaseEngineAdapter`, which provides shared help
 
 ## Selecting an engine
 
+### Automatic (v2.5.0+)
+
+When you don't call `->engine()`, LiveCharts picks the best available engine for the chart type via `EngineFactory::engineForType()`:
+
+| Condition | Engine selected |
+|---|---|
+| Type supported by ApexCharts only | `apexcharts` |
+| Type supported by Chart.js only | `chartjs` |
+| Type supported by both | `apexcharts` (preferred) |
+
+```php
+// No ->engine() call — engine auto-selected based on chart type
+LiveCharts::line()->labels(['A'])->dataset('S', [1]);   // → apexcharts
+LiveCharts::sankey()->dataset('Flows', [...]);           // → chartjs (apex doesn't support sankey)
+```
+
+Introspect which engines can handle a type:
+
+```php
+use Matheusmarnt\LiveCharts\Engines\EngineFactory;
+
+app(EngineFactory::class)->availableEnginesForType('line');
+// ['apexcharts', 'chartjs']
+
+app(EngineFactory::class)->availableEnginesForType('heatmap');
+// ['apexcharts']
+```
+
+### Manual override
+
 Per chart:
 
 ```php
@@ -49,12 +79,12 @@ Globally:
 
 ```php
 // config/livecharts.php
-'default_engine' => 'chartjs',
+'engine' => env('LIVECHARTS_DEFAULT_ENGINE', 'chartjs'),
 ```
 
 ## Type compatibility
 
-Not every type is supported by every engine. The `EngineAdapter::supportedTypes()` array is the authoritative source. If you call `engine('chartjs')->treemap()` without the matrix plugin loaded, LiveCharts throws `InvalidChartTypeException` at definition time — not at render time — so failures surface during testing.
+Not every type is supported by every engine. The `EngineAdapter::supportedTypes()` array is the authoritative source. If you call `->engine('chartjs')` with an apex-only type, LiveCharts throws `InvalidChartTypeException` at definition time — not at render time — so failures surface during testing.
 
 See [ApexCharts](../apexcharts/) and [Chart.js](../chartjs/) for engine-specific support matrices.
 
