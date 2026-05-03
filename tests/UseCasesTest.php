@@ -72,6 +72,7 @@ it('UC-02: onDataPointClick event flows through payload into rendered Alpine dat
  *
  * pollEvery(5000) renders wire:poll.5000ms="refresh" and the refresh action
  * dispatches livecharts:refreshed scoped to the chart id, allowing userland
+ *
  * @on listeners to hydrate fresh data.
  */
 it('UC-03: 5s polling renders directive and refresh dispatches scoped event', function () {

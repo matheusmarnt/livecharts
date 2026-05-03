@@ -9,6 +9,7 @@ use Matheusmarnt\LiveCharts\Charts\BubbleChart;
 use Matheusmarnt\LiveCharts\Charts\CandlestickChart;
 use Matheusmarnt\LiveCharts\Charts\Chart;
 use Matheusmarnt\LiveCharts\Charts\DonutChart;
+use Matheusmarnt\LiveCharts\Charts\GenericChart;
 use Matheusmarnt\LiveCharts\Charts\HeatmapChart;
 use Matheusmarnt\LiveCharts\Charts\LineChart;
 use Matheusmarnt\LiveCharts\Charts\MatrixChart;
@@ -81,7 +82,7 @@ dataset('apex_supported_types', [
 ]);
 
 it('ApexChartsAdapter routes specialized payloads to the matching chart.type', function (string $type) {
-    $payload = (new \Matheusmarnt\LiveCharts\Charts\GenericChart)
+    $payload = (new GenericChart)
         ->type($type)
         ->engine('apexcharts')
         ->labels(['A'])
@@ -102,7 +103,7 @@ it('ApexChartsAdapter routes specialized payloads to the matching chart.type', f
 })->with('apex_supported_types');
 
 it('ApexChartsAdapter collapses single-series chart types into a flat series array', function (string $type) {
-    $payload = (new \Matheusmarnt\LiveCharts\Charts\GenericChart)
+    $payload = (new GenericChart)
         ->type($type)
         ->engine('apexcharts')
         ->labels(['A', 'B', 'C'])
@@ -115,7 +116,7 @@ it('ApexChartsAdapter collapses single-series chart types into a flat series arr
 })->with([['pie'], ['donut'], ['radialBar'], ['polarArea']]);
 
 it('ApexChartsAdapter wraps multi-series payloads as name+data+type triples', function () {
-    $payload = (new \Matheusmarnt\LiveCharts\Charts\GenericChart)
+    $payload = (new GenericChart)
         ->type('line')
         ->engine('apexcharts')
         ->labels(['A'])
@@ -137,7 +138,7 @@ it('ApexChartsAdapter wraps multi-series payloads as name+data+type triples', fu
 });
 
 it('ApexChartsAdapter rejects chart-js-only types via InvalidChartTypeException', function (string $type) {
-    $payload = (new \Matheusmarnt\LiveCharts\Charts\GenericChart)
+    $payload = (new GenericChart)
         ->type($type)
         ->engine('apexcharts')
         ->dataset('S', [1])
@@ -154,7 +155,7 @@ dataset('chartjs_supported_types', [
 ]);
 
 it('ChartJsAdapter routes specialized payloads to the matching top-level type', function (string $type) {
-    $payload = (new \Matheusmarnt\LiveCharts\Charts\GenericChart)
+    $payload = (new GenericChart)
         ->type($type)
         ->engine('chartjs')
         ->labels(['A'])
@@ -173,7 +174,7 @@ it('ChartJsAdapter routes specialized payloads to the matching top-level type', 
 })->with('chartjs_supported_types');
 
 it('ChartJsAdapter aliases donut to doughnut at the top-level type', function () {
-    $payload = (new \Matheusmarnt\LiveCharts\Charts\GenericChart)
+    $payload = (new GenericChart)
         ->type('donut')
         ->engine('chartjs')
         ->labels(['A'])
@@ -186,7 +187,7 @@ it('ChartJsAdapter aliases donut to doughnut at the top-level type', function ()
 });
 
 it('ChartJsAdapter rejects apex-only types via InvalidChartTypeException', function (string $type) {
-    $payload = (new \Matheusmarnt\LiveCharts\Charts\GenericChart)
+    $payload = (new GenericChart)
         ->type($type)
         ->engine('chartjs')
         ->dataset('S', [1])

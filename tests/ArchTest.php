@@ -13,6 +13,7 @@ use Matheusmarnt\LiveCharts\Engines\ApexChartsAdapter;
 use Matheusmarnt\LiveCharts\Engines\BaseEngineAdapter;
 use Matheusmarnt\LiveCharts\Engines\ChartJsAdapter;
 use Matheusmarnt\LiveCharts\Engines\EngineFactory;
+use Matheusmarnt\LiveCharts\LiveChartsServiceProvider;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
 arch('debug helpers must not ship')
@@ -69,7 +70,7 @@ arch('livewire components extend Component')
     ->toExtend(Component::class);
 
 arch('service provider extends Spatie PackageServiceProvider')
-    ->expect(\Matheusmarnt\LiveCharts\LiveChartsServiceProvider::class)
+    ->expect(LiveChartsServiceProvider::class)
     ->toExtend(PackageServiceProvider::class);
 
 arch('GeneratorCommand stays available for chart make command')
