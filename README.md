@@ -205,7 +205,6 @@ Implement `Matheusmarnt\LiveCharts\Contracts\EngineAdapter` and the engine becom
 ## Documentation
 
 - [Installation guide](docs/installation.md) — step-by-step setup, asset modes, engine selection, customization
-- [PRD](PRD.md) — product requirements, architecture decisions, full API surface
 
 ## Testing
 
