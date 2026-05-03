@@ -63,7 +63,7 @@ class LiveChartsServiceProvider extends PackageServiceProvider
         Livewire::component('livecharts', LiveChartsComponent::class);
 
         Blade::directive('liveChartsScripts', function () {
-            return "<?php echo view('livecharts::scripts')->render(); ?>";
+            return "<?php echo \$__env->yieldPushContent('livecharts-scripts'); ?>";
         });
 
         if ($this->app->runningInConsole()) {

@@ -81,6 +81,7 @@ class LiveChartsComponent extends Component
         $options = $adapter->build($chartPayload);
 
         app(AssetManager::class)->registerEngine($payload['engine']);
+        app(AssetManager::class)->flushPendingPushes();
 
         /** @var view-string $view */
         $view = 'livecharts::livewire.livecharts';

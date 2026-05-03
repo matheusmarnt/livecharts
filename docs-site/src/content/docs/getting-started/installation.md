@@ -21,13 +21,24 @@ php artisan livecharts:install
 
 ## Register Scripts
 
-Add the `@liveChartsScripts` directive to your layout's `<head>` or before the closing `</body>` tag:
+Add `@liveChartsScripts` **before the closing `</body>` tag**, after all chart components:
 
 ```html
+<body>
+    <!-- your chart components here -->
+    @liveChartsScripts
+</body>
+```
+
+:::tip[Using a shared layout with `@extends`?]
+When your app uses Blade layouts (`@extends` / `@section`), you can place `@liveChartsScripts` in the layout's `<head>`. The directive uses Blade's push/stack mechanism, so scripts pushed by chart components in child sections are captured before the layout renders.
+
+```html
+<!-- layouts/app.blade.php -->
 <head>
-    <!-- ... -->
     @liveChartsScripts
 </head>
 ```
+:::
 
-This directive will automatically inject the required charting engine CDNs (or local files) and the Alpine.js integration logic.
+This directive injects the required charting engine scripts (CDN or local) and the Alpine.js integration bundle.

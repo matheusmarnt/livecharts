@@ -5,6 +5,30 @@ description: Control how engine assets are loaded.
 
 LiveCharts ships pre-built IIFE bundles for every supported engine and plugin. The `@liveChartsScripts` directive resolves these against the configured asset mode.
 
+## Directive placement
+
+Place `@liveChartsScripts` **before the closing `</body>` tag**, after all chart components:
+
+```blade
+<body>
+    <!-- chart components here -->
+    @liveChartsScripts
+</body>
+```
+
+**Using a Blade layout (`@extends`/`@section`)?** You can place the directive in the layout's `<head>`. The directive uses Blade's push/stack mechanism: chart components push their engine script tags when they render, and the stack is flushed wherever `@liveChartsScripts` is placed. Because `@extends` child views render before the layout resolves its stacks, `<head>` placement works correctly in this pattern.
+
+```blade
+<!-- layouts/app.blade.php -->
+<head>
+    @liveChartsScripts  {{-- works here with @extends/@section --}}
+</head>
+```
+
+:::caution[Standalone views]
+In views that do **not** extend a layout (e.g. a single Blade file), place `@liveChartsScripts` **after** the chart components. If placed in `<head>` of a standalone view, the stack is empty when the directive renders and no scripts are emitted.
+:::
+
 ## Bundled artefacts
 
 | File | Source |

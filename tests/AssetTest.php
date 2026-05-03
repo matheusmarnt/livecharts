@@ -52,10 +52,10 @@ it('marks scripts as rendered', function () {
     expect($manager->hasBeenRendered())->toBeTrue();
 });
 
-it('renders the blade directive correctly', function () {
+it('renders the blade directive using the livecharts-scripts push stack', function () {
     $directive = Blade::compileString('@liveChartsScripts');
 
-    expect($directive)->toContain("echo view('livecharts::scripts')->render()");
+    expect($directive)->toContain("yieldPushContent('livecharts-scripts')");
 });
 
 it('returns the dist bootstrap script when present', function () {
