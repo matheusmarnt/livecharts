@@ -19,4 +19,11 @@ class InvalidChartTypeException extends Exception
             'supported' => implode(', ', $supported),
         ]));
     }
+
+    public static function forNoEngine(string $type): self
+    {
+        return new self(trans('livecharts::livecharts.exceptions.no_engine_for_type', [
+            'type' => $type,
+        ]));
+    }
 }

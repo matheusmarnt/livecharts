@@ -9,6 +9,7 @@ return [
         'empty_dataset_named' => 'Dataset [:name] has no data points. Provide values via Dataset::data().',
         'data_shape_mismatch' => 'Dataset [:name] data count mismatch: expected :expected points (matching labels), got :actual.',
         'unknown_engine' => 'Engine [:name] not registered. Available: [:registered].',
+        'no_engine_for_type' => 'Chart type [:type] is not supported by any registered engine.',
     ],
 
     'install' => [

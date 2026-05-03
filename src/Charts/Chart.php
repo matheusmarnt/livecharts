@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Matheusmarnt\LiveCharts\Charts;
 
 use Matheusmarnt\LiveCharts\Contracts\ChartContract;
+use Matheusmarnt\LiveCharts\Engines\EngineFactory;
 use Matheusmarnt\LiveCharts\Exceptions\DataShapeMismatchException;
 use Matheusmarnt\LiveCharts\Exceptions\EmptyDatasetException;
 use Matheusmarnt\LiveCharts\Support\ChartPayload;
@@ -39,6 +40,8 @@ abstract class Chart implements ChartContract
     protected string $type = 'line';
 
     protected string $engine;
+
+    protected bool $engineExplicit = false;
 
     protected ?string $title = null;
 
@@ -126,6 +129,7 @@ abstract class Chart implements ChartContract
     public function engine(string $engine): self
     {
         $this->engine = $engine;
+        $this->engineExplicit = true;
 
         return $this;
     }
@@ -391,6 +395,10 @@ abstract class Chart implements ChartContract
 
     public function toPayloadObject(): ChartPayload
     {
+        if (! $this->engineExplicit) {
+            $this->engine = app(EngineFactory::class)->engineForType($this->type);
+        }
+
         $this->validate();
 
         return new ChartPayload(
