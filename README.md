@@ -29,8 +29,10 @@ LiveCharts unifies ApexCharts and Chart.js behind a single fluent PHP API. Defin
 - **Interaction events** — `onDataPointClick`, `onZoom`, `onSelection`, `onScroll` map directly to Livewire events
 - **Broadcasting** — push chart updates over Laravel Echo channels with `broadcastOn()` / `broadcastAs()`
 - **Theme detection** — `auto`, `light`, or `dark` modes with Tailwind `.dark` class auto-detection
-- **CDN or local assets** — switch between jsDelivr CDNs and self-hosted bundles via config
+- **Local-first assets with CDN fallback** — engine bundles (`apexcharts.js`, `chartjs.js`) and Chart.js plugin bundles (treemap/matrix/sankey/financial/luxon/adapter-luxon) ship pre-built in `resources/dist`; switch between `local`, `cdn`, or `both` via config
+- **Vite build pipeline** — lib-mode IIFE outputs for `livecharts.js` + every engine and plugin shim, verified in CI
 - **Stub publishing** — `livecharts:install` can publish chart class stubs to `stubs/livecharts` for project-level customization
+- **Browser preview** — `php artisan livecharts:preview` launches a gallery of every chart type in your default browser
 - **i18n** — ships with `en`, `pt_BR`, and `es` translations
 - **Type-safe** — PHPStan level 8, PHP 8.2+, strict types throughout
 
@@ -43,7 +45,7 @@ php artisan livecharts:install
 
 This will:
 1. Publish `config/livecharts.php`
-2. Copy `resources/js/livecharts.js` to your application (CDN-mode default)
+2. Copy the LiveCharts JS runtime + engine bundles to `public/vendor/livecharts/js` (local-first delivery with CDN fallback by default — `LIVECHARTS_ASSETS_MODE=both`)
 3. Optionally publish chart class stubs to `stubs/livecharts`
 
 Then build a chart and render it:
@@ -196,9 +198,9 @@ Implement `Matheusmarnt\LiveCharts\Contracts\EngineAdapter` and the engine becom
 
 | Command | Description |
 |---|---|
-| `livecharts:install` | Publish config, copy the JS runtime, optionally publish chart stubs |
-| `make:chart {name}` | Generate a new chart class under `app/Charts` |
-| `livecharts:preview` | Print the URL of a debug route that renders one of every chart type |
+| `livecharts:install` | Publish config, copy the JS runtime + engine bundles, optionally publish chart stubs |
+| `make:chart {name} {--type=} {--engine=}` | Generate a new chart class under `app/Charts`; `--type`/`--engine` derived from `Chart::TYPES` and `EngineFactory::names()` |
+| `livecharts:preview {--no-open}` | Open the gallery of every chart type at `/livecharts/preview` in your default browser; `--no-open` only prints the URL |
 
 ## Documentation
 
@@ -211,7 +213,7 @@ Implement `Matheusmarnt\LiveCharts\Contracts\EngineAdapter` and the engine becom
 composer test
 ```
 
-Runs the Pest suite (49 tests / 137 assertions) against the package's testbench harness.
+Runs the Pest suite (127 tests / 439 assertions) against the package's testbench harness — including 17 Pest arch rules, payload + adapter routing for every chart type, and integration tests for UC-01 dashboard, UC-02 drill-down, UC-03 polling, and UC-04 multi-tenant flows. CI matrix: PHP 8.2-8.5 × Laravel 11/12/13 × Livewire 3/4 × prefer-lowest/stable × Ubuntu/Windows, with a `--min=90` coverage gate and PHPStan level 8 enforcement.
 
 ## Changelog
 
