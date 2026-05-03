@@ -1,0 +1,47 @@
+name: JS Build
+
+on:
+  push:
+    paths:
+      - 'resources/js/**'
+      - 'resources/dist/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'vite.config.js'
+      - '.github/workflows/js-build.yml'
+  pull_request:
+    paths:
+      - 'resources/js/**'
+      - 'resources/dist/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'vite.config.js'
+      - '.github/workflows/js-build.yml'
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Build assets
+        run: npm run build
+
+      - name: Verify dist matches source
+        run: |
+          if ! git diff --quiet resources/dist; then
+            echo "::error::resources/dist is out of date. Run 'npm run build' and commit the result."
+            git diff resources/dist
+            exit 1
+          fi

@@ -13,7 +13,12 @@
 @endforeach
 
 @unless(config('livecharts.assets.auto_inject', true) === false)
+    @php
+        $built = __DIR__.'/../../resources/dist/livecharts.js';
+        $source = __DIR__.'/../../resources/js/livecharts.js';
+        $bootstrap = file_exists($built) ? $built : $source;
+    @endphp
     <script>
-        {!! file_get_contents(__DIR__.'/../../resources/js/livecharts.js') !!}
+        {!! file_get_contents($bootstrap) !!}
     </script>
 @endunless
