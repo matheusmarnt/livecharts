@@ -25,7 +25,7 @@ php artisan livecharts:install
 The installer:
 
 1. Publishes `config/livecharts.php`
-2. Copies `resources/js/livecharts.js` to `resources/js/livecharts.js` in your application
+2. Publishes the LiveCharts JS runtime **and** the pre-built engine bundles (`livecharts.js`, `apexcharts.js`, `chartjs.js`, plus Chart.js plugins for `treemap`, `matrix`, `sankey`, `financial`, `luxon`, `adapter-luxon`) to `public/vendor/livecharts/js`
 3. Prompts whether to publish chart class stubs to `stubs/livecharts` (used by `make:chart`)
 
 > **Environment-specific invocations**
@@ -38,7 +38,7 @@ The installer:
 
 ## 3. Wire the asset directive
 
-LiveCharts ships in **CDN mode** by default — engine scripts (ApexCharts, Chart.js, plugins) are loaded from jsDelivr on demand. Place the directive once in your layout `<head>`:
+LiveCharts ships in **`both` mode** by default (since v2.2.0): the locally-published engine bundles are served first, with the matching jsDelivr CDN URL wired as the `<script onerror>` fallback. Place the directive once in your layout `<head>`:
 
 ```blade
 <!DOCTYPE html>
@@ -56,7 +56,7 @@ LiveCharts ships in **CDN mode** by default — engine scripts (ApexCharts, Char
 
 The directive emits the loader script and only fetches the engine bundles for engines actually used on the page.
 
-> **Asset modes:** `cdn` (default), `local`, or `both` (fallback). Switch via `LIVECHARTS_ASSETS_MODE` in `.env` or `config/livecharts.php`. See [Local assets](#local-assets) below.
+> **Asset modes:** `both` (default — local-first with CDN fallback), `local` (no CDN), or `cdn` (no local). Switch via `LIVECHARTS_ASSETS_MODE` in `.env` or `config/livecharts.php`. See [Local assets](#local-assets) below.
 
 ## 4. Build a chart
 
@@ -201,19 +201,36 @@ The custom class must implement `Matheusmarnt\LiveCharts\Contracts\EngineAdapter
 
 ## Local assets
 
-To self-host the engine bundles instead of using the jsDelivr CDN:
+The package ships pre-built engine bundles via Vite (`vite build`) under `resources/dist`:
+
+| Bundle | Source | Purpose |
+|---|---|---|
+| `livecharts.js` | `resources/js/livecharts.js` | Alpine component + Livewire hooks |
+| `apexcharts.js` | npm `apexcharts@^5.10.6` | ApexCharts engine |
+| `chartjs.js` | npm `chart.js@^4.5.1` | Chart.js engine (UMD-mirrored named exports) |
+| `chartjs-treemap.js` | npm `chartjs-chart-treemap` | Treemap plugin |
+| `chartjs-matrix.js` | npm `chartjs-chart-matrix` | Matrix plugin |
+| `chartjs-sankey.js` | npm `chartjs-chart-sankey` | Sankey plugin |
+| `chartjs-financial.js` | npm `chartjs-chart-financial` | Candlestick plugin |
+| `chartjs-luxon.js` + `chartjs-adapter-luxon.js` | npm `luxon` + `chartjs-adapter-luxon` | Time-axis adapter for candlestick |
+
+`livecharts:install` republishes all of these to `public/vendor/livecharts/js`. To re-publish on demand:
 
 ```bash
-php artisan vendor:publish --tag=livecharts-assets
+php artisan vendor:publish --tag=livecharts-assets --force
 ```
 
-This copies the engine JS files to `public/vendor/livecharts/js`. Then:
+Switch modes:
 
 ```env
-LIVECHARTS_ASSETS_MODE=local
+LIVECHARTS_ASSETS_MODE=both   # default — local-first, CDN fallback via <script onerror>
+LIVECHARTS_ASSETS_MODE=local  # no CDN
+LIVECHARTS_ASSETS_MODE=cdn    # no local copy required
 ```
 
-Or `both` for CDN with local fallback. The `@liveChartsScripts` directive emits the right `<script>` tags for the active mode.
+The `@liveChartsScripts` directive emits the right `<script>` tags for the active mode and registers only the bundles required by the engines actually rendered on the page.
+
+> **Building from source:** if you fork the package or modify `resources/js/livecharts.js`, run `npm ci && npm run build` to regenerate the bundles. The `js-build.yml` workflow fails CI when the committed `resources/dist/` is out of sync with the source.
 
 ## Customization
 
@@ -286,10 +303,13 @@ When upgrading **across a major version** (e.g. `1.x → 2.x`) review [CHANGELOG
 
 ## Preview Route
 
-The package ships a debug route that renders one of every chart type for visual smoke-testing. Print the URL with:
+The package ships a debug route that renders one of every chart type for visual smoke-testing. Open it in your default browser with:
 
 ```bash
-php artisan livecharts:preview
+php artisan livecharts:preview            # opens the URL via the OS-native opener
+php artisan livecharts:preview --no-open  # only prints the URL (CI / headless)
 ```
 
-The route is registered automatically at `/livecharts/preview` under the `web` middleware group — point your browser at it after starting `php artisan serve`. Restrict or disable the route in production by overriding `LiveChartsServiceProvider::registerRoutes()` from a child provider, or by gating it via middleware in your application.
+The command detects the host OS and spawns the appropriate opener (`open` on macOS, `xdg-open` on Linux/BSD, `cmd /c start` on Windows). On failure it falls back to printing the URL with the warning string from `livecharts.preview.open_failed`.
+
+The route is registered automatically at `/livecharts/preview` under the `web` middleware group — make sure your local server (`php artisan serve`, Sail, or Docker) is running before invoking the command. Restrict or disable the route in production by overriding `LiveChartsServiceProvider::registerRoutes()` from a child provider, or by gating it via middleware in your application.
