@@ -8,6 +8,12 @@ on:
       - 'phpunit.xml.dist'
       - 'composer.json'
       - 'composer.lock'
+      - 'resources/js/**'
+      - 'resources/dist/**'
+      - 'resources/views/**'
+      - 'vite.config.js'
+      - 'package.json'
+      - 'package-lock.json'
   pull_request:
     paths:
       - '**.php'
@@ -15,6 +21,12 @@ on:
       - 'phpunit.xml.dist'
       - 'composer.json'
       - 'composer.lock'
+      - 'resources/js/**'
+      - 'resources/dist/**'
+      - 'resources/views/**'
+      - 'vite.config.js'
+      - 'package.json'
+      - 'package-lock.json'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
