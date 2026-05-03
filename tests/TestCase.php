@@ -13,6 +13,8 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
+        \Laravel\Prompts\Prompt::fallbackWhen(true);
+
         Factory::guessFactoryNamesUsing(
             fn (string $modelName) => 'Matheusmarnt\\LiveCharts\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );

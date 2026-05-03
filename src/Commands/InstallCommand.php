@@ -7,6 +7,10 @@ namespace Matheusmarnt\LiveCharts\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
+use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\info;
+use function Laravel\Prompts\spin;
+
 class InstallCommand extends Command
 {
     public $signature = 'livecharts:install';
@@ -15,13 +19,20 @@ class InstallCommand extends Command
 
     public function handle(): int
     {
-        $this->info(__('livecharts::livecharts.install.starting'));
+        info(__('livecharts::livecharts.install.starting'));
 
-        $this->publishConfiguration();
+        spin(
+            fn () => $this->publishConfiguration(),
+            __('livecharts::livecharts.install.publishing_assets'),
+        );
+
         $this->publishAssets();
         $this->publishStubs();
 
-        $this->info(__('livecharts::livecharts.install.completed'));
+        info(__('livecharts::livecharts.install.completed'));
+
+        $this->newLine();
+        $this->line('  <comment>Next:</comment> php artisan livecharts:preview');
 
         return self::SUCCESS;
     }
@@ -36,30 +47,31 @@ class InstallCommand extends Command
 
     protected function publishAssets(): void
     {
-        $this->info(__('livecharts::livecharts.install.publishing_assets'));
-
         $jsPath = resource_path('js/livecharts.js');
 
-        if (File::exists($jsPath) && ! $this->confirm(__('livecharts::livecharts.install.overwrite_js'), false)) {
+        if (File::exists($jsPath) && ! confirm(label: __('livecharts::livecharts.install.overwrite_js'), default: false)) {
             return;
         }
 
-        File::ensureDirectoryExists(dirname($jsPath));
-        File::copy(__DIR__.'/../../resources/js/livecharts.js', $jsPath);
+        spin(function () use ($jsPath) {
+            File::ensureDirectoryExists(dirname($jsPath));
+            File::copy(__DIR__.'/../../resources/js/livecharts.js', $jsPath);
+        }, __('livecharts::livecharts.install.publishing_assets'));
 
-        $this->info(__('livecharts::livecharts.install.js_published', ['path' => $jsPath]));
+        $this->components->info(__('livecharts::livecharts.install.js_published', ['path' => $jsPath]));
     }
 
     protected function publishStubs(): void
     {
-        if (! $this->confirm(__('livecharts::livecharts.install.publish_stubs'), false)) {
+        if (! confirm(label: __('livecharts::livecharts.install.publish_stubs'), default: false)) {
             return;
         }
 
-        $this->call('vendor:publish', [
-            '--tag' => 'livecharts-stubs',
-        ]);
+        spin(
+            fn () => $this->call('vendor:publish', ['--tag' => 'livecharts-stubs']),
+            __('livecharts::livecharts.install.publishing_assets'),
+        );
 
-        $this->info(__('livecharts::livecharts.install.stubs_published', ['path' => base_path('stubs/livecharts')]));
+        $this->components->info(__('livecharts::livecharts.install.stubs_published', ['path' => base_path('stubs/livecharts')]));
     }
 }

@@ -61,7 +61,7 @@ return [
         'mode' => env('LIVECHARTS_ASSETS_MODE', 'both'), // "cdn", "local", or "both" (local first, CDN fallback)
         'auto_inject' => true,
         'cdn' => [
-            'apexcharts' => 'https://cdn.jsdelivr.net/npm/apexcharts@5.10.6',
+            'apexcharts' => 'https://cdn.jsdelivr.net/npm/apexcharts@5.10.6/dist/apexcharts.min.js',
             'chartjs' => 'https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js',
             'chartjs-treemap' => 'https://cdn.jsdelivr.net/npm/chartjs-chart-treemap@3.0.0/dist/chartjs-chart-treemap.min.js',
             'chartjs-matrix' => 'https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@2.0.1/dist/chartjs-chart-matrix.min.js',
