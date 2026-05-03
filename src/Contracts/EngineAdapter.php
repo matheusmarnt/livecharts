@@ -29,4 +29,16 @@ interface EngineAdapter
      * Version constraint for the engine.
      */
     public function version(): string;
+
+    /**
+     * Chart types accepted by this engine.
+     *
+     * @return list<string>
+     */
+    public function supportedTypes(): array;
+
+    /**
+     * Identifier used in the engine registry and error messages.
+     */
+    public function engineName(): string;
 }

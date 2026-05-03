@@ -9,6 +9,7 @@ return [
         'empty_dataset_named' => 'Dataset [:name] não possui pontos de dados. Informe valores via Dataset::data().',
         'data_shape_mismatch' => 'Contagem de dados do dataset [:name] não confere: esperados :expected pontos (de acordo com os rótulos), recebidos :actual.',
         'unknown_engine' => 'Motor [:name] não registrado. Disponíveis: [:registered].',
+        'no_engine_for_type' => 'Tipo de gráfico [:type] não é suportado por nenhum motor registrado.',
     ],
 
     'install' => [
