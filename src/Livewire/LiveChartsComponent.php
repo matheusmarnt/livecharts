@@ -76,10 +76,10 @@ class LiveChartsComponent extends Component
             width: $payload['width'],
             labels: $payload['labels'],
             datasets: $datasets,
-            colors: array_map(
+            colors: array_values(array_map(
                 fn (array $c) => ColorValue::pair($c['dark'], $c['light']),
                 $payload['colors']
-            ),
+            )),
             theme: $payload['theme'],
             stacked: $payload['stacked'],
             sparkline: $payload['sparkline'],
