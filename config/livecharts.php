@@ -58,7 +58,7 @@ return [
     |--------------------------------------------------------------------------
     */
     'assets' => [
-        'mode' => env('LIVECHARTS_ASSETS_MODE', 'cdn'), // "cdn", "local", or "both" (fallback)
+        'mode' => env('LIVECHARTS_ASSETS_MODE', 'both'), // "cdn", "local", or "both" (local first, CDN fallback)
         'auto_inject' => true,
         'cdn' => [
             'apexcharts' => 'https://cdn.jsdelivr.net/npm/apexcharts@5.10.6',
