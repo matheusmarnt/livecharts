@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://github.com/matheusmarnt/livecharts/compare/v2.1.0...v2.2.0) (2026-05-03)
+
+
+### Features
+
+* **assets:** bundle apexcharts and chart.js with local-first fallback ([#56](https://github.com/matheusmarnt/livecharts/issues/56)) ([7b7c90f](https://github.com/matheusmarnt/livecharts/commit/7b7c90f5a32cbbe7dfcad328f85f7565e88ab36e))
+
 ## [2.1.0](https://github.com/matheusmarnt/livecharts/compare/v2.0.0...v2.1.0) (2026-05-03)
 
 
