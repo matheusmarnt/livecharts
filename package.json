@@ -5,7 +5,7 @@
     "license": "MIT",
     "type": "module",
     "scripts": {
-        "build": "vite build --mode livecharts && vite build --mode apexcharts && vite build --mode chartjs",
+        "build": "vite build --mode livecharts && vite build --mode apexcharts && vite build --mode chartjs && vite build --mode chartjs-treemap && vite build --mode chartjs-matrix && vite build --mode chartjs-sankey && vite build --mode chartjs-financial && vite build --mode chartjs-luxon && vite build --mode chartjs-adapter-luxon",
         "dev": "vite build --mode livecharts --watch"
     },
     "dependencies": {
