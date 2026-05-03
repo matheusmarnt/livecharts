@@ -86,11 +86,11 @@ These use the same OKLCH-approach as Tailwind v4 but are LiveCharts-specific ext
 
 ## Recommended dark/light pairs
 
-| Element | `dark:` | `light:` |
-|---|---|---|
-| Title | `Amber300` | `Amber700` |
-| Legend | `Slate200` | `Slate700` |
-| Axis labels | `Slate400` | `Slate600` |
-| Grid | `Slate800` | `Slate200` |
-| Tooltip text | `White` | `Slate900` |
-| Chart background | `Slate900` | `White` |
+| Element | `dark:` | `light:` | Notes |
+|---|---|---|---|
+| Title | `Amber300` | `Amber700` | |
+| Legend | `Slate200` | `Slate700` | |
+| Axis labels | `Slate400` | `Slate600` | |
+| Grid | `Slate800` | `Slate200` | |
+| Tooltip text | `White` | `Slate900` | ApexCharts: applied via CSS injection |
+| Chart background | `Slate900` | `White` | |

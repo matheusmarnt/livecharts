@@ -40,7 +40,7 @@ Pass a single value to use the same hex for both themes:
 | `subtitleColor()` | Subtitle text (ApexCharts) |
 | `legendColor()` | Legend label text |
 | `labelsColor()` | Axis tick labels |
-| `tooltipColor()` | Tooltip text |
+| `tooltipColor()` | Tooltip text — ApexCharts applies this via scoped CSS injection since the engine ignores `tooltip.style.color` at runtime |
 | `axisColor()` | Axis borders and ticks |
 | `gridColor()` | Grid lines |
 | `dataLabelsColor()` | Data label text (datalabels plugin) |

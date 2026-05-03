@@ -21,12 +21,13 @@ php artisan livecharts:install
 
 ## Register Scripts
 
-Add `@liveChartsScripts` **before the closing `</body>` tag**, after all chart components:
+Add `@liveChartsScripts` **before `@livewireScripts`**. The LiveCharts JS runtime registers an Alpine component and must load before Livewire's bundled Alpine initializes:
 
 ```html
 <body>
     <!-- your chart components here -->
     @liveChartsScripts
+    @livewireScripts
 </body>
 ```
 
