@@ -48,7 +48,7 @@ class ApexChartsAdapter extends BaseEngineAdapter
 
         if ($payload->backgroundColor !== null) {
             $chartBlock['background'] = $this->pickColor($payload->backgroundColor);
-            $chartBlock = array_merge($chartBlock, $this->themedSidecar('backgroundColor', $payload->backgroundColor));
+            $chartBlock = array_merge($chartBlock, $this->themedSidecar('background', $payload->backgroundColor));
         }
 
         $options = [
@@ -77,31 +77,38 @@ class ApexChartsAdapter extends BaseEngineAdapter
         // Axis label colors
         if ($payload->labelsColor !== null) {
             $color = $this->pickColor($payload->labelsColor);
-            $options['xaxis'] = array_merge_recursive($options['xaxis'] ?? [], [
-                'labels' => ['style' => ['colors' => [$color]]],
-            ]);
-            $options['yaxis'] = array_merge_recursive($options['yaxis'] ?? [], [
-                'labels' => ['style' => ['colors' => [$color]]],
-            ]);
-            $options['xaxis'] = array_merge(
-                $options['xaxis'],
-                $this->themedSidecar('labelsColor', $payload->labelsColor),
+            $labelStyle = array_merge(
+                ['colors' => [$color]],
+                $this->themedSidecar('colors', $payload->labelsColor),
+            );
+            $options['xaxis']['labels']['style'] = array_merge(
+                $options['xaxis']['labels']['style'] ?? [],
+                $labelStyle,
+            );
+            $options['yaxis']['labels']['style'] = array_merge(
+                $options['yaxis']['labels']['style'] ?? [],
+                $labelStyle,
             );
         }
 
         // Axis border + tick colors
         if ($payload->axisColor !== null) {
             $color = $this->pickColor($payload->axisColor);
-            $options['xaxis'] = array_merge_recursive($options['xaxis'] ?? [], [
-                'axisBorder' => ['color' => $color],
-                'axisTicks' => ['color' => $color],
-            ]);
-            $options['yaxis'] = array_merge_recursive($options['yaxis'] ?? [], [
-                'axisBorder' => ['color' => $color],
-            ]);
-            $options['xaxis'] = array_merge(
-                $options['xaxis'],
-                $this->themedSidecar('axisColor', $payload->axisColor),
+            $axisSidecar = $this->themedSidecar('color', $payload->axisColor);
+            $options['xaxis']['axisBorder'] = array_merge(
+                $options['xaxis']['axisBorder'] ?? [],
+                ['color' => $color],
+                $axisSidecar,
+            );
+            $options['xaxis']['axisTicks'] = array_merge(
+                $options['xaxis']['axisTicks'] ?? [],
+                ['color' => $color],
+                $axisSidecar,
+            );
+            $options['yaxis']['axisBorder'] = array_merge(
+                $options['yaxis']['axisBorder'] ?? [],
+                ['color' => $color],
+                $axisSidecar,
             );
         }
 
@@ -112,19 +119,19 @@ class ApexChartsAdapter extends BaseEngineAdapter
             ]);
             $options['grid'] = array_merge(
                 $options['grid'],
-                $this->themedSidecar('gridColor', $payload->gridColor),
+                $this->themedSidecar('borderColor', $payload->gridColor),
             );
         }
 
         // Data labels color
         if ($payload->dataLabelsColor !== null) {
-            $options['dataLabels'] = array_merge_recursive($options['dataLabels'] ?? [], [
-                'style' => ['colors' => [$this->pickColor($payload->dataLabelsColor)]],
-            ]);
-            $options['dataLabels'] = array_merge(
-                $options['dataLabels'],
-                $this->themedSidecar('dataLabelsColor', $payload->dataLabelsColor),
+            $dataLabelsStyle = array_merge(
+                ['colors' => [$this->pickColor($payload->dataLabelsColor)]],
+                $this->themedSidecar('colors', $payload->dataLabelsColor),
             );
+            $options['dataLabels'] = array_merge_recursive($options['dataLabels'] ?? [], [
+                'style' => $dataLabelsStyle,
+            ]);
         }
 
         if ($payload->theme !== 'auto') {
@@ -146,6 +153,7 @@ class ApexChartsAdapter extends BaseEngineAdapter
 
             if ($payload->titleColor !== null) {
                 $style['color'] = $this->pickColor($payload->titleColor);
+                $style = array_merge($style, $this->themedSidecar('color', $payload->titleColor));
             }
 
             if ($payload->titleFont !== null) {
@@ -163,10 +171,6 @@ class ApexChartsAdapter extends BaseEngineAdapter
             $title['style'] = $style;
         }
 
-        if ($payload->titleColor !== null) {
-            $title = array_merge($title, $this->themedSidecar('titleColor', $payload->titleColor));
-        }
-
         return $title;
     }
 
@@ -178,8 +182,10 @@ class ApexChartsAdapter extends BaseEngineAdapter
         $subtitle = ['text' => $payload->subtitle];
 
         if ($payload->subtitleColor !== null) {
-            $subtitle['style'] = ['color' => $this->pickColor($payload->subtitleColor)];
-            $subtitle = array_merge($subtitle, $this->themedSidecar('subtitleColor', $payload->subtitleColor));
+            $subtitle['style'] = array_merge(
+                ['color' => $this->pickColor($payload->subtitleColor)],
+                $this->themedSidecar('color', $payload->subtitleColor),
+            );
         }
 
         return $subtitle;
@@ -193,8 +199,10 @@ class ApexChartsAdapter extends BaseEngineAdapter
         $legend = ['show' => $payload->legend];
 
         if ($payload->legendColor !== null) {
-            $legend['labels'] = ['colors' => $this->pickColor($payload->legendColor)];
-            $legend = array_merge($legend, $this->themedSidecar('legendColor', $payload->legendColor));
+            $legend['labels'] = array_merge(
+                ['colors' => $this->pickColor($payload->legendColor)],
+                $this->themedSidecar('colors', $payload->legendColor),
+            );
         }
 
         if ($payload->legendFont !== null) {
@@ -224,6 +232,14 @@ class ApexChartsAdapter extends BaseEngineAdapter
 
             if ($payload->tooltipColor !== null) {
                 $style['color'] = $this->pickColor($payload->tooltipColor);
+                $style = array_merge($style, $this->themedSidecar('color', $payload->tooltipColor));
+
+                // tooltip.theme controls bg+text as a unit ('dark'/'light').
+                // Swap in sync with page theme so the tooltip matches the active mode.
+                $tooltip['theme'] = 'light';
+                $tooltip = array_merge($tooltip, [
+                    '__lc_themed' => ['theme' => ['dark' => 'dark', 'light' => 'light']],
+                ]);
             }
             if (isset($payload->tooltipFont['size'])) {
                 $style['fontSize'] = $payload->tooltipFont['size'].'px';
@@ -235,10 +251,6 @@ class ApexChartsAdapter extends BaseEngineAdapter
             if (! empty($style)) {
                 $tooltip['style'] = $style;
             }
-        }
-
-        if ($payload->tooltipColor !== null) {
-            $tooltip = array_merge($tooltip, $this->themedSidecar('tooltipColor', $payload->tooltipColor));
         }
 
         return $tooltip;

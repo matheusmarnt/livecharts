@@ -32,8 +32,8 @@ it('flushPendingPushes is idempotent — calling twice does not duplicate script
 
     $output = app('view')->yieldPushContent('livecharts-scripts');
 
-    // apexcharts.js appears exactly once
-    expect(substr_count($output, 'apexcharts'))->toBe(1);
+    // apexcharts CDN script tag appears exactly once
+    expect(substr_count($output, 'cdn.jsdelivr.net/npm/apexcharts'))->toBe(1);
 });
 
 it('flushPendingPushes pushes only new assets on second component render', function () {
