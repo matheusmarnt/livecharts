@@ -3,6 +3,7 @@
 namespace Matheusmarnt\LiveCharts\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Laravel\Prompts\Prompt;
 use Livewire\LivewireServiceProvider;
 use Matheusmarnt\LiveCharts\LiveChartsServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -13,7 +14,7 @@ class TestCase extends Orchestra
     {
         parent::setUp();
 
-        \Laravel\Prompts\Prompt::fallbackWhen(true);
+        Prompt::fallbackWhen(true);
 
         Factory::guessFactoryNamesUsing(
             fn (string $modelName) => 'Matheusmarnt\\LiveCharts\\Database\\Factories\\'.class_basename($modelName).'Factory'
