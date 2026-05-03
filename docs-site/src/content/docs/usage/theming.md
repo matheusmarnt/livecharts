@@ -1,71 +1,69 @@
 ---
 title: Theming
-description: Configure light, dark, and auto themes.
+description: Configure light, dark, and auto themes with live toggle support.
 ---
 
-LiveCharts exposes three theme modes:
+LiveCharts exposes three theme modes and a live JS observer that re-colors charts when your app switches between dark and light mode — no Livewire roundtrip required.
 
 | Mode | Behaviour |
 |---|---|
-| `auto` | Follows the user's `prefers-color-scheme` system setting. |
+| `auto` | Follows the host app's `<html class="dark">` (default strategy). |
 | `light` | Always uses the light palette. |
 | `dark` | Always uses the dark palette. |
-
-:::caution
-Theming is currently **config-only**. The JavaScript consumption path for engine-specific theme tokens is on the roadmap. Today, `theme` controls colour selection inside LiveCharts but you may need to pass engine-native options for full styling control.
-:::
 
 ## Global default
 
 ```php
 // config/livecharts.php
 return [
-    'theme' => env('LIVECHARTS_THEME', 'auto'),
-    // ...
+    'theme' => [
+        'mode'        => env('LIVECHARTS_THEME', 'auto'),
+        'auto_detect' => env('LIVECHARTS_THEME_DETECT', 'class'), // 'class' | 'media'
+    ],
 ];
 ```
+
+`auto_detect` controls how the JS observer detects theme changes:
+
+| Strategy | Trigger |
+|---|---|
+| `class` | Watches `<html class="dark">` — works with Tailwind dark mode |
+| `media` | Watches `prefers-color-scheme: dark` OS media query |
 
 ## Per-chart override
 
 ```php
-LiveCharts::line()->theme('dark');
+use Matheusmarnt\LiveCharts\Enums\ThemeMode;
+
+LiveCharts::line()->theme(ThemeMode::Dark);
+LiveCharts::line()->theme('dark'); // string form still works
 ```
 
-## Engine-native styling (recommended today)
+## Theme-aware color customization
 
-Until the JS theming hook lands, override engine options directly:
-
-### ApexCharts
+The recommended way to style charts for both themes is the fluent color API using `TwColor` enums. Charts re-color instantly when the theme toggles — no page reload, no Livewire request.
 
 ```php
-LiveCharts::line()->options([
-    'chart' => ['foreColor' => '#cbd5e1'],
-    'grid' => ['borderColor' => '#334155'],
-    'tooltip' => ['theme' => 'dark'],
-]);
-```
+use Matheusmarnt\LiveCharts\Enums\TwColor;
 
-### Chart.js
-
-```php
-LiveCharts::engine('chartjs')->bar()->options([
-    'plugins' => [
-        'legend' => ['labels' => ['color' => '#cbd5e1']],
-    ],
-    'scales' => [
-        'x' => ['grid' => ['color' => '#334155']],
-        'y' => ['grid' => ['color' => '#334155']],
-    ],
-]);
-```
-
-## Mixing with Tailwind
-
-If you're driving the rest of the UI with Tailwind, derive your chart palette from your CSS variables:
-
-```php
 LiveCharts::line()
-    ->colors(['rgb(var(--color-primary))', 'rgb(var(--color-secondary))']);
+    ->titleColor(dark: TwColor::Amber300, light: TwColor::Amber600)
+    ->legendColor(dark: TwColor::Slate200, light: TwColor::Slate700)
+    ->gridColor(dark: TwColor::Slate800, light: TwColor::Slate200)
+    ->tooltipColor(dark: TwColor::White, light: TwColor::Slate900)
+    ->backgroundColor(dark: TwColor::Slate900, light: TwColor::White)
+    ->labelsColor(dark: TwColor::Slate400, light: TwColor::Slate600);
 ```
 
-Just remember the values are emitted as JSON to the engine — they need to be valid CSS colour strings the browser can resolve at render time.
+See the [Color Customization](/usage/customization) page for the full API reference.
+
+## Live toggle behavior
+
+When `auto_detect` is `class` (default), LiveCharts watches for changes to `document.documentElement.classList`. Toggle your app's dark mode and all charts update instantly:
+
+```js
+// Example toggle — charts re-color with no round-trip
+document.documentElement.classList.toggle('dark');
+```
+
+This works with Tailwind's class strategy, Alpine.js dark mode plugins, and any UI framework that drives dark mode via the `.dark` class.

@@ -12,7 +12,10 @@ it('dataset can set all properties', function () {
 
     expect($dataset->name)->toBe('Series');
     expect($dataset->data)->toBe([1, 2, 3]);
-    expect($dataset->color)->toBe('#000');
+    // color() now sets both background and border as a theme-aware ColorValue
+    expect($dataset->background)->not->toBeNull();
+    expect($dataset->background->lightHex())->toBe('#000');
+    expect($dataset->border)->not->toBeNull();
     expect($dataset->type)->toBe('bar');
     expect($dataset->meta)->toBe(['foo' => 'bar']);
     expect($dataset->toArray())->toBeArray();
@@ -41,7 +44,8 @@ it('chart can set all common properties', function () {
     expect($payload['subtitle'])->toBe('Subtitle');
     expect($payload['height'])->toBe(400);
     expect($payload['width'])->toBe('50%');
-    expect($payload['colors'])->toBe(['#111']);
+    // colors() now resolves to theme-aware ColorValue pairs; hex strings use same hex for dark+light
+    expect($payload['colors'])->toBe([['dark' => '#111', 'light' => '#111']]);
     expect($payload['theme'])->toBe('dark');
     expect($payload['stacked'])->toBeTrue();
     expect($payload['sparkline'])->toBeTrue();
