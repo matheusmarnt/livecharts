@@ -1,40 +1,142 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
-template: splash # Remove or comment out this line to display the site sidebar on this page.
+title: LiveCharts
+description: A unified, reactive chart abstraction layer for Laravel Livewire. Multi-engine. Pure PHP. Zero JavaScript required.
+template: splash
 hero:
-  tagline: Congrats on setting up a new Starlight project!
+  title: '<span class="lc-title-live">Live</span><span class="lc-title-charts">Charts</span>'
+  tagline: Reactive charts for Laravel Livewire — pure PHP, multi-engine, zero JavaScript required.
   image:
-    file: ../../assets/houston.webp
+    file: ../../assets/livecharts-square.png
   actions:
-    - text: Example Guide
-      link: /guides/example/
+    - text: Get Started
+      link: /livecharts/getting-started/installation/
       icon: right-arrow
-    - text: Read the Starlight docs
-      link: https://starlight.astro.build
+      variant: primary
+    - text: View on GitHub
+      link: https://github.com/matheusmarnt/livecharts
       icon: external
-      variant: minimal
+      variant: secondary
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Card, CardGrid, LinkCard, Tabs, TabItem } from '@astrojs/starlight/components';
 
-## Next steps
+## Why LiveCharts?
 
-<CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
+<CardGrid>
+	<Card title="Pure PHP API" icon="seti:php">
+		Define everything in PHP — types, datasets, options, themes. No JavaScript scaffolding required for standard use cases.
 	</Card>
-	<Card title="Change page layout" icon="document">
-		Delete `template: splash` in `src/content/docs/index.mdx` to display a
-		sidebar on this page.
+	<Card title="Multi-Engine" icon="puzzle">
+		Switch between **ApexCharts** and **Chart.js** with a single method call. Register your own engines via a stable adapter contract.
 	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
+	<Card title="Livewire Native" icon="rocket">
+		Hooks into the v3/v4 lifecycle: morph protection, commit hydration, Alpine init/destroy. Charts react to property updates automatically.
 	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
+	<Card title="Real-Time Polling" icon="random">
+		`Chart::poll()` + `wire:poll` + `livecharts:refreshed` event. Build live dashboards without writing a single line of JavaScript.
 	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
+	<Card title="Artisan Ready" icon="laptop">
+		Scaffold chart classes with `php artisan make:chart`. Publish stubs, install assets, preview in browser — all from the CLI.
+	</Card>
+	<Card title="Production Tested" icon="approve-check">
+		127 tests, 17 architecture rules, PHPStan level 8, ≥90% coverage gate, CI matrix across PHP 8.2-8.5 × Laravel 11/12/13 × Livewire 3/4.
 	</Card>
 </CardGrid>
+
+## Quick taste
+
+<Tabs>
+<TabItem label="Fluent">
+
+```php
+use Matheusmarnt\LiveCharts\Facades\LiveCharts;
+
+$chart = LiveCharts::line()
+    ->title('Monthly Revenue')
+    ->labels(['Jan', 'Feb', 'Mar', 'Apr'])
+    ->dataset('Revenue', [12000, 19000, 15000, 22000])
+    ->colors(['#10B981'])
+    ->pollEvery(30);
+```
+
+</TabItem>
+<TabItem label="Class-Based">
+
+```php
+namespace App\Charts;
+
+use Matheusmarnt\LiveCharts\Charts\Chart;
+use Matheusmarnt\LiveCharts\Charts\Dataset;
+
+class RevenueChart extends Chart
+{
+    protected string $type = 'line';
+
+    public function datasets(): array
+    {
+        return [
+            Dataset::make('Revenue')
+                ->data([12000, 19000, 15000, 22000])
+                ->color('#10B981'),
+        ];
+    }
+}
+```
+
+</TabItem>
+<TabItem label="Blade">
+
+```blade
+<livewire:livecharts :chart="$chart" />
+
+{{-- Or with a class-based chart --}}
+<livewire:livecharts :chart="App\Charts\RevenueChart::class" />
+```
+
+</TabItem>
+</Tabs>
+
+## Explore the docs
+
+<CardGrid>
+	<LinkCard
+		title="Installation"
+		description="Composer install, asset publishing, scripts directive."
+		href="/livecharts/getting-started/installation/"
+	/>
+	<LinkCard
+		title="Quick Start"
+		description="Render your first chart in under five minutes."
+		href="/livecharts/getting-started/quick-start/"
+	/>
+	<LinkCard
+		title="Class-Based Charts"
+		description="Reusable, testable chart definitions."
+		href="/livecharts/usage/class-based/"
+	/>
+	<LinkCard
+		title="Reactivity & Polling"
+		description="Live dashboards via `Chart::poll()` and Livewire events."
+		href="/livecharts/usage/reactivity/"
+	/>
+	<LinkCard
+		title="Interactive Events"
+		description="`onDataPointClick` listeners for drill-downs."
+		href="/livecharts/usage/events/"
+	/>
+	<LinkCard
+		title="Custom Engines"
+		description="Register your own rendering engine via the adapter contract."
+		href="/livecharts/engines/custom/"
+	/>
+</CardGrid>
+
+## Compatibility
+
+| Stack | Versions |
+|---|---|
+| PHP | 8.2 · 8.3 · 8.4 · 8.5 |
+| Laravel | 11 · 12 · 13 |
+| Livewire | 3.6.4+ · 4.0+ |
+| ApexCharts | ^5.10.6 |
+| Chart.js | ^4.5.1 |
