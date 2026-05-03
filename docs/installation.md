@@ -40,7 +40,7 @@ The installer:
 
 LiveCharts ships in **`both` mode** by default (since v2.2.0): the locally-published engine bundles are served first, with the matching jsDelivr CDN URL wired as the `<script onerror>` fallback.
 
-Place `@liveChartsScripts` **before the closing `</body>` tag**, after all chart components:
+Place `@liveChartsScripts` **before `@livewireScripts`** and before the closing `</body>` tag. The LiveCharts JS runtime registers an Alpine component (`livechart`) — it must load before Livewire's bundled Alpine starts:
 
 ```blade
 <!DOCTYPE html>
@@ -50,8 +50,8 @@ Place `@liveChartsScripts` **before the closing `</body>` tag**, after all chart
 </head>
 <body>
     {{ $slot }}
-    @livewireScripts
     @liveChartsScripts
+    @livewireScripts
 </body>
 </html>
 ```

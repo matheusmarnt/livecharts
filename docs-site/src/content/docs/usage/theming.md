@@ -67,3 +67,7 @@ document.documentElement.classList.toggle('dark');
 ```
 
 This works with Tailwind's class strategy, Alpine.js dark mode plugins, and any UI framework that drives dark mode via the `.dark` class.
+
+## Tooltip color
+
+ApexCharts ignores `tooltip.style.color` at runtime, so `tooltipColor()` is applied via a scoped `<style>` element injected into `<head>`. The style is keyed to the chart's DOM id and targets `.apexcharts-tooltip-title` and `.apexcharts-tooltip-text-y-*` selectors with `!important`. It updates on every theme toggle and is removed when the chart is destroyed. No extra configuration required.
