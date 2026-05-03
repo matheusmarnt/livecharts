@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/matheusmarnt/livecharts/compare/v2.0.0...v2.1.0) (2026-05-03)
+
+
+### Features
+
+* **assets:** add Vite-based JS build pipeline ([#54](https://github.com/matheusmarnt/livecharts/issues/54)) ([eecd214](https://github.com/matheusmarnt/livecharts/commit/eecd214b7c4896f2d42e12413b7b0942db29a753))
+
 ## [2.0.0](https://github.com/matheusmarnt/livecharts/compare/v1.19.0...v2.0.0) (2026-05-02)
 
 
