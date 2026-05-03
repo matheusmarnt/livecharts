@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Matheusmarnt\LiveCharts\Charts\LineChart;
 use Matheusmarnt\LiveCharts\Charts\HeatmapChart;
+use Matheusmarnt\LiveCharts\Charts\LineChart;
 use Matheusmarnt\LiveCharts\Charts\MatrixChart;
 use Matheusmarnt\LiveCharts\Engines\EngineFactory;
 use Matheusmarnt\LiveCharts\Exceptions\InvalidChartTypeException;
