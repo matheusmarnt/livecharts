@@ -28,7 +28,10 @@ LiveCharts unifies ApexCharts and Chart.js behind a single fluent PHP API. Defin
 - **Polling** — `Chart::poll(5000)` + `wire:poll="refresh"` integration with a `livecharts:refreshed` event for userland data hydration
 - **Interaction events** — `onDataPointClick`, `onZoom`, `onSelection`, `onScroll` map directly to Livewire events
 - **Broadcasting** — push chart updates over Laravel Echo channels with `broadcastOn()` / `broadcastAs()`
-- **Theme detection** — `auto`, `light`, or `dark` modes with Tailwind `.dark` class auto-detection
+- **Theme-aware color tokens** — 289-case `TwColor` enum (all Tailwind v4 families + 4 extensions × 11 shades) with `dark:`/`light:` named-arg API: `->titleColor(dark: TwColor::Amber300, light: TwColor::Amber600)`. Charts re-color live on dark-mode toggle — no Livewire roundtrip
+- **Palette presets** — `->palette(TwPalette::Vibrant)` auto-fills dataset colors from theme-aware preset schemes
+- **Typography** — `->titleFont(size: 18, weight: 'bold', family: 'Inter')` for title, legend, and tooltip
+- **Theme detection** — `auto`, `light`, or `dark` modes; JS observer watches `<html class="dark">` (or `prefers-color-scheme`) and re-colors charts live
 - **Local-first assets with CDN fallback** — engine bundles (`apexcharts.js`, `chartjs.js`) and Chart.js plugin bundles (treemap/matrix/sankey/financial/luxon/adapter-luxon) ship pre-built in `resources/dist`; switch between `local`, `cdn`, or `both` via config
 - **Vite build pipeline** — lib-mode IIFE outputs for `livecharts.js` + every engine and plugin shim, verified in CI
 - **Stub publishing** — `livecharts:install` can publish chart class stubs to `stubs/livecharts` for project-level customization

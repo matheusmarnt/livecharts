@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Matheusmarnt\LiveCharts\Contracts;
 
 use Matheusmarnt\LiveCharts\Charts\Dataset;
+use Matheusmarnt\LiveCharts\Enums\ThemeMode;
+use Matheusmarnt\LiveCharts\Enums\TwColor;
+use Matheusmarnt\LiveCharts\Enums\TwPalette;
+use Matheusmarnt\LiveCharts\Support\ColorValue;
 
 interface ChartContract
 {
@@ -32,7 +36,7 @@ interface ChartContract
     public function datasets(array $datasets): self;
 
     /**
-     * @param  array<int, string>  $colors
+     * @param  array<int, string|TwColor|ColorValue|array{dark?: TwColor|string, light?: TwColor|string}>  $colors
      */
     public function colors(array $colors): self;
 
@@ -74,6 +78,34 @@ interface ChartContract
      * @param  array<string, mixed>  $config
      */
     public function dataLabels(array $config): self;
+
+    public function titleColor(TwColor|string|null $dark = null, TwColor|string|null $light = null): self;
+
+    public function subtitleColor(TwColor|string|null $dark = null, TwColor|string|null $light = null): self;
+
+    public function legendColor(TwColor|string|null $dark = null, TwColor|string|null $light = null): self;
+
+    public function labelsColor(TwColor|string|null $dark = null, TwColor|string|null $light = null): self;
+
+    public function tooltipColor(TwColor|string|null $dark = null, TwColor|string|null $light = null): self;
+
+    public function axisColor(TwColor|string|null $dark = null, TwColor|string|null $light = null): self;
+
+    public function gridColor(TwColor|string|null $dark = null, TwColor|string|null $light = null): self;
+
+    public function dataLabelsColor(TwColor|string|null $dark = null, TwColor|string|null $light = null): self;
+
+    public function backgroundColor(TwColor|string|null $dark = null, TwColor|string|null $light = null): self;
+
+    public function palette(TwPalette $palette): self;
+
+    public function theme(ThemeMode|string $mode): self;
+
+    public function titleFont(?int $size = null, ?string $weight = null, ?string $family = null): self;
+
+    public function legendFont(?int $size = null, ?string $weight = null, ?string $family = null): self;
+
+    public function tooltipFont(?int $size = null, ?string $weight = null, ?string $family = null): self;
 
     public function onDataPointClick(string $event): self;
 

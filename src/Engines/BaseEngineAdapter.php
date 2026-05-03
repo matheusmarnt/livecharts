@@ -7,6 +7,7 @@ namespace Matheusmarnt\LiveCharts\Engines;
 use Matheusmarnt\LiveCharts\Contracts\EngineAdapter;
 use Matheusmarnt\LiveCharts\Exceptions\InvalidChartTypeException;
 use Matheusmarnt\LiveCharts\Support\ChartPayload;
+use Matheusmarnt\LiveCharts\Support\ColorValue;
 
 abstract class BaseEngineAdapter implements EngineAdapter
 {
@@ -59,10 +60,44 @@ abstract class BaseEngineAdapter implements EngineAdapter
     }
 
     /**
-     * @return array<int, string>
+     * Returns the light-theme hex list for the chart-level colors array.
+     * JS observer will swap to dark values at runtime.
+     *
+     * @return list<string>
      */
     protected function normalizeColors(ChartPayload $payload): array
     {
-        return $payload->colors;
+        return array_map(
+            fn (ColorValue $cv) => $cv->lightHex(),
+            $payload->colors,
+        );
+    }
+
+    /**
+     * Resolve a ColorValue to its initial (light) hex for server-side paint.
+     * Returns null when $cv is null (slot not set → engine default applies).
+     */
+    protected function pickColor(?ColorValue $cv): ?string
+    {
+        return $cv?->lightHex();
+    }
+
+    /**
+     * Build a __lc_themed sidecar for a single color slot.
+     * The JS observer reads this to swap on theme toggle.
+     *
+     * @return array{__lc_themed: array<string, array{dark: string, light: string}>}|array{}
+     */
+    protected function themedSidecar(string $key, ?ColorValue $cv): array
+    {
+        if ($cv === null) {
+            return [];
+        }
+
+        return [
+            '__lc_themed' => [
+                $key => $cv->jsonSerialize(),
+            ],
+        ];
     }
 }

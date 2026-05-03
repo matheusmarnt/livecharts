@@ -40,13 +40,26 @@ class LiveChartsComponent extends Component
 
         // Reconstruct datasets as objects for the adapter
         $datasets = array_map(function ($d) {
-            return new Dataset(
-                name: $d['name'],
-                data: $d['data'],
-                color: $d['color'] ?? null,
-                type: $d['type'] ?? null,
-                meta: $d['meta'] ?? []
-            );
+            $dataset = Dataset::make($d['name'])
+                ->data($d['data'] ?? []);
+
+            if (! empty($d['background'])) {
+                $bg = $d['background'];
+                $dataset->backgroundColor(dark: $bg['dark'], light: $bg['light'] ?? $bg['dark']);
+            } elseif (! empty($d['color'])) {
+                $dataset->color($d['color']);
+            }
+
+            if (! empty($d['border'])) {
+                $brd = $d['border'];
+                $dataset->borderColor(dark: $brd['dark'], light: $brd['light'] ?? $brd['dark']);
+            }
+
+            if (! empty($d['type'])) {
+                $dataset->type($d['type']);
+            }
+
+            return $dataset->meta($d['meta'] ?? []);
         }, $payload['datasets']);
 
         $adapter = app(EngineFactory::class)->resolve($payload['engine']);
