@@ -11,6 +11,13 @@ class AssetManager
 
     protected bool $scriptsRendered = false;
 
+    protected string $packageRoot;
+
+    public function __construct(?string $packageRoot = null)
+    {
+        $this->packageRoot = $packageRoot ?? dirname(__DIR__, 2);
+    }
+
     public function registerEngine(string $engine): void
     {
         $this->registerAsset($engine);
@@ -59,5 +66,23 @@ class AssetManager
     public function hasBeenRendered(): bool
     {
         return $this->scriptsRendered;
+    }
+
+    public function getBootstrapScript(): ?string
+    {
+        $candidates = [
+            $this->packageRoot.'/resources/dist/livecharts.js',
+            $this->packageRoot.'/resources/js/livecharts.js',
+        ];
+
+        foreach ($candidates as $path) {
+            if (is_file($path)) {
+                $contents = @file_get_contents($path);
+
+                return $contents === false ? null : $contents;
+            }
+        }
+
+        return null;
     }
 }

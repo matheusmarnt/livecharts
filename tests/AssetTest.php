@@ -57,3 +57,57 @@ it('renders the blade directive correctly', function () {
 
     expect($directive)->toContain("echo view('livecharts::scripts')->render()");
 });
+
+it('returns the dist bootstrap script when present', function () {
+    $root = sys_get_temp_dir().'/livecharts-bootstrap-'.uniqid();
+    mkdir($root.'/resources/dist', 0777, true);
+    mkdir($root.'/resources/js', 0777, true);
+    file_put_contents($root.'/resources/dist/livecharts.js', 'DIST');
+    file_put_contents($root.'/resources/js/livecharts.js', 'SOURCE');
+
+    $manager = new AssetManager($root);
+
+    expect($manager->getBootstrapScript())->toBe('DIST');
+
+    unlink($root.'/resources/dist/livecharts.js');
+    unlink($root.'/resources/js/livecharts.js');
+    rmdir($root.'/resources/dist');
+    rmdir($root.'/resources/js');
+    rmdir($root.'/resources');
+    rmdir($root);
+});
+
+it('falls back to the source bundle when dist is missing', function () {
+    $root = sys_get_temp_dir().'/livecharts-bootstrap-'.uniqid();
+    mkdir($root.'/resources/js', 0777, true);
+    file_put_contents($root.'/resources/js/livecharts.js', 'SOURCE');
+
+    $manager = new AssetManager($root);
+
+    expect($manager->getBootstrapScript())->toBe('SOURCE');
+
+    unlink($root.'/resources/js/livecharts.js');
+    rmdir($root.'/resources/js');
+    rmdir($root.'/resources');
+    rmdir($root);
+});
+
+it('returns null when neither bundle exists', function () {
+    $root = sys_get_temp_dir().'/livecharts-bootstrap-'.uniqid();
+    mkdir($root, 0777, true);
+
+    $manager = new AssetManager($root);
+
+    expect($manager->getBootstrapScript())->toBeNull();
+
+    rmdir($root);
+});
+
+it('resolves the package root by default and ships a bootstrap script', function () {
+    $manager = new AssetManager;
+
+    $bootstrap = $manager->getBootstrapScript();
+
+    expect($bootstrap)->toBeString();
+    expect($bootstrap)->not->toBe('');
+});
