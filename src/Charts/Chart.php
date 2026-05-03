@@ -15,6 +15,18 @@ use Matheusmarnt\LiveCharts\Support\ChartPayload;
 abstract class Chart implements ChartContract
 {
     /**
+     * All chart types shipped by the package, derived from concrete Chart subclasses.
+     *
+     * @var list<string>
+     */
+    public const TYPES = [
+        'area', 'bar', 'boxPlot', 'bubble', 'candlestick',
+        'donut', 'heatmap', 'line', 'matrix', 'pie',
+        'polarArea', 'radar', 'radialBar', 'rangeBar',
+        'sankey', 'scatter', 'treemap',
+    ];
+
+    /**
      * Chart types whose label count must match each dataset's data count.
      *
      * @var list<string>
