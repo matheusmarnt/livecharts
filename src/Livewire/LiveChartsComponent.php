@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Matheusmarnt\LiveCharts\Livewire;
 
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Matheusmarnt\LiveCharts\Charts\Dataset;
 use Matheusmarnt\LiveCharts\Contracts\ChartContract;
@@ -24,7 +25,7 @@ class LiveChartsComponent extends Component
     public function mount(ChartContract $chart, ?string $id = null, string $class = ''): void
     {
         $this->payload = $chart->toPayload();
-        $this->id = $id ?? 'chart-'.uniqid();
+        $this->id = $id ?? 'chart-'.Str::uuid()->toString();
         $this->class = $class;
     }
 
