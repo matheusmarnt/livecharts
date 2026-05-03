@@ -38,23 +38,36 @@ The installer:
 
 ## 3. Wire the asset directive
 
-LiveCharts ships in **`both` mode** by default (since v2.2.0): the locally-published engine bundles are served first, with the matching jsDelivr CDN URL wired as the `<script onerror>` fallback. Place the directive once in your layout `<head>`:
+LiveCharts ships in **`both` mode** by default (since v2.2.0): the locally-published engine bundles are served first, with the matching jsDelivr CDN URL wired as the `<script onerror>` fallback.
+
+Place `@liveChartsScripts` **before the closing `</body>` tag**, after all chart components:
 
 ```blade
 <!DOCTYPE html>
 <html>
 <head>
-    @liveChartsScripts
     @livewireStyles
 </head>
 <body>
     {{ $slot }}
     @livewireScripts
+    @liveChartsScripts
 </body>
 </html>
 ```
 
-The directive emits the loader script and only fetches the engine bundles for engines actually used on the page.
+> **Blade layouts with `@extends`/`@section`:** when your app uses a shared layout, you can place `@liveChartsScripts` in the layout's `<head>`. The directive uses Blade's push/stack mechanism — scripts registered by chart components in child sections are pushed to the stack before the layout renders, so they're available when `<head>` resolves.
+>
+> ```blade
+> <!-- layouts/app.blade.php -->
+> <head>
+>     @liveChartsScripts  {{-- works here when using @extends/@section --}}
+> </head>
+> ```
+>
+> **Standalone views (not extending a layout):** always place `@liveChartsScripts` after the chart components in the body.
+
+The directive emits only the engine bundles required by the engines actually rendered on the page.
 
 > **Asset modes:** `both` (default — local-first with CDN fallback), `local` (no CDN), or `cdn` (no local). Switch via `LIVECHARTS_ASSETS_MODE` in `.env` or `config/livecharts.php`. See [Local assets](#local-assets) below.
 

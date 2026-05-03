@@ -9,6 +9,11 @@ class AssetManager
     /** @var array<string, bool> */
     protected array $assets = [];
 
+    /** @var array<string, bool> */
+    protected array $pushed = [];
+
+    protected bool $bootstrapPushed = false;
+
     protected bool $scriptsRendered = false;
 
     protected string $packageRoot;
@@ -26,6 +31,54 @@ class AssetManager
     public function registerAsset(string $key): void
     {
         $this->assets[$key] = true;
+    }
+
+    public function flushPendingPushes(): void
+    {
+        $pending = array_diff_key($this->assets, $this->pushed);
+
+        if (empty($pending) && $this->bootstrapPushed) {
+            return;
+        }
+
+        $html = '';
+
+        foreach (array_keys($pending) as $key) {
+            $html .= $this->buildScriptTag($key)."\n";
+            $this->pushed[$key] = true;
+        }
+
+        if (! $this->bootstrapPushed && config('livecharts.assets.auto_inject', true)) {
+            $bootstrap = $this->getBootstrapScript();
+            if ($bootstrap !== null && $bootstrap !== '') {
+                $html .= "<script>{$bootstrap}</script>\n";
+                $this->bootstrapPushed = true;
+            }
+        }
+
+        if ($html !== '') {
+            app('view')->startPush('livecharts-scripts', $html);
+        }
+    }
+
+    protected function buildScriptTag(string $key): string
+    {
+        $cdn = config('livecharts.assets.cdn', []);
+        $mode = config('livecharts.assets.mode', 'cdn');
+        $localUrl = asset("vendor/livecharts/js/{$key}.js");
+        $cdnUrl = $cdn[$key] ?? null;
+
+        if ($mode === 'local') {
+            return '<script src="'.e($localUrl).'" defer></script>';
+        }
+
+        if ($mode === 'cdn') {
+            return '<script src="'.e($cdnUrl ?? '').'" defer></script>';
+        }
+
+        $fallback = e($cdnUrl ?? '');
+
+        return '<script src="'.e($localUrl)."\" onerror=\"this.onerror=null;this.src='{$fallback}';\" defer></script>";
     }
 
     /**
