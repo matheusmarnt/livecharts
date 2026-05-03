@@ -1,5 +1,12 @@
 import { defineConfig } from 'vite';
 
+const chartPlugin = (entry, name) => ({
+    entry,
+    name,
+    external: ['chart.js'],
+    globals: { 'chart.js': 'Chart' },
+});
+
 const targets = {
     livecharts: {
         entry: 'resources/js/livecharts.js',
@@ -18,6 +25,22 @@ const targets = {
         name: 'LiveChartsChart',
         external: [],
         globals: {},
+    },
+    'chartjs-treemap': chartPlugin('resources/js/plugins/chartjs-treemap.js', 'LiveChartsTreemap'),
+    'chartjs-matrix': chartPlugin('resources/js/plugins/chartjs-matrix.js', 'LiveChartsMatrix'),
+    'chartjs-sankey': chartPlugin('resources/js/plugins/chartjs-sankey.js', 'LiveChartsSankey'),
+    'chartjs-financial': chartPlugin('resources/js/plugins/chartjs-financial.js', 'LiveChartsFinancial'),
+    'chartjs-luxon': {
+        entry: 'resources/js/plugins/chartjs-luxon.js',
+        name: 'LiveChartsLuxon',
+        external: [],
+        globals: {},
+    },
+    'chartjs-adapter-luxon': {
+        entry: 'resources/js/plugins/chartjs-adapter-luxon.js',
+        name: 'LiveChartsLuxonAdapter',
+        external: ['chart.js', 'luxon'],
+        globals: { 'chart.js': 'Chart', luxon: 'luxon' },
     },
 };
 
