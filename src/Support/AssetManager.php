@@ -39,10 +39,11 @@ class AssetManager
             } elseif ($mode === 'cdn') {
                 $scripts[] = ['src' => $cdnUrl];
             } else {
-                // Both/Fallback mode
+                // Both/Fallback mode: serve the locally-published asset first
+                // and fall back to the CDN copy if the local file is missing.
                 $scripts[] = [
-                    'src' => $cdnUrl,
-                    'fallback' => $localUrl,
+                    'src' => $localUrl,
+                    'fallback' => $cdnUrl,
                 ];
             }
         }

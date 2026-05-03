@@ -5,12 +5,12 @@
     "license": "MIT",
     "type": "module",
     "scripts": {
-        "build": "vite build",
-        "dev": "vite build --watch"
+        "build": "vite build --mode livecharts && vite build --mode apexcharts && vite build --mode chartjs",
+        "dev": "vite build --mode livecharts --watch"
     },
     "dependencies": {
-        "apexcharts": "^4.3.0",
-        "chart.js": "^4.4.7",
+        "apexcharts": "^5.10.6",
+        "chart.js": "^4.5.1",
         "chartjs-chart-financial": "^0.2.0",
         "chartjs-chart-matrix": "^2.0.1",
         "chartjs-chart-sankey": "^0.12.0",
