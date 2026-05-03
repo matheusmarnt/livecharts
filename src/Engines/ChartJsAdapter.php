@@ -112,6 +112,10 @@ class ChartJsAdapter extends BaseEngineAdapter
     {
         $assetManager = app(AssetManager::class);
 
+        // Register the engine asset first so plugin scripts always load and
+        // execute after the chart.js global is defined in the DOM.
+        $assetManager->registerAsset('chartjs');
+
         if ($payload->type === 'treemap') {
             $assetManager->registerAsset('chartjs-treemap');
         }
