@@ -65,6 +65,7 @@ export default defineConfig({
 					label: 'Usage',
 					items: [
 						{ label: 'Basic Usage', slug: 'usage/basic-usage' },
+						{ label: 'Livewire & Volt', slug: 'usage/livewire-volt' },
 						{ label: 'Class-Based Charts', slug: 'usage/class-based' },
 						{ label: 'Reactivity & Polling', slug: 'usage/reactivity' },
 						{ label: 'Interactive Events', slug: 'usage/events' },
