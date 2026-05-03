@@ -42,30 +42,37 @@ class ChartJsAdapter extends BaseEngineAdapter
 
         $chartType = $payload->type === 'donut' ? 'doughnut' : $payload->type;
 
+        $scaleOverrides = array_filter([
+            'x' => $payload->xaxis ?: null,
+            'y' => $payload->yaxis ?: null,
+        ]);
+
+        $plugins = [
+            'title' => [
+                'display' => (bool) $payload->title,
+                'text' => $payload->title,
+            ],
+            'subtitle' => [
+                'display' => (bool) $payload->subtitle,
+                'text' => $payload->subtitle,
+            ],
+            'legend' => [
+                'display' => $payload->legend,
+            ],
+            'tooltip' => [
+                'enabled' => $payload->tooltip,
+            ],
+        ];
+
+        if (! empty($payload->dataLabels)) {
+            $plugins['datalabels'] = $payload->dataLabels;
+        }
+
         $options = [
             'responsive' => true,
             'maintainAspectRatio' => false,
-            'scales' => array_merge_recursive($this->buildScales($payload), [
-                'x' => $payload->xaxis,
-                'y' => $payload->yaxis,
-            ]),
-            'plugins' => [
-                'title' => [
-                    'display' => (bool) $payload->title,
-                    'text' => $payload->title,
-                ],
-                'subtitle' => [
-                    'display' => (bool) $payload->subtitle,
-                    'text' => $payload->subtitle,
-                ],
-                'legend' => [
-                    'display' => $payload->legend,
-                ],
-                'tooltip' => [
-                    'enabled' => $payload->tooltip,
-                ],
-                'datalabels' => $payload->dataLabels,
-            ],
+            'scales' => array_merge_recursive($this->buildScales($payload), $scaleOverrides),
+            'plugins' => $plugins,
         ];
 
         return [
