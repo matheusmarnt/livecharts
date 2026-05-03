@@ -10,10 +10,13 @@ The `Chart` class is the fluent builder behind `LiveCharts::line()`, `LiveCharts
 | Method | Signature | Description |
 |---|---|---|
 | `type()` | `type(string $type): self` | Set the chart type (`line`, `bar`, `pie`, …). |
-| `engine()` | `engine(string $name): self` | Select the rendering engine. |
+| `engine()` | `engine(string $name): self` | Select the rendering engine (optional — auto-routed if omitted). |
+
+Calling `->engine()` is optional. When omitted, `EngineFactory::engineForType()` selects the best available engine for the chart type: apex-only types → `apexcharts`, chartjs-only types → `chartjs`, shared types → `apexcharts`.
 
 ```php
-LiveCharts::make()->type('bar')->engine('chartjs');
+LiveCharts::make()->type('bar')->engine('chartjs'); // explicit
+LiveCharts::bar()->labels(['A'])->dataset('S', [1]); // engine auto-selected
 ```
 
 ## Data

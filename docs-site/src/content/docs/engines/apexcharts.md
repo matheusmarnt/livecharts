@@ -7,7 +7,7 @@ ApexCharts is the default engine. It supports a wide range of chart types includ
 
 ## Selecting the Engine
 
-ApexCharts is selected by default. To make it explicit, call `engine()` on the chart:
+ApexCharts is the default engine and is auto-selected for any type it supports exclusively (heatmap, boxPlot, radialBar, rangeBar, candlestick). To make it explicit:
 
 ```php
 use Matheusmarnt\LiveCharts\Chart;
