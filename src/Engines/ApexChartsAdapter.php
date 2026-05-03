@@ -63,13 +63,13 @@ class ApexChartsAdapter extends BaseEngineAdapter
             'colors' => $this->normalizeColors($payload),
             'legend' => ['show' => $payload->legend],
             'tooltip' => ['enabled' => $payload->tooltip],
-            'xaxis' => $payload->xaxis,
-            'yaxis' => $payload->yaxis,
-            'grid' => $payload->grid,
-            'stroke' => $payload->stroke,
-            'markers' => $payload->markers,
-            'dataLabels' => $payload->dataLabels,
         ];
+
+        foreach (['xaxis', 'yaxis', 'grid', 'stroke', 'markers', 'dataLabels'] as $key) {
+            if (! empty($payload->{$key})) {
+                $options[$key] = $payload->{$key};
+            }
+        }
 
         if ($payload->theme !== 'auto') {
             $options['theme'] = ['mode' => $payload->theme];
