@@ -22,9 +22,8 @@ return [
     ],
 
     'preview' => [
-        'confirm_register' => 'This will register a temporary web route [/livecharts/preview]. Proceed?',
-        'registering' => 'Registering preview route...',
         'opening_at' => 'Opening preview at: :url',
         'serve_warning' => 'Note: ensure your local server is running (php artisan serve).',
+        'open_failed' => 'Could not launch the browser automatically (:error). Open the URL manually.',
     ],
 ];
