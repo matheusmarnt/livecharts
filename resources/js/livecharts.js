@@ -38,7 +38,7 @@ document.addEventListener('alpine:init', () => {
         id: config.id,
         instance: null,
         options: config.options,
-        constructor: config.constructor,
+        engineCtor: config.engineCtor,
         payload: config.payload,
 
         init() {
@@ -68,7 +68,7 @@ document.addEventListener('alpine:init', () => {
         },
 
         render() {
-            if (this.constructor === 'ApexCharts') {
+            if (this.engineCtor === 'ApexCharts') {
                 const apexOptions = {
                     ...this.options,
                     chart: {
@@ -103,7 +103,7 @@ document.addEventListener('alpine:init', () => {
                     }
                 };
                 this.instance = new ApexCharts(this.$refs.chart, apexOptions);
-            } else if (this.constructor === 'Chart') {
+            } else if (this.engineCtor === 'Chart') {
                 const chartjsOptions = {
                     ...this.options,
                     onClick: (event, elements) => {
@@ -151,14 +151,14 @@ document.addEventListener('alpine:init', () => {
                 this.render();
             } else {
                 // Soft update for ApexCharts
-                if (this.constructor === 'ApexCharts') {
+                if (this.engineCtor === 'ApexCharts') {
                     this.instance.updateSeries(newPayload.datasets.map(d => ({
                         name: d.name,
                         data: d.data
                     })));
                 } 
                 // Soft update for Chart.js
-                else if (this.constructor === 'Chart') {
+                else if (this.engineCtor === 'Chart') {
                     this.instance.data.datasets = newPayload.datasets.map(d => ({
                         label: d.name,
                         data: d.data,
