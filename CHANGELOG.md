@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.1](https://github.com/matheusmarnt/livecharts/compare/v2.7.0...v2.7.1) (2026-05-03)
+
+
+### Bug Fixes
+
+* **types:** wrap array_map with array_values to satisfy list&lt;ColorValue&gt; type ([#83](https://github.com/matheusmarnt/livecharts/issues/83)) ([3c13b0e](https://github.com/matheusmarnt/livecharts/commit/3c13b0e290e4c02fcc1120a969c2ce4ae4235fce))
+
 ## [2.7.0](https://github.com/matheusmarnt/livecharts/compare/v2.6.0...v2.7.0) (2026-05-03)
 
 
