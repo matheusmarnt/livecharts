@@ -81,4 +81,23 @@ class EngineFactory
 
         return $candidates[0];
     }
+
+    /**
+     * Return all engine names that support a given chart type.
+     *
+     * @return array<int, string>
+     */
+    public function availableEnginesForType(string $type): array
+    {
+        $candidates = [];
+
+        foreach ($this->engines as $name => $adapterClass) {
+            $adapter = new $adapterClass;
+            if (in_array($type, $adapter->supportedTypes(), true)) {
+                $candidates[] = $name;
+            }
+        }
+
+        return $candidates;
+    }
 }
