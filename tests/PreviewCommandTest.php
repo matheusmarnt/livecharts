@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+use Illuminate\Support\Facades\Route;
 
 it('prints the preview URL and exits cleanly with --no-open', function () {
     $this->artisan('livecharts:preview', ['--no-open' => true])
@@ -10,7 +11,7 @@ it('prints the preview URL and exits cleanly with --no-open', function () {
 });
 
 it('registers the preview route at /livecharts/preview', function () {
-    $route = collect(\Illuminate\Support\Facades\Route::getRoutes()->getRoutes())
+    $route = collect(Route::getRoutes()->getRoutes())
         ->first(fn ($r) => $r->uri() === 'livecharts/preview');
 
     expect($route)->not->toBeNull();
