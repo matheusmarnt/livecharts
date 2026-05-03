@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Matheusmarnt\LiveCharts\Commands;
 
 use Illuminate\Console\GeneratorCommand;
+use Matheusmarnt\LiveCharts\Charts\Chart;
+use Matheusmarnt\LiveCharts\Engines\EngineFactory;
 use Symfony\Component\Console\Input\InputOption;
 
 class ChartMakeCommand extends GeneratorCommand
@@ -49,9 +51,12 @@ class ChartMakeCommand extends GeneratorCommand
      */
     protected function getOptions(): array
     {
+        $types = implode(', ', Chart::TYPES);
+        $engines = implode(', ', app(EngineFactory::class)->names());
+
         return [
-            ['type', 't', InputOption::VALUE_OPTIONAL, 'The type of the chart (line, bar, area, pie, donut, radar, scatter, bubble, heatmap)', 'line'],
-            ['engine', 'e', InputOption::VALUE_OPTIONAL, 'The engine of the chart'],
+            ['type', 't', InputOption::VALUE_OPTIONAL, "The type of the chart ({$types})", 'line'],
+            ['engine', 'e', InputOption::VALUE_OPTIONAL, "The engine of the chart ({$engines})"],
         ];
     }
 }
