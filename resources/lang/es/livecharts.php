@@ -22,9 +22,8 @@ return [
     ],
 
     'preview' => [
-        'confirm_register' => 'Esto registrará una ruta web temporal [/livecharts/preview]. ¿Continuar?',
-        'registering' => 'Registrando ruta de previsualización...',
         'opening_at' => 'Abriendo la previsualización en: :url',
         'serve_warning' => 'Nota: asegúrate de que tu servidor local esté en ejecución (php artisan serve).',
+        'open_failed' => 'No se pudo abrir el navegador automáticamente (:error). Abre la URL manualmente.',
     ],
 ];

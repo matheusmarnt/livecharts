@@ -22,9 +22,8 @@ return [
     ],
 
     'preview' => [
-        'confirm_register' => 'Isto irá registrar uma rota web temporária [/livecharts/preview]. Continuar?',
-        'registering' => 'Registrando rota de preview...',
         'opening_at' => 'Abrindo preview em: :url',
         'serve_warning' => 'Atenção: certifique-se de que seu servidor local está rodando (php artisan serve).',
+        'open_failed' => 'Não foi possível abrir o navegador automaticamente (:error). Abra a URL manualmente.',
     ],
 ];
