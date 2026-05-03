@@ -12,6 +12,7 @@ use Matheusmarnt\LiveCharts\Contracts\ChartContract;
 use Matheusmarnt\LiveCharts\Engines\EngineFactory;
 use Matheusmarnt\LiveCharts\Support\AssetManager;
 use Matheusmarnt\LiveCharts\Support\ChartPayload;
+use Matheusmarnt\LiveCharts\Support\ColorValue;
 
 class LiveChartsComponent extends Component
 {
@@ -64,6 +65,8 @@ class LiveChartsComponent extends Component
 
         $adapter = app(EngineFactory::class)->resolve($payload['engine']);
 
+        $cv = fn (?array $c): ?ColorValue => $c ? ColorValue::pair($c['dark'], $c['light']) : null;
+
         $chartPayload = new ChartPayload(
             type: $payload['type'],
             engine: $payload['engine'],
@@ -73,7 +76,10 @@ class LiveChartsComponent extends Component
             width: $payload['width'],
             labels: $payload['labels'],
             datasets: $datasets,
-            colors: $payload['colors'],
+            colors: array_map(
+                fn (array $c) => ColorValue::pair($c['dark'], $c['light']),
+                $payload['colors']
+            ),
             theme: $payload['theme'],
             stacked: $payload['stacked'],
             sparkline: $payload['sparkline'],
@@ -88,7 +94,16 @@ class LiveChartsComponent extends Component
             onScroll: $payload['onScroll'] ?? null,
             broadcastOn: $payload['broadcastOn'] ?? null,
             broadcastAs: $payload['broadcastAs'] ?? null,
-            options: $payload['options']
+            options: $payload['options'],
+            titleColor: $cv($payload['titleColor'] ?? null),
+            subtitleColor: $cv($payload['subtitleColor'] ?? null),
+            legendColor: $cv($payload['legendColor'] ?? null),
+            labelsColor: $cv($payload['labelsColor'] ?? null),
+            tooltipColor: $cv($payload['tooltipColor'] ?? null),
+            axisColor: $cv($payload['axisColor'] ?? null),
+            gridColor: $cv($payload['gridColor'] ?? null),
+            dataLabelsColor: $cv($payload['dataLabelsColor'] ?? null),
+            backgroundColor: $cv($payload['backgroundColor'] ?? null),
         );
 
         $options = $adapter->build($chartPayload);

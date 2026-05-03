@@ -1,1 +1,409 @@
-(function(){"use strict";document.addEventListener("livewire:init",()=>{typeof Livewire>"u"||(Livewire.hook("morph.updating",({el:i,skip:t})=>{i&&i.classList&&i.classList.contains("livecharts-container")&&t()}),Livewire.hook("commit.applied",({component:i})=>{const t=i&&i.$wire;if(!t||typeof t.id>"u")return;const o=document.getElementById(t.id);if(!o||!o._x_dataStack||!o._x_dataStack[0])return;const s=o._x_dataStack[0],e=t.payload;e&&typeof s.update=="function"&&s.update(e)}))});const d=(()=>{const i=new Set;let t=s();function o(){return window.LiveChartsConfig&&window.LiveChartsConfig.themeStrategy||"class"}function s(){return o()==="media"?matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light":document.documentElement.classList.contains("dark")?"dark":"light"}function e(){const a=s();a!==t&&(t=a,i.forEach(r=>r(t)))}return new MutationObserver(e).observe(document.documentElement,{attributes:!0,attributeFilter:["class"]}),matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{o()==="media"&&e()}),{current:()=>t,subscribe:a=>(i.add(a),()=>i.delete(a))}})();function h(i,t,o){if(t=t||"",o=o||{},!i||typeof i!="object")return o;if(Array.isArray(i))return i.forEach((s,e)=>h(s,t+"["+e+"]",o)),o;if(i.__lc_themed){const s=i.__lc_themed;Object.keys(s).forEach(e=>{o[t?t+"."+e:e]=s[e]}),delete i.__lc_themed}return Object.keys(i).forEach(s=>{s!=="__lc_themed"&&h(i[s],t?t+"."+s:s,o)}),o}function u(i,t,o){Object.keys(t).forEach(s=>{const e=t[s][o];if(e===void 0)return;const a=s.replace(/\[(\d+)\]/g,".$1").split(".");let r=i.options;for(let n=0;n<a.length-1;n++)r[a[n]]===void 0&&(r[a[n]]={}),r=r[a[n]];r[a[a.length-1]]=e}),i.update("none")}function p(i,t){const o={};return Object.keys(i).forEach(s=>{const e=i[s][t];if(e===void 0)return;const a=s.replace(/\[(\d+)\]/g,".$1").split(".");let r=o;for(let n=0;n<a.length-1;n++)r[a[n]]===void 0&&(r[a[n]]={}),r=r[a[n]];r[a[a.length-1]]=e}),o}document.addEventListener("alpine:init",()=>{Alpine.data("livecharts",i=>({id:i.id,instance:null,options:i.options,engineCtor:i.engineCtor,payload:i.payload,_themedMap:{},_themeUnsub:null,init(){this.render(),this.$watch("payload",t=>{this.update(t)}),window.addEventListener(`livecharts:update:${this.id}`,t=>{t.detail.options&&(this.options=t.detail.options),this.update(t.detail.payload||this.payload)}),window.Echo&&this.payload.broadcastOn&&this.payload.broadcastAs&&window.Echo.channel(this.payload.broadcastOn).listen(this.payload.broadcastAs,t=>{t.payload&&this.update(t.payload)})},render(){const t=JSON.parse(JSON.stringify(this.options));this._themedMap=h(t,"",{});const o=d.current();if(f(t,this._themedMap,o),this.engineCtor==="ApexCharts"){const e={...t,chart:{...t.chart,events:{dataPointSelection:(a,r,n)=>{this.payload.onDataPointClick&&this.$wire.dispatch(this.payload.onDataPointClick,{seriesIndex:n.seriesIndex,dataPointIndex:n.dataPointIndex,value:n.w.globals.series[n.seriesIndex][n.dataPointIndex],label:n.w.globals.labels[n.dataPointIndex]})},zoomed:(a,{xaxis:r,yaxis:n})=>{this.payload.onZoom&&this.$wire.dispatch(this.payload.onZoom,{xaxis:r,yaxis:n})},selection:(a,{xaxis:r,yaxis:n})=>{this.payload.onSelection&&this.$wire.dispatch(this.payload.onSelection,{xaxis:r,yaxis:n})},scrolled:(a,{xaxis:r,yaxis:n})=>{this.payload.onScroll&&this.$wire.dispatch(this.payload.onScroll,{xaxis:r,yaxis:n})}}}};this.instance=new ApexCharts(this.$refs.chart,e)}else if(this.engineCtor==="Chart"){const e={...t,onClick:(a,r)=>{if(r.length>0&&this.payload.onDataPointClick){const n=r[0],l=n.datasetIndex,c=n.index;this.$wire.dispatch(this.payload.onDataPointClick,{datasetIndex:l,index:c,value:this.instance.data.datasets[l].data[c],label:this.instance.data.labels[c]})}}};this.instance=new Chart(this.$refs.chart,e)}this.instance&&(this.instance.render&&this.instance.render(),window.LiveCharts=window.LiveCharts||{},window.LiveCharts[this.id]=this.instance);const s=this;this._themeUnsub=d.subscribe(function(e){s.applyTheme(e)})},applyTheme(t){if(!(!this.instance||Object.keys(this._themedMap).length===0))if(this.engineCtor==="ApexCharts"){const o=p(this._themedMap,t);Object.keys(o).length>0&&this.instance.updateOptions(o,!1,!0)}else this.engineCtor==="Chart"&&u(this.instance,this._themedMap,t)},update(t){if(!this.instance){this.render();return}if(JSON.stringify(this.payload.type)!==JSON.stringify(t.type)||JSON.stringify(this.payload.labels)!==JSON.stringify(t.labels)||JSON.stringify(this.payload.options)!==JSON.stringify(t.options))this.destroy(),this.options=t.options,this.payload=t,this.render();else{if(this.engineCtor==="ApexCharts")this.instance.updateSeries(t.datasets.map(s=>({name:s.name,data:s.data})));else if(this.engineCtor==="Chart"){const s=d.current();this.instance.data.datasets=t.datasets.map(e=>({label:e.name,data:e.data,backgroundColor:e.background?e.background[s]:e.background||null,borderColor:e.border?e.border[s]:e.border||null})),this.instance.update()}this.payload=t}},destroy(){this._themeUnsub&&(this._themeUnsub(),this._themeUnsub=null),this.instance&&typeof this.instance.destroy=="function"&&this.instance.destroy(),this.instance=null,window.LiveCharts&&window.LiveCharts[this.id]&&delete window.LiveCharts[this.id]}}))});function f(i,t,o){Object.keys(t).forEach(s=>{const e=t[s][o];if(e===void 0)return;const a=s.replace(/\[(\d+)\]/g,".$1").split(".");let r=i;for(let n=0;n<a.length-1;n++)if(r&&r[a[n]]!==void 0)r=r[a[n]];else return;r&&(r[a[a.length-1]]=e)})}})();
+// Defense-in-depth Livewire integration hooks.
+// `wire:ignore` on the container already skips morphing; the explicit
+// `morph.updating` hook is a safety net when consumers strip wire:ignore.
+// `commit.applied` re-syncs the chart from the latest server payload via the
+// soft-update path on the Alpine component, avoiding a full destroy+render.
+document.addEventListener('livewire:init', () => {
+    if (typeof Livewire === 'undefined') {
+        return;
+    }
+
+    Livewire.hook('morph.updating', ({ el, skip }) => {
+        if (el && el.classList && el.classList.contains('livecharts-container')) {
+            skip();
+        }
+    });
+
+    Livewire.hook('commit.applied', ({ component }) => {
+        const wire = component && component.$wire;
+        if (!wire || typeof wire.id === 'undefined') {
+            return;
+        }
+
+        const el = document.getElementById(wire.id);
+        if (!el || !el._x_dataStack || !el._x_dataStack[0]) {
+            return;
+        }
+
+        const alpineData = el._x_dataStack[0];
+        const nextPayload = wire.payload;
+        if (nextPayload && typeof alpineData.update === 'function') {
+            alpineData.update(nextPayload);
+        }
+    });
+});
+
+// ─── Theme observer singleton ──────────────────────────────────────────────
+// Reads `window.LiveChartsConfig.themeStrategy` ('class' or 'media').
+// 'class' watches <html class="dark"> via MutationObserver.
+// 'media' watches prefers-color-scheme.
+// Emits to all subscribed chart instances on every theme change.
+const themeWatcher = (() => {
+    const subs = new Set();
+    let mode = detect();
+
+    function strategy() {
+        return (window.LiveChartsConfig && window.LiveChartsConfig.themeStrategy) || 'class';
+    }
+
+    function detect() {
+        if (strategy() === 'media') {
+            return matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    }
+
+    function notify() {
+        const next = detect();
+        if (next !== mode) {
+            mode = next;
+            subs.forEach(fn => fn(mode));
+        }
+    }
+
+    new MutationObserver(notify).observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['class'],
+    });
+
+    matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+        if (strategy() === 'media') notify();
+    });
+
+    return {
+        current: () => mode,
+        subscribe: (fn) => {
+            subs.add(fn);
+            return () => subs.delete(fn);
+        },
+    };
+})();
+
+// ─── Sidecar helpers ────────────────────────────────────────────────────────
+
+/**
+ * Walk an options object, collect every __lc_themed entry, strip them, and
+ * return a map of { dotPath → { dark, light } } for the theme observer to use.
+ *
+ * @param  {object}  obj   - mutable options object (stripped in place)
+ * @param  {string}  path  - current dot-path prefix (internal use)
+ * @param  {object}  map   - result map (internal use)
+ * @returns {object}  map
+ */
+function collectThemed(obj, path, map) {
+    path = path || '';
+    map  = map  || {};
+
+    if (!obj || typeof obj !== 'object') return map;
+
+    if (Array.isArray(obj)) {
+        obj.forEach((item, i) => collectThemed(item, path + '[' + i + ']', map));
+        return map;
+    }
+
+    if (obj.__lc_themed) {
+        const themed = obj.__lc_themed;
+        Object.keys(themed).forEach(key => {
+            map[path ? path + '.' + key : key] = themed[key];
+        });
+        delete obj.__lc_themed;
+    }
+
+    Object.keys(obj).forEach(key => {
+        if (key !== '__lc_themed') {
+            collectThemed(obj[key], path ? path + '.' + key : key, map);
+        }
+    });
+
+    return map;
+}
+
+/**
+ * Apply a theme to a Chart.js options object given the themed map.
+ * Calls chart.update('none') after patching.
+ */
+function applyThemeChartJs(instance, themedMap, mode) {
+    Object.keys(themedMap).forEach(dotPath => {
+        const value = themedMap[dotPath][mode];
+        if (value === undefined) return;
+
+        const parts = dotPath.replace(/\[(\d+)\]/g, '.$1').split('.');
+        let obj = instance.options;
+        for (let i = 0; i < parts.length - 1; i++) {
+            if (obj[parts[i]] === undefined) obj[parts[i]] = {};
+            obj = obj[parts[i]];
+        }
+        obj[parts[parts.length - 1]] = value;
+    });
+
+    instance.update('none');
+}
+
+/**
+ * Build a partial ApexCharts updateOptions payload from the themed map.
+ */
+function buildApexUpdate(themedMap, mode) {
+    const update = {};
+
+    Object.keys(themedMap).forEach(dotPath => {
+        const value = themedMap[dotPath][mode];
+        if (value === undefined) return;
+
+        const parts = dotPath.replace(/\[(\d+)\]/g, '.$1').split('.');
+        let obj = update;
+        for (let i = 0; i < parts.length - 1; i++) {
+            if (obj[parts[i]] === undefined) obj[parts[i]] = {};
+            obj = obj[parts[i]];
+        }
+        obj[parts[parts.length - 1]] = value;
+    });
+
+    return update;
+}
+
+document.addEventListener('alpine:init', () => {
+    Alpine.data('livecharts', (config) => ({
+        id: config.id,
+        instance: null,
+        options: config.options,
+        engineCtor: config.engineCtor,
+        payload: config.payload,
+        _themedMap: {},
+        _themeUnsub: null,
+
+        init() {
+            this.render();
+
+            this.$watch('payload', (value) => {
+                this.update(value);
+            });
+
+            // Register global event for manual updates from JS
+            window.addEventListener(`livecharts:update:${this.id}`, (event) => {
+                if (event.detail.options) {
+                    this.options = event.detail.options;
+                }
+                this.update(event.detail.payload || this.payload);
+            });
+
+            // Echo Integration
+            if (window.Echo && this.payload.broadcastOn && this.payload.broadcastAs) {
+                window.Echo.channel(this.payload.broadcastOn)
+                    .listen(this.payload.broadcastAs, (event) => {
+                        if (event.payload) {
+                            this.update(event.payload);
+                        }
+                    });
+            }
+        },
+
+        render() {
+            // Deep-clone options so we can strip __lc_themed without mutating
+            // the original config object (important for Livewire re-renders).
+            const opts = JSON.parse(JSON.stringify(this.options));
+            this._themedMap = collectThemed(opts, '', {});
+
+            // Apply initial theme before engine init
+            const currentMode = themeWatcher.current();
+            applyInitialTheme(opts, this._themedMap, currentMode);
+
+            if (this.engineCtor === 'ApexCharts') {
+                const apexOptions = {
+                    ...opts,
+                    theme: { mode: currentMode, ...(opts.theme || {}) },
+                    chart: {
+                        ...opts.chart,
+                        events: {
+                            dataPointSelection: (event, chartContext, config) => {
+                                if (this.payload.onDataPointClick) {
+                                    this.$wire.dispatch(this.payload.onDataPointClick, {
+                                        seriesIndex: config.seriesIndex,
+                                        dataPointIndex: config.dataPointIndex,
+                                        value: config.w.globals.series[config.seriesIndex][config.dataPointIndex],
+                                        label: config.w.globals.labels[config.dataPointIndex]
+                                    });
+                                }
+                            },
+                            zoomed: (chartContext, { xaxis, yaxis }) => {
+                                if (this.payload.onZoom) {
+                                    this.$wire.dispatch(this.payload.onZoom, { xaxis, yaxis });
+                                }
+                            },
+                            selection: (chartContext, { xaxis, yaxis }) => {
+                                if (this.payload.onSelection) {
+                                    this.$wire.dispatch(this.payload.onSelection, { xaxis, yaxis });
+                                }
+                            },
+                            scrolled: (chartContext, { xaxis, yaxis }) => {
+                                if (this.payload.onScroll) {
+                                    this.$wire.dispatch(this.payload.onScroll, { xaxis, yaxis });
+                                }
+                            }
+                        }
+                    }
+                };
+                this.instance = new ApexCharts(this.$refs.chart, apexOptions);
+            } else if (this.engineCtor === 'Chart') {
+                const chartjsOptions = {
+                    ...opts,
+                    onClick: (event, elements) => {
+                        if (elements.length > 0 && this.payload.onDataPointClick) {
+                            const element = elements[0];
+                            const datasetIndex = element.datasetIndex;
+                            const index = element.index;
+
+                            this.$wire.dispatch(this.payload.onDataPointClick, {
+                                datasetIndex: datasetIndex,
+                                index: index,
+                                value: this.instance.data.datasets[datasetIndex].data[index],
+                                label: this.instance.data.labels[index]
+                            });
+                        }
+                    }
+                };
+                this.instance = new Chart(this.$refs.chart, chartjsOptions);
+            }
+
+            if (this.instance) {
+                this.instance.render ? this.instance.render() : null;
+
+                if (this.engineCtor === 'ApexCharts') {
+                    this._injectTooltipStyle(currentMode);
+                }
+
+                // Expose instance globally for direct JS access
+                window.LiveCharts = window.LiveCharts || {};
+                window.LiveCharts[this.id] = this.instance;
+            }
+
+            // Subscribe to theme changes
+            const self = this;
+            this._themeUnsub = themeWatcher.subscribe(function(newMode) {
+                self.applyTheme(newMode);
+            });
+        },
+
+        applyTheme(mode) {
+            if (!this.instance) return;
+
+            if (this.engineCtor === 'ApexCharts') {
+                const update = { theme: { mode } };
+                if (Object.keys(this._themedMap).length > 0) {
+                    Object.assign(update, buildApexUpdate(this._themedMap, mode));
+                }
+                this.instance.updateOptions(update, false, true);
+                this._injectTooltipStyle(mode);
+            } else if (this.engineCtor === 'Chart') {
+                if (Object.keys(this._themedMap).length > 0) {
+                    applyThemeChartJs(this.instance, this._themedMap, mode);
+                }
+            }
+        },
+
+        // ApexCharts ignores tooltip.style.color — inject a scoped <style> instead.
+        _injectTooltipStyle(mode) {
+            const entry = this._themedMap['tooltip.style.color'];
+            if (!entry) return;
+            const color = entry[mode];
+            if (!color) return;
+            const styleId = `livecharts-tooltip-${this.id}`;
+            let el = document.getElementById(styleId);
+            if (!el) {
+                el = document.createElement('style');
+                el.id = styleId;
+                document.head.appendChild(el);
+            }
+            el.textContent = [
+                `#${this.id} .apexcharts-tooltip-title,`,
+                `#${this.id} .apexcharts-tooltip-text-y-label,`,
+                `#${this.id} .apexcharts-tooltip-text-y-value`,
+                `{ color: ${color} !important; }`,
+            ].join('\n');
+        },
+
+        update(newPayload) {
+            if (!this.instance) {
+                this.render();
+                return;
+            }
+
+            // Check if structural changes occurred
+            const structural = JSON.stringify(this.payload.type) !== JSON.stringify(newPayload.type) ||
+                             JSON.stringify(this.payload.labels) !== JSON.stringify(newPayload.labels) ||
+                             JSON.stringify(this.payload.options) !== JSON.stringify(newPayload.options);
+
+            if (structural) {
+                this.destroy();
+                this.options = newPayload.options;
+                this.payload = newPayload;
+                this.render();
+            } else {
+                // Soft update for ApexCharts
+                if (this.engineCtor === 'ApexCharts') {
+                    this.instance.updateSeries(newPayload.datasets.map(d => ({
+                        name: d.name,
+                        data: d.data
+                    })));
+                }
+                // Soft update for Chart.js
+                else if (this.engineCtor === 'Chart') {
+                    const mode = themeWatcher.current();
+                    this.instance.data.datasets = newPayload.datasets.map(d => ({
+                        label: d.name,
+                        data: d.data,
+                        backgroundColor: d.background ? d.background[mode] : (d.background || null),
+                        borderColor: d.border ? d.border[mode] : (d.border || null),
+                    }));
+                    this.instance.update();
+                }
+
+                this.payload = newPayload;
+            }
+        },
+
+        // Alpine.data auto-invokes destroy() when the element is torn down
+        // (Alpine 3.x destroyTree). Drops the engine instance and the global
+        // registry entry so the chart can be garbage collected.
+        destroy() {
+            if (this._themeUnsub) {
+                this._themeUnsub();
+                this._themeUnsub = null;
+            }
+
+            if (this.instance && typeof this.instance.destroy === 'function') {
+                this.instance.destroy();
+            }
+
+            this.instance = null;
+
+            const tooltipStyle = document.getElementById(`livecharts-tooltip-${this.id}`);
+            if (tooltipStyle) tooltipStyle.remove();
+
+            if (window.LiveCharts && window.LiveCharts[this.id]) {
+                delete window.LiveCharts[this.id];
+            }
+        }
+    }));
+});
+
+/**
+ * Apply initial theme colors directly into options before engine init.
+ * Avoids a visible flash on first render.
+ */
+function applyInitialTheme(opts, themedMap, mode) {
+    Object.keys(themedMap).forEach(dotPath => {
+        const value = themedMap[dotPath][mode];
+        if (value === undefined) return;
+
+        const parts = dotPath.replace(/\[(\d+)\]/g, '.$1').split('.');
+        let obj = opts;
+        for (let i = 0; i < parts.length - 1; i++) {
+            if (obj && obj[parts[i]] !== undefined) {
+                obj = obj[parts[i]];
+            } else {
+                return;
+            }
+        }
+        if (obj) obj[parts[parts.length - 1]] = value;
+    });
+}

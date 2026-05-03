@@ -210,6 +210,7 @@ document.addEventListener('alpine:init', () => {
             if (this.engineCtor === 'ApexCharts') {
                 const apexOptions = {
                     ...opts,
+                    theme: { mode: currentMode, ...(opts.theme || {}) },
                     chart: {
                         ...opts.chart,
                         events: {
@@ -266,6 +267,10 @@ document.addEventListener('alpine:init', () => {
             if (this.instance) {
                 this.instance.render ? this.instance.render() : null;
 
+                if (this.engineCtor === 'ApexCharts') {
+                    this._injectTooltipStyle(currentMode);
+                }
+
                 // Expose instance globally for direct JS access
                 window.LiveCharts = window.LiveCharts || {};
                 window.LiveCharts[this.id] = this.instance;
@@ -279,16 +284,41 @@ document.addEventListener('alpine:init', () => {
         },
 
         applyTheme(mode) {
-            if (!this.instance || Object.keys(this._themedMap).length === 0) return;
+            if (!this.instance) return;
 
             if (this.engineCtor === 'ApexCharts') {
-                const update = buildApexUpdate(this._themedMap, mode);
-                if (Object.keys(update).length > 0) {
-                    this.instance.updateOptions(update, false, true);
+                const update = { theme: { mode } };
+                if (Object.keys(this._themedMap).length > 0) {
+                    Object.assign(update, buildApexUpdate(this._themedMap, mode));
                 }
+                this.instance.updateOptions(update, false, true);
+                this._injectTooltipStyle(mode);
             } else if (this.engineCtor === 'Chart') {
-                applyThemeChartJs(this.instance, this._themedMap, mode);
+                if (Object.keys(this._themedMap).length > 0) {
+                    applyThemeChartJs(this.instance, this._themedMap, mode);
+                }
             }
+        },
+
+        // ApexCharts ignores tooltip.style.color — inject a scoped <style> instead.
+        _injectTooltipStyle(mode) {
+            const entry = this._themedMap['tooltip.style.color'];
+            if (!entry) return;
+            const color = entry[mode];
+            if (!color) return;
+            const styleId = `livecharts-tooltip-${this.id}`;
+            let el = document.getElementById(styleId);
+            if (!el) {
+                el = document.createElement('style');
+                el.id = styleId;
+                document.head.appendChild(el);
+            }
+            el.textContent = [
+                `#${this.id} .apexcharts-tooltip-title,`,
+                `#${this.id} .apexcharts-tooltip-text-y-label,`,
+                `#${this.id} .apexcharts-tooltip-text-y-value`,
+                `{ color: ${color} !important; }`,
+            ].join('\n');
         },
 
         update(newPayload) {
@@ -345,6 +375,9 @@ document.addEventListener('alpine:init', () => {
             }
 
             this.instance = null;
+
+            const tooltipStyle = document.getElementById(`livecharts-tooltip-${this.id}`);
+            if (tooltipStyle) tooltipStyle.remove();
 
             if (window.LiveCharts && window.LiveCharts[this.id]) {
                 delete window.LiveCharts[this.id];
