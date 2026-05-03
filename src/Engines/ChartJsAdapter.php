@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Matheusmarnt\LiveCharts\Engines;
 
-use Matheusmarnt\LiveCharts\Contracts\EngineAdapter;
-use Matheusmarnt\LiveCharts\Exceptions\InvalidChartTypeException;
 use Matheusmarnt\LiveCharts\Support\AssetManager;
 use Matheusmarnt\LiveCharts\Support\ChartPayload;
 
-class ChartJsAdapter implements EngineAdapter
+class ChartJsAdapter extends BaseEngineAdapter
 {
     /** @var list<string> */
     public const SUPPORTED_TYPES = [
@@ -17,18 +15,30 @@ class ChartJsAdapter implements EngineAdapter
         'scatter', 'radar', 'bubble', 'candlestick', 'matrix', 'sankey', 'treemap',
     ];
 
+    public function engineName(): string
+    {
+        return 'chartjs';
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function supportedTypes(): array
+    {
+        return self::SUPPORTED_TYPES;
+    }
+
     /**
      * @return array<string, mixed>
      */
     public function build(ChartPayload $payload): array
     {
-        if (! in_array($payload->type, self::SUPPORTED_TYPES, true)) {
-            throw InvalidChartTypeException::forEngine($payload->type, 'chartjs', self::SUPPORTED_TYPES);
-        }
+        $this->assertTypeSupported($payload);
 
         $this->registerRequiredAssets($payload);
 
-        $isSingleSeries = in_array($payload->type, ['pie', 'donut', 'doughnut', 'polarArea']);
+        $isSingleSeries = $this->isSingleSeries($payload->type);
+        $colors = $this->normalizeColors($payload);
 
         $chartType = $payload->type === 'donut' ? 'doughnut' : $payload->type;
 
@@ -61,13 +71,13 @@ class ChartJsAdapter implements EngineAdapter
         return [
             'type' => $chartType,
             'data' => [
-                'labels' => $payload->labels,
+                'labels' => $this->normalizeLabels($payload),
                 'datasets' => array_map(fn ($dataset) => [
                     'type' => $dataset->type,
                     'label' => $dataset->name,
                     'data' => $dataset->data,
-                    'backgroundColor' => $isSingleSeries ? $payload->colors : ($dataset->color ?? $payload->colors[0] ?? null),
-                    'borderColor' => $isSingleSeries ? '#fff' : ($dataset->color ?? $payload->colors[0] ?? null),
+                    'backgroundColor' => $isSingleSeries ? $colors : ($dataset->color ?? $colors[0] ?? null),
+                    'borderColor' => $isSingleSeries ? '#fff' : ($dataset->color ?? $colors[0] ?? null),
                     'fill' => $payload->type === 'area' || $dataset->type === 'area',
                     'tension' => ($payload->stroke['curve'] ?? null) === 'smooth' ? 0.4 : 0, // Basic mapping
                     ...$payload->stroke, // Merge remaining stroke options
