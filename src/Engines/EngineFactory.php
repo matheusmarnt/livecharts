@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Matheusmarnt\LiveCharts\Engines;
 
 use Matheusmarnt\LiveCharts\Contracts\EngineAdapter;
+use Matheusmarnt\LiveCharts\Exceptions\InvalidChartTypeException;
 use Matheusmarnt\LiveCharts\Exceptions\UnknownEngineException;
 
 class EngineFactory
@@ -49,5 +50,35 @@ class EngineFactory
     public function names(): array
     {
         return array_keys($this->engines);
+    }
+
+    /**
+     * Select the best engine name for a given chart type.
+     *
+     * Rules: if only one registered engine supports the type, use it.
+     * If multiple engines support it, prefer 'apexcharts'.
+     *
+     * @throws InvalidChartTypeException when no registered engine supports the type
+     */
+    public function engineForType(string $type): string
+    {
+        $candidates = [];
+
+        foreach ($this->engines as $name => $adapterClass) {
+            $adapter = new $adapterClass;
+            if (in_array($type, $adapter->supportedTypes(), true)) {
+                $candidates[] = $name;
+            }
+        }
+
+        if ($candidates === []) {
+            throw InvalidChartTypeException::forNoEngine($type);
+        }
+
+        if (in_array('apexcharts', $candidates, true)) {
+            return 'apexcharts';
+        }
+
+        return $candidates[0];
     }
 }

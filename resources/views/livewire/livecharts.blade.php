@@ -4,7 +4,7 @@
     x-data="livecharts({
         id: '{{ $id }}',
         options: {{ json_encode($options) }},
-        constructor: '{{ $adapter->jsConstructor() }}',
+        engineCtor: '{{ $adapter->jsConstructor() }}',
         payload: {{ json_encode($payload) }}
     })"
     wire:ignore
