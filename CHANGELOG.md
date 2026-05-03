@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.2](https://github.com/matheusmarnt/livecharts/compare/v2.5.1...v2.5.2) (2026-05-03)
+
+
+### Bug Fixes
+
+* **scripts:** use Blade push/stack so [@live](https://github.com/live)ChartsScripts works in layout &lt;head&gt; ([#74](https://github.com/matheusmarnt/livecharts/issues/74)) ([8ce1c60](https://github.com/matheusmarnt/livecharts/commit/8ce1c602e49c99b37d08af5fa9d3d2174eb42e66))
+
 ## [2.5.1](https://github.com/matheusmarnt/livecharts/compare/v2.5.0...v2.5.1) (2026-05-03)
 
 
