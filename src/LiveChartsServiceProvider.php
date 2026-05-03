@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Matheusmarnt\LiveCharts;
 
 use Illuminate\Support\Facades\Blade;
