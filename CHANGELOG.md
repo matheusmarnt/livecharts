@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.1](https://github.com/matheusmarnt/livecharts/compare/v2.4.0...v2.4.1) (2026-05-03)
+
+
+### Bug Fixes
+
+* **views:** resolve bootstrap script path outside Blade-compiled view ([#67](https://github.com/matheusmarnt/livecharts/issues/67)) ([0e578bb](https://github.com/matheusmarnt/livecharts/commit/0e578bb3d2de3aa6d6ee444150823440aa542757))
+
 ## [2.4.0](https://github.com/matheusmarnt/livecharts/compare/v2.3.0...v2.4.0) (2026-05-03)
 
 
