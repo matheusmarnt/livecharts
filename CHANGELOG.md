@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.6.0](https://github.com/matheusmarnt/livecharts/compare/v2.5.2...v2.6.0) (2026-05-03)
+
+
+### Features
+
+* **colors:** theme-aware Tailwind color tokens with live dark-mode toggle ([#77](https://github.com/matheusmarnt/livecharts/issues/77)) ([0343b50](https://github.com/matheusmarnt/livecharts/commit/0343b50da2d4a0c773a6dc036edbf2eb39fabd23))
+
 ## [2.5.2](https://github.com/matheusmarnt/livecharts/compare/v2.5.1...v2.5.2) (2026-05-03)
 
 
