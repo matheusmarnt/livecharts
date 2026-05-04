@@ -3,7 +3,7 @@ title: Artisan Commands
 description: Reference for every command shipped by LiveCharts.
 ---
 
-LiveCharts ships four Artisan commands. All command output is translated via `lang/{en,pt-BR,es}/livecharts.php`.
+LiveCharts ships four Artisan commands. All command output is translated via `lang/{en,pt_BR,es}/livecharts.php`.
 
 ## `livecharts:install`
 
@@ -63,7 +63,7 @@ For granular control without the interactive installer:
 | `livecharts-config` | `config/livecharts.php` |
 | `livecharts-assets` | `public/vendor/livecharts/*` |
 | `livecharts-stubs` | `stubs/livecharts/chart.stub` |
-| `livecharts-lang` | `lang/vendor/livecharts/{en,pt-BR,es}/livecharts.php` |
+| `livecharts-lang` | `lang/vendor/livecharts/{en,pt_BR,es}/livecharts.php` |
 
 ```bash
 php artisan vendor:publish --tag=livecharts-config
