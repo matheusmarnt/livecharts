@@ -26,6 +26,7 @@ class InstallCommand extends Command
             __('livecharts::livecharts.install.publishing_assets'),
         );
 
+        $this->publishVendorAssets();
         $this->publishAssets();
         $this->publishStubs();
 
@@ -43,6 +44,18 @@ class InstallCommand extends Command
             '--provider' => "Matheusmarnt\LiveCharts\LiveChartsServiceProvider",
             '--tag' => 'livecharts-config',
         ]);
+    }
+
+    protected function publishVendorAssets(): void
+    {
+        spin(function () {
+            $this->call('vendor:publish', [
+                '--tag' => 'livecharts-assets',
+                '--force' => true,
+            ]);
+        }, __('livecharts::livecharts.install.publishing_vendor_assets'));
+
+        $this->components->info(__('livecharts::livecharts.install.vendor_assets_published'));
     }
 
     protected function publishAssets(): void

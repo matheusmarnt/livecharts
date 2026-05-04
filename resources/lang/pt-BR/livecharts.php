@@ -17,6 +17,8 @@ return [
         'completed' => 'LiveCharts instalado com sucesso.',
         'publishing_assets' => 'Publicando assets...',
         'overwrite_js' => 'livecharts.js já existe. Sobrescrever?',
+        'publishing_vendor_assets' => 'Publicando assets JS do fornecedor...',
+        'vendor_assets_published' => 'Assets JS publicados em public/vendor/livecharts/js',
         'js_published' => 'Assets publicados em [:path]',
         'publish_stubs' => 'Publicar stubs de classes de gráfico em stubs/livecharts?',
         'stubs_published' => 'Stubs publicados em [:path]',
