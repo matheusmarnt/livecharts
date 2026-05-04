@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.2](https://github.com/matheusmarnt/livecharts/compare/v2.7.1...v2.7.2) (2026-05-04)
+
+
+### Bug Fixes
+
+* **install:** publish vendor JS dist assets and fix translation loading ([#86](https://github.com/matheusmarnt/livecharts/issues/86)) ([153cadc](https://github.com/matheusmarnt/livecharts/commit/153cadc4eaa9772d1ae5a5cbe6e67ae05f17841d))
+
 ## [2.7.1](https://github.com/matheusmarnt/livecharts/compare/v2.7.0...v2.7.1) (2026-05-03)
 
 
