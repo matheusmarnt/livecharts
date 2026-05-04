@@ -29,7 +29,6 @@ class LiveChartsServiceProvider extends PackageServiceProvider
             ->name('livecharts')
             ->hasConfigFile()
             ->hasViews()
-            ->hasTranslations()
             ->hasCommands([
                 InstallCommand::class,
                 ChartMakeCommand::class,
@@ -54,7 +53,7 @@ class LiveChartsServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'livecharts');
+        $this->app->make('translator')->addNamespace('livecharts', __DIR__.'/../resources/lang');
 
         $factory = $this->app->make(EngineFactory::class);
 
@@ -76,6 +75,12 @@ class LiveChartsServiceProvider extends PackageServiceProvider
             $this->publishes([
                 __DIR__.'/../resources/stubs' => base_path('stubs/livecharts'),
             ], 'livecharts-stubs');
+
+            $this->publishes([
+                __DIR__.'/../resources/lang' => function_exists('lang_path')
+                    ? lang_path('vendor/livecharts')
+                    : resource_path('lang/vendor/livecharts'),
+            ], 'livecharts-translations');
         }
 
         $this->registerRoutes();
