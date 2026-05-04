@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.3](https://github.com/matheusmarnt/livecharts/compare/v2.7.2...v2.7.3) (2026-05-04)
+
+
+### Bug Fixes
+
+* **i18n:** bypass callAfterResolving for translation namespace registration ([#89](https://github.com/matheusmarnt/livecharts/issues/89)) ([13d39ac](https://github.com/matheusmarnt/livecharts/commit/13d39ac3e5437968914276f6b574c54662e87191))
+
 ## [2.7.2](https://github.com/matheusmarnt/livecharts/compare/v2.7.1...v2.7.2) (2026-05-04)
 
 
