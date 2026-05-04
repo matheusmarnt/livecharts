@@ -28,6 +28,25 @@ The installer:
 2. Publishes the LiveCharts JS runtime **and** the pre-built engine bundles (`livecharts.js`, `apexcharts.js`, `chartjs.js`, plus Chart.js plugins for `treemap`, `matrix`, `sankey`, `financial`, `luxon`, `adapter-luxon`) to `public/vendor/livecharts/js`
 3. Prompts whether to publish chart class stubs to `stubs/livecharts` (used by `make:chart`)
 
+> **⚠️ Assets must be published for `local` and `both` modes**
+>
+> The default asset mode is `both` (local first, CDN fallback). The files in `public/vendor/livecharts/js/` **must exist** for this to work. If you skip `livecharts:install`, assets are missing after a fresh clone, or a deployment wipes `public/vendor/`, every chart will fail silently with `ApexCharts is not defined` or `Chart is not defined`.
+>
+> Re-publish assets on demand:
+>
+> ```bash
+> php artisan vendor:publish --tag=livecharts-assets --force
+> ```
+>
+> Verify the output:
+>
+> ```bash
+> ls public/vendor/livecharts/js/
+> # Expected: apexcharts.js  chartjs.js  livecharts.js  (+ plugin bundles)
+> ```
+>
+> If you prefer no local files, set `LIVECHARTS_ASSETS_MODE=cdn` in `.env` — no publish step needed.
+
 > **Environment-specific invocations**
 >
 > | Environment | Artisan invocation |
@@ -40,7 +59,7 @@ The installer:
 
 LiveCharts ships in **`both` mode** by default (since v2.2.0): the locally-published engine bundles are served first, with the matching jsDelivr CDN URL wired as the `<script onerror>` fallback.
 
-Place `@liveChartsScripts` **before `@livewireScripts`** and before the closing `</body>` tag. The LiveCharts JS runtime registers an Alpine component (`livechart`) — it must load before Livewire's bundled Alpine starts:
+Place `@liveChartsScripts` **before `@livewireScripts`** and before the closing `</body>` tag. The LiveCharts JS runtime registers an Alpine component (`livecharts`) — it must load before Livewire's bundled Alpine starts:
 
 ```blade
 <!DOCTYPE html>
@@ -54,6 +73,25 @@ Place `@liveChartsScripts` **before `@livewireScripts`** and before the closing 
     @livewireScripts
 </body>
 </html>
+```
+
+> **⚠️ Wrong order = `livecharts is not defined`**
+>
+> If `@liveChartsScripts` appears **after** `@livewireScripts`, or is missing entirely, Alpine initializes before the `livecharts` factory is registered. Every chart fails immediately:
+>
+> ```
+> Alpine Expression Error: livecharts is not defined
+> Uncaught ReferenceError: livecharts is not defined
+> ```
+>
+> There is no runtime recovery — the directive must precede `@livewireScripts`.
+
+If your layout uses additional script directives (e.g. `@fluxScripts`), place `@liveChartsScripts` first — the only hard constraint is that it comes before `@livewireScripts`:
+
+```blade
+@liveChartsScripts
+@fluxScripts
+@livewireScripts
 ```
 
 > **Blade layouts with `@extends`/`@section`:** when your app uses a shared layout, you can place `@liveChartsScripts` in the layout's `<head>`. The directive uses Blade's push/stack mechanism — scripts registered by chart components in child sections are pushed to the stack before the layout renders, so they're available when `<head>` resolves.

@@ -7,14 +7,34 @@ LiveCharts ships pre-built IIFE bundles for every supported engine and plugin. T
 
 ## Directive placement
 
-Place `@liveChartsScripts` **before the closing `</body>` tag**, after all chart components:
+Place `@liveChartsScripts` **before `@livewireScripts`** and before the closing `</body>` tag. The directive registers the `livecharts` Alpine data factory; Livewire's `@livewireScripts` bootstraps Alpine — so the factory **must** exist before Alpine initializes.
 
 ```blade
 <body>
     <!-- chart components here -->
     @liveChartsScripts
+    @livewireScripts
 </body>
 ```
+
+If your layout uses additional script directives (e.g. `@fluxScripts`), place `@liveChartsScripts` first:
+
+```blade
+@liveChartsScripts
+@fluxScripts
+@livewireScripts
+```
+
+:::danger[Wrong order causes `livecharts is not defined`]
+Placing `@liveChartsScripts` after `@livewireScripts`, or omitting it entirely, causes Alpine to initialize without the `livecharts` factory. Every chart fails immediately with:
+
+```
+Alpine Expression Error: livecharts is not defined
+Uncaught ReferenceError: livecharts is not defined
+```
+
+There is no recovery path once Alpine has started — the directive must precede `@livewireScripts`.
+:::
 
 **Using a Blade layout (`@extends`/`@section`)?** You can place the directive in the layout's `<head>`. The directive uses Blade's push/stack mechanism: chart components push their engine script tags when they render, and the stack is flushed wherever `@liveChartsScripts` is placed. Because `@extends` child views render before the layout resolves its stacks, `<head>` placement works correctly in this pattern.
 
@@ -51,9 +71,23 @@ Configure via `LIVECHARTS_ASSETS_MODE`:
 
 | Mode | Behaviour |
 |---|---|
-| `local` | Serve only the local copies. Fails closed if the file is missing. |
+| `local` | Serve only the local copies. Fails closed if the file is missing. **Requires published assets.** |
 | `cdn` | Serve only the public CDN URLs. No local files needed. |
-| `both` | Serve local first, fall back to CDN via `<script>` `onerror` handler. **Default.** |
+| `both` | Serve local first, fall back to CDN via `<script>` `onerror` handler. **Default. Requires published assets.** |
+
+:::caution[`local` and `both` require published assets]
+Modes `local` and `both` (the default) serve files from `public/vendor/livecharts/js/`. If that directory is empty or missing, every engine script request returns 404 and charts fail with `ApexCharts is not defined` or `Chart is not defined`.
+
+Publish assets with:
+
+```bash
+php artisan vendor:publish --tag=livecharts-assets --force
+```
+
+Or run `php artisan livecharts:install` which does this automatically.
+
+Use `LIVECHARTS_ASSETS_MODE=cdn` to skip local files entirely.
+:::
 
 ## Rebuilding bundles
 
