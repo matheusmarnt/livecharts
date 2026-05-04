@@ -51,6 +51,12 @@ This will:
 2. Copy the LiveCharts JS runtime + engine bundles to `public/vendor/livecharts/js` (local-first delivery with CDN fallback by default — `LIVECHARTS_ASSETS_MODE=both`)
 3. Optionally publish chart class stubs to `stubs/livecharts`
 
+> **Note:** The default asset mode is `both` (local first, CDN fallback). The files in `public/vendor/livecharts/js/` must exist for this to work. If you skip the install step or need to restore the assets after deployment, run:
+> ```bash
+> php artisan vendor:publish --tag=livecharts-assets --force
+> ```
+> If you prefer no local files at all, set `LIVECHARTS_ASSETS_MODE=cdn` in `.env` — no publish step needed.
+
 Then build a chart and render it:
 
 ```php
