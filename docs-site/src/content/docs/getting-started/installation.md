@@ -22,7 +22,7 @@ php artisan livecharts:install
 This publishes `config/livecharts.php` and copies the pre-built JS bundles to `public/vendor/livecharts/js/`.
 
 :::caution[Assets must be published for `local` and `both` modes]
-The default asset mode is `both` (local first, CDN fallback). If you skip `livecharts:install` or the publish step fails silently, the local JS files won't exist and every chart will throw `ApexCharts is not defined` / `Chart is not defined`.
+The default asset mode is `both` (local first, CDN fallback). If you skip `livecharts:install`, the local JS files won't exist and every chart will throw `ApexCharts is not defined` / `Chart is not defined`. This also applies after a fresh clone or any deployment that wipes `public/vendor/`.
 
 Run the asset publish step explicitly if needed:
 

@@ -84,7 +84,7 @@ Publish assets with:
 php artisan vendor:publish --tag=livecharts-assets --force
 ```
 
-Or run `php artisan livecharts:install` which does this automatically.
+Or run `php artisan livecharts:install` — the installer publishes all bundles automatically on first run.
 
 Use `LIVECHARTS_ASSETS_MODE=cdn` to skip local files entirely.
 :::
