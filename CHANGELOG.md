@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.4](https://github.com/matheusmarnt/livecharts/compare/v2.7.3...v2.7.4) (2026-05-04)
+
+
+### Bug Fixes
+
+* **i18n:** rename lang dir pt-BR → pt_BR to match Laravel locale convention ([#91](https://github.com/matheusmarnt/livecharts/issues/91)) ([74166de](https://github.com/matheusmarnt/livecharts/commit/74166deb9c21395697f2652fa3b5da12a5a6f42c))
+
 ## [2.7.3](https://github.com/matheusmarnt/livecharts/compare/v2.7.2...v2.7.3) (2026-05-04)
 
 
