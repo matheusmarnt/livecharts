@@ -54,6 +54,8 @@ class LiveChartsServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'livecharts');
+
         $factory = $this->app->make(EngineFactory::class);
 
         foreach (config('livecharts.engines', []) as $name => $adapter) {
