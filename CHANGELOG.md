@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.7.5](https://github.com/matheusmarnt/livecharts/compare/v2.7.4...v2.7.5) (2026-05-29)
+
+
+### Miscellaneous Chores
+
+* **deps:** bump actions/checkout from 4 to 6 ([#97](https://github.com/matheusmarnt/livecharts/issues/97)) ([7fa136c](https://github.com/matheusmarnt/livecharts/commit/7fa136c29c5e11ac7e07af6a571bafa4973dd89f))
+* **deps:** bump actions/configure-pages from 5 to 6 ([#95](https://github.com/matheusmarnt/livecharts/issues/95)) ([221f4b9](https://github.com/matheusmarnt/livecharts/commit/221f4b9c4fa2029693ff70dbe8eeec8c2fc720fd))
+* **deps:** bump actions/deploy-pages from 4 to 5 ([#94](https://github.com/matheusmarnt/livecharts/issues/94)) ([a3467f9](https://github.com/matheusmarnt/livecharts/commit/a3467f9ab27066accfe917ae04d9343bcd003a9f))
+* **deps:** bump googleapis/release-please-action from 4 to 5 ([#98](https://github.com/matheusmarnt/livecharts/issues/98)) ([39a0fc8](https://github.com/matheusmarnt/livecharts/commit/39a0fc88aa0865691ba345c9e9487faf1e325d5f))
+
 ## [2.7.4](https://github.com/matheusmarnt/livecharts/compare/v2.7.3...v2.7.4) (2026-05-04)
 
 
