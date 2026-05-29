@@ -223,7 +223,7 @@ Implement `Matheusmarnt\LiveCharts\Contracts\EngineAdapter` and the engine becom
 composer test
 ```
 
-Runs the Pest suite (299 tests) against the package's testbench harness — including 17 Pest arch rules, payload + adapter routing for every chart type, Livewire color-roundtrip tests (Bugs 1 & 5), ApexCharts themed-color path tests, script-stack idempotency tests, wire:navigate asset strategy tests, and integration tests for UC-01 dashboard, UC-02 drill-down, UC-03 polling, and UC-04 multi-tenant flows. CI matrix: PHP 8.2-8.5 × Laravel 11/12/13 × Livewire 3/4 × prefer-lowest/stable × Ubuntu/Windows, with a `--min=90` coverage gate and PHPStan level 8 enforcement.
+Runs the Pest suite (301 tests) against the package's testbench harness — including 17 Pest arch rules, payload + adapter routing for every chart type, Livewire color-roundtrip tests (Bugs 1 & 5), ApexCharts themed-color path tests, script-stack idempotency tests, wire:navigate asset strategy tests, and integration tests for UC-01 dashboard, UC-02 drill-down, UC-03 polling, and UC-04 multi-tenant flows. CI matrix: PHP 8.2-8.5 × Laravel 11/12/13 × Livewire 3/4 × prefer-lowest/stable × Ubuntu/Windows, with a `--min=90` coverage gate and PHPStan level 8 enforcement.
 
 ## Changelog
 
