@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.6](https://github.com/matheusmarnt/livecharts/compare/v2.7.5...v2.7.6) (2026-05-29)
+
+
+### Miscellaneous Chores
+
+* **deps:** bump actions/setup-node from 4 to 6 ([#96](https://github.com/matheusmarnt/livecharts/issues/96)) ([3fcdaab](https://github.com/matheusmarnt/livecharts/commit/3fcdaabe241b9c994f9ceeb6e2bb06037094a4a8))
+
 ## [2.7.5](https://github.com/matheusmarnt/livecharts/compare/v2.7.4...v2.7.5) (2026-05-29)
 
 
