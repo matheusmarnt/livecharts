@@ -42,38 +42,40 @@ If you prefer zero local files, set `LIVECHARTS_ASSETS_MODE=cdn` in `.env` — n
 
 ## Register Scripts
 
-Add `@liveChartsScripts` **before `@livewireScripts`**. The LiveCharts JS runtime registers an Alpine component and must load before Livewire's bundled Alpine initializes:
+Since **v2.7.7**, no layout changes are needed for most apps. LiveCharts uses the **`navigate` asset strategy** by default: each chart component emits its engine scripts via Livewire's `@assets` block, which Livewire loads once per page and re-ensures across `wire:navigate` SPA transitions.
 
 ```html
 <body>
-    <!-- your chart components here -->
+    <!-- chart components self-contain their scripts -->
+    @livewireScripts
+</body>
+```
+
+:::tip[`wire:navigate` (Livewire SPA) works out of the box]
+The `navigate` strategy handles SPA navigation automatically. Charts initialize correctly whether the chart page is the SPA entry point or reached via a `wire:navigate` link.
+:::
+
+### Legacy strategy (`@liveChartsScripts`)
+
+If you need the legacy push-stack behavior (e.g. non-Livewire contexts or manual placement), set `LIVECHARTS_ASSETS_STRATEGY=stack` in `.env` and add `@liveChartsScripts` **before `@livewireScripts`**:
+
+```env
+LIVECHARTS_ASSETS_STRATEGY=stack
+```
+
+```html
+<body>
     @liveChartsScripts
     @livewireScripts
 </body>
 ```
 
-:::danger[Wrong order = `livecharts is not defined`]
-If `@liveChartsScripts` appears **after** `@livewireScripts` (or is missing entirely), Alpine will initialize before the `livecharts` data factory is registered. Every chart will fail with:
-
-```
-Alpine Expression Error: livecharts is not defined
-```
-
-The fix is always the same: move `@liveChartsScripts` above `@livewireScripts`.
+:::danger[`stack` strategy + `wire:navigate` = `livecharts is not defined`]
+The `stack` strategy does **not** support `wire:navigate`. If the SPA entry page has no chart, navigating to a chart page throws `Uncaught ReferenceError: livecharts is not defined`. Use the `navigate` strategy (default) for SPA apps.
 :::
 
-:::tip[Using Flux UI or other script directives?]
-If your layout uses `@fluxScripts` or similar third-party directives, place `@liveChartsScripts` first — it only matters that it comes before `@livewireScripts`, which is what bootstraps Alpine:
-
-```html
-@liveChartsScripts
-@fluxScripts
-@livewireScripts
-```
-:::
-
-:::tip[Using a shared layout with `@extends`?]
-When your app uses Blade layouts (`@extends` / `@section`), you can place `@liveChartsScripts` in the layout's `<head>`. The directive uses Blade's push/stack mechanism, so scripts pushed by chart components in child sections are captured before the layout renders.
+:::tip[Using a shared layout with `@extends`? (stack strategy only)]
+You can place `@liveChartsScripts` in the layout's `<head>`. The directive uses Blade's push/stack mechanism, so scripts pushed by chart components in child sections are captured before the layout renders.
 
 ```html
 <!-- layouts/app.blade.php -->
@@ -83,4 +85,4 @@ When your app uses Blade layouts (`@extends` / `@section`), you can place `@live
 ```
 :::
 
-This directive injects the required charting engine scripts (CDN or local) and the Alpine.js integration bundle.
+See [Asset Management](/usage/asset-management) for the full strategy reference.
