@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use Livewire\Livewire;
+use Matheusmarnt\LiveCharts\Charts\GenericChart;
+use Matheusmarnt\LiveCharts\Livewire\LiveChartsComponent;
 use Matheusmarnt\LiveCharts\Support\AssetManager;
 
 // ─── engineScriptsHtml ────────────────────────────────────────────────────────
@@ -100,6 +103,44 @@ it('stack strategy still pushes engine script and bootstrap to Blade stack', fun
 
     expect($output)->toContain('apexcharts');
     expect($output)->toContain('<script>');
+});
+
+// ─── LiveChartsComponent::render() strategy branching ────────────────────────
+
+it('navigate strategy: component render leaves livecharts-scripts stack empty', function () {
+    config()->set('livecharts.assets.strategy', 'navigate');
+    config()->set('livecharts.assets.mode', 'cdn');
+    config()->set('livecharts.assets.auto_inject', true);
+
+    $chart = (new GenericChart)->type('line')->labels(['A'])->dataset('S1', [1]);
+
+    Livewire::test(LiveChartsComponent::class, ['chart' => $chart])
+        ->assertStatus(200);
+
+    // flushPendingPushes must NOT be called under navigate strategy
+    expect(app('view')->yieldPushContent('livecharts-scripts'))->toBe('');
+});
+
+it('stack strategy: component render calls flushPendingPushes — engine registered as pushed', function () {
+    config()->set('livecharts.assets.strategy', 'stack');
+    config()->set('livecharts.assets.mode', 'cdn');
+    config()->set('livecharts.assets.auto_inject', true);
+
+    $chart = (new GenericChart)->type('line')->labels(['A'])->dataset('S1', [1]);
+
+    Livewire::test(LiveChartsComponent::class, ['chart' => $chart])
+        ->assertStatus(200);
+
+    // Livewire::test() consumes the Blade push stack internally, so we verify
+    // flushPendingPushes() ran by inspecting the AssetManager singleton's $pushed state.
+    $assetManager = app(AssetManager::class);
+    $pushedProp = new ReflectionProperty($assetManager, 'pushed');
+    $pushedProp->setAccessible(true);
+    $bootstrapProp = new ReflectionProperty($assetManager, 'bootstrapPushed');
+    $bootstrapProp->setAccessible(true);
+
+    expect($pushedProp->getValue($assetManager))->toHaveKey('apexcharts');
+    expect($bootstrapProp->getValue($assetManager))->toBeTrue();
 });
 
 // ─── navigate strategy output is complete ────────────────────────────────────
