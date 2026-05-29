@@ -3,10 +3,10 @@
 // `morph.updating` hook is a safety net when consumers strip wire:ignore.
 // `commit.applied` re-syncs the chart from the latest server payload via the
 // soft-update path on the Alpine component, avoiding a full destroy+render.
-document.addEventListener('livewire:init', () => {
-    if (typeof Livewire === 'undefined') {
-        return;
-    }
+// Guard __livechartsHooked prevents double-registration on wire:navigate re-execution.
+function registerLivewireHooks() {
+    if (typeof Livewire === 'undefined' || Livewire.__livechartsHooked) return;
+    Livewire.__livechartsHooked = true;
 
     Livewire.hook('morph.updating', ({ el, skip }) => {
         if (el && el.classList && el.classList.contains('livecharts-container')) {
@@ -31,7 +31,9 @@ document.addEventListener('livewire:init', () => {
             alpineData.update(nextPayload);
         }
     });
-});
+}
+if (typeof Livewire !== 'undefined') registerLivewireHooks();
+else document.addEventListener('livewire:init', registerLivewireHooks);
 
 // ─── Theme observer singleton ──────────────────────────────────────────────
 // Reads `window.LiveChartsConfig.themeStrategy` ('class' or 'media').
@@ -161,8 +163,9 @@ function buildApexUpdate(themedMap, mode) {
     return update;
 }
 
-document.addEventListener('alpine:init', () => {
-    Alpine.data('livecharts', (config) => ({
+// Guard __livechartsRegistered prevents double-registration when the bootstrap
+// script executes on a wire:navigate page after Alpine is already booted.
+const livechartsFactory = (config) => ({
         id: config.id,
         instance: null,
         options: config.options,
@@ -383,8 +386,15 @@ document.addEventListener('alpine:init', () => {
                 delete window.LiveCharts[this.id];
             }
         }
-    }));
-});
+    });
+
+function registerLiveChartsComponent() {
+    if (!window.Alpine || window.Alpine.__livechartsRegistered) return;
+    window.Alpine.data('livecharts', livechartsFactory);
+    window.Alpine.__livechartsRegistered = true;
+}
+if (window.Alpine) registerLiveChartsComponent();
+else document.addEventListener('alpine:init', registerLiveChartsComponent);
 
 /**
  * Apply initial theme colors directly into options before engine init.

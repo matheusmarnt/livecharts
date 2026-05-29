@@ -59,7 +59,9 @@ The installer:
 
 LiveCharts ships in **`both` mode** by default (since v2.2.0): the locally-published engine bundles are served first, with the matching jsDelivr CDN URL wired as the `<script onerror>` fallback.
 
-Place `@liveChartsScripts` **before `@livewireScripts`** and before the closing `</body>` tag. The LiveCharts JS runtime registers an Alpine component (`livecharts`) — it must load before Livewire's bundled Alpine starts:
+### Asset strategy
+
+Since v2.7.7, LiveCharts uses the **`navigate` strategy** by default. Charts emit their engine scripts via Livewire's `@assets` block — no `@liveChartsScripts` directive required. This strategy works correctly with `wire:navigate` SPA navigation.
 
 ```blade
 <!DOCTYPE html>
@@ -69,43 +71,26 @@ Place `@liveChartsScripts` **before `@livewireScripts`** and before the closing 
 </head>
 <body>
     {{ $slot }}
-    @liveChartsScripts
     @livewireScripts
 </body>
 </html>
 ```
 
-> **⚠️ Wrong order = `livecharts is not defined`**
->
-> If `@liveChartsScripts` appears **after** `@livewireScripts`, or is missing entirely, Alpine initializes before the `livecharts` factory is registered. Every chart fails immediately:
->
-> ```
-> Alpine Expression Error: livecharts is not defined
-> Uncaught ReferenceError: livecharts is not defined
-> ```
->
-> There is no runtime recovery — the directive must precede `@livewireScripts`.
+If you need to use the legacy **`stack` strategy** (e.g. for non-Livewire contexts or manual placement), set `LIVECHARTS_ASSETS_STRATEGY=stack` and add `@liveChartsScripts` **before `@livewireScripts`**:
 
-If your layout uses additional script directives (e.g. `@fluxScripts`), place `@liveChartsScripts` first — the only hard constraint is that it comes before `@livewireScripts`:
-
-```blade
-@liveChartsScripts
-@fluxScripts
-@livewireScripts
+```env
+LIVECHARTS_ASSETS_STRATEGY=stack
 ```
 
-> **Blade layouts with `@extends`/`@section`:** when your app uses a shared layout, you can place `@liveChartsScripts` in the layout's `<head>`. The directive uses Blade's push/stack mechanism — scripts registered by chart components in child sections are pushed to the stack before the layout renders, so they're available when `<head>` resolves.
->
-> ```blade
-> <!-- layouts/app.blade.php -->
-> <head>
->     @liveChartsScripts  {{-- works here when using @extends/@section --}}
-> </head>
-> ```
->
-> **Standalone views (not extending a layout):** always place `@liveChartsScripts` after the chart components in the body.
+```blade
+<body>
+    {{ $slot }}
+    @liveChartsScripts
+    @livewireScripts
+</body>
+```
 
-The directive emits only the engine bundles required by the engines actually rendered on the page.
+> **`wire:navigate` (Livewire SPA):** the `navigate` strategy handles SPA navigation automatically. The `stack` strategy does **not** support `wire:navigate` — charts on navigated pages will throw `livecharts is not defined`.
 
 > **Asset modes:** `both` (default — local-first with CDN fallback), `local` (no CDN), or `cdn` (no local). Switch via `LIVECHARTS_ASSETS_MODE` in `.env` or `config/livecharts.php`. See [Local assets](#local-assets) below.
 
@@ -282,7 +267,7 @@ LIVECHARTS_ASSETS_MODE=local  # no CDN
 LIVECHARTS_ASSETS_MODE=cdn    # no local copy required
 ```
 
-The `@liveChartsScripts` directive emits the right `<script>` tags for the active mode and registers only the bundles required by the engines actually rendered on the page.
+Under the `navigate` strategy (default), engine scripts are emitted via Livewire `@assets` blocks — Livewire deduplicates them and re-ensures them across `wire:navigate` transitions. Under the `stack` strategy, `@liveChartsScripts` emits the right `<script>` tags for the active mode and registers only the bundles required by the engines actually rendered on the page.
 
 > **Building from source:** if you fork the package or modify `resources/js/livecharts.js`, run `npm ci && npm run build` to regenerate the bundles. The `js-build.yml` workflow fails CI when the committed `resources/dist/` is out of sync with the source.
 

@@ -26,6 +26,24 @@ it('forbids __DIR__ and __FILE__ in package blade views', function () {
     ));
 });
 
+it('JS source registers Alpine component via window.Alpine guard not solely inside alpine:init', function () {
+    $src = file_get_contents(dirname(__DIR__).'/resources/js/livecharts.js') ?: '';
+
+    // Must have the guard-based registration path
+    expect($src)->toContain('window.Alpine.__livechartsRegistered');
+    expect($src)->toContain('registerLiveChartsComponent');
+    // Must support immediate registration when Alpine is already booted
+    expect($src)->toContain('if (window.Alpine) registerLiveChartsComponent');
+});
+
+it('JS source registers Livewire hooks via window.Livewire guard not solely inside livewire:init', function () {
+    $src = file_get_contents(dirname(__DIR__).'/resources/js/livecharts.js') ?: '';
+
+    expect($src)->toContain('Livewire.__livechartsHooked');
+    expect($src)->toContain('registerLivewireHooks');
+    expect($src)->toContain('if (typeof Livewire !== \'undefined\') registerLivewireHooks');
+});
+
 it('forbids constructor as Alpine data object key in JS source', function () {
     $jsDir = dirname(__DIR__).'/resources/js';
 

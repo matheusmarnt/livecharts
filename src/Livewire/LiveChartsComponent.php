@@ -108,8 +108,14 @@ class LiveChartsComponent extends Component
 
         $options = $adapter->build($chartPayload);
 
-        app(AssetManager::class)->registerEngine($payload['engine']);
-        app(AssetManager::class)->flushPendingPushes();
+        $assetManager = app(AssetManager::class);
+        $assetManager->registerEngine($payload['engine']);
+
+        $assetStrategy = config('livecharts.assets.strategy', 'navigate');
+
+        if ($assetStrategy === 'stack') {
+            $assetManager->flushPendingPushes();
+        }
 
         /** @var view-string $view */
         $view = 'livecharts::livewire.livecharts';
@@ -117,6 +123,9 @@ class LiveChartsComponent extends Component
         return view($view, [
             'options' => $options,
             'adapter' => $adapter,
+            'assetStrategy' => $assetStrategy,
+            'engineScripts' => $assetStrategy === 'navigate' ? $assetManager->engineScriptsHtml() : '',
+            'bootstrap' => $assetStrategy === 'navigate' ? $assetManager->bootstrapScriptHtml() : '',
         ]);
     }
 }
