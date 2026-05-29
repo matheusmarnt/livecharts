@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.7](https://github.com/matheusmarnt/livecharts/compare/v2.7.6...v2.7.7) (2026-05-29)
+
+
+### Bug Fixes
+
+* **livewire:** support wire:navigate via [@assets](https://github.com/assets) asset strategy ([#102](https://github.com/matheusmarnt/livecharts/issues/102)) ([868e6cd](https://github.com/matheusmarnt/livecharts/commit/868e6cd58f21601f5f3def0767d1256b8cfe7bd0))
+
 ## [2.7.6](https://github.com/matheusmarnt/livecharts/compare/v2.7.5...v2.7.6) (2026-05-29)
 
 
