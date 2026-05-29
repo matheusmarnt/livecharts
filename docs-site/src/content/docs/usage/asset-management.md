@@ -3,11 +3,34 @@ title: Asset Management
 description: Control how engine assets are loaded.
 ---
 
-LiveCharts ships pre-built IIFE bundles for every supported engine and plugin. The `@liveChartsScripts` directive resolves these against the configured asset mode.
+LiveCharts ships pre-built IIFE bundles for every supported engine and plugin. Two loading strategies are available — choose based on whether your app uses `wire:navigate` (Livewire SPA navigation).
 
-## Directive placement
+## Loading strategy
 
-Place `@liveChartsScripts` **before `@livewireScripts`** and before the closing `</body>` tag. The directive registers the `livecharts` Alpine data factory; Livewire's `@livewireScripts` bootstraps Alpine — so the factory **must** exist before Alpine initializes.
+Configure via `LIVECHARTS_ASSETS_STRATEGY` (or `config('livecharts.assets.strategy')`):
+
+| Strategy | Behaviour | Default |
+|---|---|---|
+| `navigate` | Assets emitted via Livewire `@assets` block inside the chart component. Livewire loads them once and re-ensures them across `wire:navigate` transitions. `@liveChartsScripts` not required. | ✅ Yes |
+| `stack` | Assets pushed to the `livecharts-scripts` Blade stack when a chart renders. Requires `@liveChartsScripts` in the layout. Legacy behavior. | No |
+
+```env
+# .env — switch to legacy stack strategy
+LIVECHARTS_ASSETS_STRATEGY=stack
+```
+
+### `navigate` strategy (default)
+
+No layout changes needed. Charts self-contain their script dependencies via Livewire's `@assets` block. Livewire deduplicates identical blocks, so multiple charts of the same engine load the scripts once per page. This strategy works correctly across `wire:navigate` transitions without any configuration.
+
+```blade
+<!-- No @liveChartsScripts needed — engine scripts load automatically -->
+<livewire:line-chart :chart="$chart" />
+```
+
+### `stack` strategy (legacy)
+
+Place `@liveChartsScripts` **before `@livewireScripts`** in your layout:
 
 ```blade
 <body>
@@ -17,26 +40,17 @@ Place `@liveChartsScripts` **before `@livewireScripts`** and before the closing 
 </body>
 ```
 
-If your layout uses additional script directives (e.g. `@fluxScripts`), place `@liveChartsScripts` first:
-
-```blade
-@liveChartsScripts
-@fluxScripts
-@livewireScripts
-```
-
-:::danger[Wrong order causes `livecharts is not defined`]
-Placing `@liveChartsScripts` after `@livewireScripts`, or omitting it entirely, causes Alpine to initialize without the `livecharts` factory. Every chart fails immediately with:
+:::danger[`stack` strategy + `wire:navigate`]
+The `stack` strategy does **not** support `wire:navigate`. If the SPA entry page has no chart, the engine scripts are never pushed to the stack, and navigating to a chart page throws:
 
 ```
-Alpine Expression Error: livecharts is not defined
 Uncaught ReferenceError: livecharts is not defined
 ```
 
-There is no recovery path once Alpine has started — the directive must precede `@livewireScripts`.
+Use the `navigate` strategy (default) for SPA apps.
 :::
 
-**Using a Blade layout (`@extends`/`@section`)?** You can place the directive in the layout's `<head>`. The directive uses Blade's push/stack mechanism: chart components push their engine script tags when they render, and the stack is flushed wherever `@liveChartsScripts` is placed. Because `@extends` child views render before the layout resolves its stacks, `<head>` placement works correctly in this pattern.
+**Using a Blade layout (`@extends`/`@section`)?** You can place the directive in the layout's `<head>`. The push/stack mechanism works because `@extends` child views render before the layout resolves stacks.
 
 ```blade
 <!-- layouts/app.blade.php -->
@@ -45,9 +59,15 @@ There is no recovery path once Alpine has started — the directive must precede
 </head>
 ```
 
-:::caution[Standalone views]
-In views that do **not** extend a layout (e.g. a single Blade file), place `@liveChartsScripts` **after** the chart components. If placed in `<head>` of a standalone view, the stack is empty when the directive renders and no scripts are emitted.
+:::caution[Standalone views — stack strategy only]
+In views that do not extend a layout, place `@liveChartsScripts` **after** the chart components. If placed in `<head>` of a standalone view, the stack is empty when the directive renders.
 :::
+
+## SPA navigation (`wire:navigate`)
+
+The `navigate` strategy handles `wire:navigate` automatically. Charts initialize correctly whether the chart page is the SPA entry point or reached via navigation.
+
+If you must use the `stack` strategy, you are responsible for ensuring assets are present on every page that may navigate to a chart page (e.g. by always including `@liveChartsScripts` in your base layout).
 
 ## Bundled artefacts
 
