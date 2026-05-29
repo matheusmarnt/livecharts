@@ -59,6 +59,7 @@ return [
     */
     'assets' => [
         'mode' => env('LIVECHARTS_ASSETS_MODE', 'both'), // "cdn", "local", or "both" (local first, CDN fallback)
+        'strategy' => env('LIVECHARTS_ASSETS_STRATEGY', 'navigate'), // "navigate" (Livewire @assets, SPA-safe) or "stack" (legacy @liveChartsScripts)
         'auto_inject' => true,
         'cdn' => [
             'apexcharts' => 'https://cdn.jsdelivr.net/npm/apexcharts@5.10.6/dist/apexcharts.min.js',

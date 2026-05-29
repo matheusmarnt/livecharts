@@ -8,6 +8,7 @@ use Matheusmarnt\LiveCharts\Support\AssetManager;
 // ─── flushPendingPushes ───────────────────────────────────────────────────────
 
 it('flushPendingPushes pushes engine script and bootstrap to the Blade stack', function () {
+    config()->set('livecharts.assets.strategy', 'stack');
     config()->set('livecharts.assets.mode', 'cdn');
     config()->set('livecharts.assets.auto_inject', true);
 
@@ -22,6 +23,7 @@ it('flushPendingPushes pushes engine script and bootstrap to the Blade stack', f
 });
 
 it('flushPendingPushes is idempotent — calling twice does not duplicate scripts', function () {
+    config()->set('livecharts.assets.strategy', 'stack');
     config()->set('livecharts.assets.mode', 'cdn');
     config()->set('livecharts.assets.auto_inject', true);
 
@@ -37,6 +39,7 @@ it('flushPendingPushes is idempotent — calling twice does not duplicate script
 });
 
 it('flushPendingPushes pushes only new assets on second component render', function () {
+    config()->set('livecharts.assets.strategy', 'stack');
     config()->set('livecharts.assets.mode', 'cdn');
     config()->set('livecharts.assets.cdn.chartjs', 'https://cdn.example.com/chartjs.js');
     config()->set('livecharts.assets.auto_inject', true);
@@ -60,6 +63,7 @@ it('flushPendingPushes pushes only new assets on second component render', funct
 });
 
 it('flushPendingPushes omits bootstrap when auto_inject is disabled', function () {
+    config()->set('livecharts.assets.strategy', 'stack');
     config()->set('livecharts.assets.mode', 'cdn');
     config()->set('livecharts.assets.auto_inject', false);
 
@@ -74,6 +78,7 @@ it('flushPendingPushes omits bootstrap when auto_inject is disabled', function (
 });
 
 it('flushPendingPushes emits local URL in local mode', function () {
+    config()->set('livecharts.assets.strategy', 'stack');
     config()->set('livecharts.assets.mode', 'local');
 
     $manager = new AssetManager;
@@ -86,6 +91,7 @@ it('flushPendingPushes emits local URL in local mode', function () {
 });
 
 it('flushPendingPushes emits onerror fallback in both mode', function () {
+    config()->set('livecharts.assets.strategy', 'stack');
     config()->set('livecharts.assets.mode', 'both');
     config()->set('livecharts.assets.cdn.apexcharts', 'https://cdn.example.com/apexcharts.js');
 

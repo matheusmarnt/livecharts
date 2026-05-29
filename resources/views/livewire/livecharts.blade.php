@@ -12,3 +12,9 @@
 >
     <div x-ref="chart"></div>
 </div>
+@if(($assetStrategy ?? 'navigate') === 'navigate')
+@assets
+    {!! $engineScripts !!}
+    {!! $bootstrap !!}
+@endassets
+@endif

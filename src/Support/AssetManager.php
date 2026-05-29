@@ -119,6 +119,41 @@ class AssetManager
         return $scripts;
     }
 
+    /**
+     * Return engine <script> tags for all registered assets as an HTML string.
+     * Used by the navigate strategy to pass scripts into the @assets Blade block.
+     */
+    public function engineScriptsHtml(): string
+    {
+        $html = '';
+        foreach (array_keys($this->assets) as $key) {
+            $html .= $this->buildScriptTag($key)."\n";
+        }
+
+        return $html;
+    }
+
+    /**
+     * Return the bootstrap <script> block (with LiveChartsConfig bridge) as an HTML string.
+     * Used by the navigate strategy to pass the inline script into the @assets Blade block.
+     */
+    public function bootstrapScriptHtml(): string
+    {
+        if (! config('livecharts.assets.auto_inject', true)) {
+            return '';
+        }
+
+        $bootstrap = $this->getBootstrapScript();
+        if ($bootstrap === null || $bootstrap === '') {
+            return '';
+        }
+
+        $strategy = config('livecharts.theme.auto_detect', 'class');
+        $configJs = 'window.LiveChartsConfig=window.LiveChartsConfig||{};window.LiveChartsConfig.themeStrategy='.json_encode($strategy).';';
+
+        return "<script>{$configJs}\n{$bootstrap}</script>\n";
+    }
+
     public function markAsRendered(): void
     {
         $this->scriptsRendered = true;
