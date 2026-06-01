@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.8](https://github.com/matheusmarnt/livecharts/compare/v2.7.7...v2.7.8) (2026-06-01)
+
+
+### Miscellaneous Chores
+
+* **deps:** bump actions/upload-pages-artifact from 3 to 5 ([#104](https://github.com/matheusmarnt/livecharts/issues/104)) ([cca670a](https://github.com/matheusmarnt/livecharts/commit/cca670a2d4502ed4ef7dec1ac973d78d78e48085))
+
 ## [2.7.7](https://github.com/matheusmarnt/livecharts/compare/v2.7.6...v2.7.7) (2026-05-29)
 
 
