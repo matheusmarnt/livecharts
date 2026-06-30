@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.9](https://github.com/matheusmarnt/livecharts/compare/v2.7.8...v2.7.9) (2026-06-30)
+
+
+### Miscellaneous Chores
+
+* **deps:** bump actions/checkout from 6 to 7 ([#106](https://github.com/matheusmarnt/livecharts/issues/106)) ([c2ca9fd](https://github.com/matheusmarnt/livecharts/commit/c2ca9fd398d305bd18f6291625347283cc753aee))
+
 ## [2.7.8](https://github.com/matheusmarnt/livecharts/compare/v2.7.7...v2.7.8) (2026-06-01)
 
 
